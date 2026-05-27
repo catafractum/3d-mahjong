@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://cvn7p2vhfjjrj"]
+
+[ext_resource type="Script" uid="uid://c6mhr310p1o3o" path="res://board_scene.gd" id="1_8l4tr"]
+[ext_resource type="PackedScene" uid="uid://d3xjwwjp5260l" path="res://MahjongTile.tscn" id="2_7fpns"]
+
+[sub_resource type="Environment" id="Environment_8l4tr"]
+background_mode = 1
+background_color = Color(0.14117648, 0.0627451, 0.19607843, 1)
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_energy = 0.7
+
+[node name="BoardScene" type="Node3D" unique_id=2038322144]
+script = ExtResource("1_8l4tr")
+tile_scene = ExtResource("2_7fpns")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1263549009]
+environment = SubResource("Environment_8l4tr")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="WorldEnvironment" unique_id=1158767289]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 4, 3)
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=142207390]
+transform = Transform3D(0.70710677, -0.40860704, 0.5770964, 0, 0.8161376, 0.5778576, -0.70710677, -0.40860704, 0.5770964, 4, 4, 4)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=526605951]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.17906)
+
+[node name="TileContainer" type="Node3D" parent="." unique_id=1121526227]

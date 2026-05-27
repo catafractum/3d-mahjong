@@ -1,0 +1,16 @@
+63f7b34db8d8cdea90c76aacccf841ec
+::res://::1779894870
+board_scene.tscn::PackedScene::6275615176161200551::1779893260::0::1::::<><><>0<>0<><>::uid://c6mhr310p1o3o::::res://board_scene.gd
+export_presets.cfg::TextFile::-1::1779893831::0::1::::<><><>0<>0<><>::
+icon.svg::CompressedTexture2D::4435078552910515102::1779889959::1779890141::1::::<><><>0<>0<>5e8d883270fa1ff667a8fb1cca80b751<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
+board_scene.gd::GDScript::6973924942635360350::1779892377::0::1::::<>Node3D<><>0<>0<><>::
+mahjong_rounded_tile.glb::PackedScene::4080327715218499227::1779894870::1779894870::1::::<><><>0<>0<>1c1ebb7e757689ffa85fe04ba1414c6c<>res://.godot/imported/mahjong_rounded_tile.glb-268831ee8ed4f806ec6e235bf9bffc61.scn::
+README.md::TextFile::-1::1779893278::0::1::::<><><>0<>0<><>::
+::res://export/::1779893865
+::res://export/web/::1779894860
+index.apple-touch-icon.png::CompressedTexture2D::3172513726564133163::1779893842::1779894860::1::::<><><>0<>0<>8ccda9e2aea6a790326e3dbb3f5d70db<>res://.godot/imported/index.apple-touch-icon.png-aebfb1e41ce4a993e231d731c37e24be.ctex::
+index.icon.png::CompressedTexture2D::7177828094854660147::1779893842::1779894860::1::::<><><>0<>0<>608048788fe91275885a5972a792d3f8<>res://.godot/imported/index.icon.png-71c9d3338695ba24c45c706011eaad77.ctex::
+index.png::CompressedTexture2D::8762818722070277755::1779893842::1779894860::1::::<><><>0<>0<>63537d66957ce0c68227257226d9daff<>res://.godot/imported/index.png-c2d8175aa2006ac735a751c5803e019d.ctex::
+::res://tmp/::1779891508
+Mahjong Dimensions.png::CompressedTexture2D::1620734948863937392::1779891494::1779891508::1::::<><><>0<>0<>a9dc4650a51c3b7e0b727e8ccf0a177d<>res://.godot/imported/Mahjong Dimensions.png-7bb06215c5e70439ae548d21f42f6bf2.ctex::
+Serenity Forest.png::CompressedTexture2D::2132154070867268978::1779891203::1779891222::1::::<><><>0<>0<>9676057873c9042ebf9a728011dc1c33<>res://.godot/imported/Serenity Forest.png-f0bbbfac0305f4e8d76c36eeecfed4e2.ctex::
