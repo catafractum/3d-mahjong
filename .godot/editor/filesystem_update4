@@ -1,2 +1,6 @@
 res://board_scene.tscn
 res://board_scene.gd
+res://scripts/board_scene.gd
+res://board_container.tscn
+res://scripts/board_container.gd
+res://MahjongTile.tscn
