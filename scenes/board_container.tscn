@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://dgvb6o0nf3m7y"]
+
+[ext_resource type="Script" uid="uid://bnb52gjtgjuc8" path="res://scripts/board_container.gd" id="1_48xat"]
+[ext_resource type="PackedScene" uid="uid://d3xjwwjp5260l" path="res://scenes/MahjongTile.tscn" id="2_uhclm"]
+
+[node name="BoardContainer" type="Node3D" unique_id=1009866573]
+script = ExtResource("1_48xat")
+tile_scene = ExtResource("2_uhclm")

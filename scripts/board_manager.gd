@@ -23,7 +23,7 @@ func _init_grid() -> void:
 func on_board_ready(tiles: Array[Node3D]) -> void:
 	_init_grid()
 	for tile in tiles:
-		var gp := tile.tile_data.grid_pos
+		var gp: Vector3 = tile.tile_data.grid_pos
 		_grid[int(gp.x)][int(gp.y)][int(gp.z)] = tile
 
 func on_layer_rotated(axis_name: String, layer_value: float, angle_degrees: float, spacing: int) -> void:
@@ -71,11 +71,11 @@ func on_tile_selected(tile: Node3D) -> void:
 		_grid[p2.x][p2.y][p2.z] = null
 		_selected_tile.remove_tile()
 		tile.remove_tile()
+		_selected_tile = null
 	else:
 		_selected_tile.deselect()
-		tile.deselect()
-
-	_selected_tile = null
+		_selected_tile = tile
+		tile.select()
 
 func _transform_pos(pos: Vector3i, axis: String, angle: int) -> Vector3i:
 	var x := pos.x

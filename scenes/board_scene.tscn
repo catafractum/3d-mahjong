@@ -1,16 +1,16 @@
 [gd_scene format=3 uid="uid://cvn7p2vhfjjrj"]
 
 [ext_resource type="Script" uid="uid://c6mhr310p1o3o" path="res://scripts/board_scene.gd" id="1_8l4tr"]
-[ext_resource type="PackedScene" uid="uid://d3xjwwjp5260l" path="res://MahjongTile.tscn" id="2_7fpns"]
-[ext_resource type="PackedScene" uid="uid://dgvb6o0nf3m7y" path="res://board_container.tscn" id="3_8b3xw"]
-[ext_resource type="Texture2D" uid="uid://lc5tkvpfgwir" path="res://assets/images/background.png" id="4_cagae"]
+[ext_resource type="PackedScene" uid="uid://d3xjwwjp5260l" path="res://scenes/MahjongTile.tscn" id="2_7fpns"]
+[ext_resource type="PackedScene" uid="uid://dgvb6o0nf3m7y" path="res://scenes/board_container.tscn" id="3_8b3xw"]
 [ext_resource type="Texture2D" uid="uid://dhyleexn6jvry" path="res://assets/images/icons_tiles/icon_1.png" id="4_esmum"]
 [ext_resource type="Texture2D" uid="uid://c44ota7ymi83j" path="res://assets/images/btn_arrow_off.png" id="4_g0sq7"]
 [ext_resource type="Texture2D" uid="uid://6hpb3icyo3qm" path="res://assets/images/btn_arrow_on.png" id="5_cagae"]
 [ext_resource type="Texture2D" uid="uid://cq7fjagl6nbju" path="res://assets/images/icons_tiles/icon_2.png" id="5_q6jyi"]
+[ext_resource type="Texture2D" uid="uid://cll8xwwdv46we" path="res://assets/images/background.jpg" id="6_4d81t"]
 [ext_resource type="Texture2D" uid="uid://b82ismf5gaamr" path="res://assets/images/btn_shuffle_off.png" id="7_0bi8h"]
 [ext_resource type="Texture2D" uid="uid://hdn7sxfh1tps" path="res://assets/images/btn_shuffle_on.png" id="8_aqgsf"]
-[ext_resource type="Script" path="res://scripts/board_manager.gd" id="11_q6jyi"]
+[ext_resource type="Script" uid="uid://cukbj00rlfhmg" path="res://scripts/board_manager.gd" id="11_q6jyi"]
 
 [sub_resource type="Environment" id="Environment_8l4tr"]
 background_mode = 3
@@ -30,7 +30,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 5, 4)
 light_energy = 0.832
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=142207390]
-transform = Transform3D(0.7071067, -0.15304592, 0.6903455, 0, 0.976296, 0.21643962, -0.7071067, -0.15304592, 0.6903455, 7, 3.8, 7)
+transform = Transform3D(0.70710677, -0.15304592, 0.6903455, 0, 0.976296, 0.21643962, -0.70710677, -0.15304592, 0.6903455, 7, 3.8, 7)
 projection = 1
 size = 7.433
 
@@ -42,7 +42,6 @@ light_energy = 1.202
 
 [node name="MahjongTile" parent="." unique_id=696403091 instance=ExtResource("2_7fpns")]
 transform = Transform3D(0.9659258, 0, -0.25881904, 0, 1, 0, 0.25881904, 0, 0.9659258, 0, 0, 0)
-visible = false
 tile_icons = Array[Texture2D]([ExtResource("4_esmum"), ExtResource("5_q6jyi")])
 
 [node name="Background" type="CanvasLayer" parent="." unique_id=1910045739]
@@ -52,7 +51,7 @@ layer = -1
 offset_right = 1500.0
 offset_bottom = 844.0
 scale = Vector2(0.766318, 0.7671596)
-texture = ExtResource("4_cagae")
+texture = ExtResource("6_4d81t")
 
 [node name="GUI" type="CanvasLayer" parent="." unique_id=251925684]
 

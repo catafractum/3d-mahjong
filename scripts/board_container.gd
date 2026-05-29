@@ -14,12 +14,17 @@ signal layer_rotated(axis_name: String, layer_value: float, angle_degrees: float
 var spacing := 1
 var _rotating := false
 const LAYER_ROTATION_DURATION := 0.35
+const TAP_MAX_DISTANCE := 16.0
+const SWIPE_MIN_DISTANCE := 80.0
+const SWIPE_VERTICAL_TOLERANCE := 0.6
 var _sync_tiles: Array[Node3D] = []
 var _last_sync_angle := 0.0
+var _press_position := Vector2.ZERO
+var _tracking_pointer := false
 
 func _ready() -> void:
-	_create_cube_board()
 	rotate_y(-10 * PI / 180)
+	_create_cube_board()
 	board_ready.emit(_get_tiles())
 
 func _process(_delta: float) -> void:
@@ -213,9 +218,35 @@ func _create_cube_board() -> void:
 				count += 1
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.pressed:
+	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
-			pick_tile(event.position)
+			if event.pressed:
+				_begin_pointer(event.position)
+			else:
+				_end_pointer(event.position)
+	elif event is InputEventScreenTouch:
+		if event.pressed:
+			_begin_pointer(event.position)
+		else:
+			_end_pointer(event.position)
+
+func _begin_pointer(position: Vector2) -> void:
+	_press_position = position
+	_tracking_pointer = true
+
+func _end_pointer(position: Vector2) -> void:
+	if not _tracking_pointer:
+		return
+
+	_tracking_pointer = false
+	var delta := position - _press_position
+	var abs_delta := delta.abs()
+
+	if abs_delta.x >= SWIPE_MIN_DISTANCE and abs_delta.y <= abs_delta.x * SWIPE_VERTICAL_TOLERANCE:
+		rotate_board(delta.x > 0.0)
+		get_viewport().set_input_as_handled()
+	elif delta.length() <= TAP_MAX_DISTANCE:
+		pick_tile(position)
 
 func pick_tile(mouse_pos: Vector2) -> void:
 	var from = camera.project_ray_origin(mouse_pos)

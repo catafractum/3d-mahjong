@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://brugxgm251okg"]
+
+[ext_resource type="Script" path="res://scripts/splash_scene.gd" id="1_splash"]
+[ext_resource type="Texture2D" uid="uid://cll8xwwdv46we" path="res://assets/images/background.jpg" id="2_lkc75"]
+[ext_resource type="Texture2D" uid="uid://dy4dtrdnge65v" path="res://assets/images/game_logo.png" id="3_lkc75"]
+
+[node name="SplashScene" type="Control" unique_id=378663134]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_splash")
+
+[node name="Background" type="TextureRect" parent="." unique_id=1276215739]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_lkc75")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Overlay" type="ColorRect" parent="." unique_id=1019418960]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.03, 0.02, 0.05, 0.34)
+
+[node name="Content" type="VBoxContainer" parent="." unique_id=487429165]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -260.0
+offset_top = -190.0
+offset_right = 260.0
+offset_bottom = 190.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Logo" type="TextureRect" parent="Content" unique_id=923173486]
+custom_minimum_size = Vector2(360, 400)
+layout_mode = 2
+texture = ExtResource("3_lkc75")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Spacer" type="Control" parent="Content" unique_id=2098211534]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+
+[node name="StartButton" type="Button" parent="Content" unique_id=1018340545]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 72)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 30
+text = "PLAY"
