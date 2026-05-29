@@ -3,28 +3,89 @@
 [ext_resource type="Script" uid="uid://c6mhr310p1o3o" path="res://scripts/board_scene.gd" id="1_8l4tr"]
 [ext_resource type="PackedScene" uid="uid://d3xjwwjp5260l" path="res://MahjongTile.tscn" id="2_7fpns"]
 [ext_resource type="PackedScene" uid="uid://dgvb6o0nf3m7y" path="res://board_container.tscn" id="3_8b3xw"]
+[ext_resource type="Texture2D" uid="uid://lc5tkvpfgwir" path="res://assets/images/background.png" id="4_cagae"]
+[ext_resource type="Texture2D" uid="uid://c44ota7ymi83j" path="res://assets/images/btn_arrow_off.png" id="4_g0sq7"]
+[ext_resource type="Texture2D" uid="uid://6hpb3icyo3qm" path="res://assets/images/btn_arrow_on.png" id="5_cagae"]
+[ext_resource type="Texture2D" uid="uid://b82ismf5gaamr" path="res://assets/images/btn_shuffle_off.png" id="7_0bi8h"]
+[ext_resource type="Texture2D" uid="uid://hdn7sxfh1tps" path="res://assets/images/btn_shuffle_on.png" id="8_aqgsf"]
 
 [sub_resource type="Environment" id="Environment_8l4tr"]
-background_mode = 1
+background_mode = 3
 background_color = Color(0.14117648, 0.0627451, 0.19607843, 1)
 ambient_light_source = 2
 ambient_light_color = Color(1, 1, 1, 1)
-ambient_light_energy = 0.7
+ambient_light_energy = 0.59
 
 [node name="BoardScene" type="Node3D" unique_id=2038322144]
 script = ExtResource("1_8l4tr")
-tile_scene = ExtResource("2_7fpns")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1263549009]
 environment = SubResource("Environment_8l4tr")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="WorldEnvironment" unique_id=1158767289]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 4, 3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 5, 4)
+light_energy = 0.832
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=142207390]
-transform = Transform3D(0.70710677, -0.40860704, 0.5770964, 0, 0.8161376, 0.5778576, -0.70710677, -0.40860704, 0.5770964, 4, 4, 4)
+transform = Transform3D(0.7071067, -0.15304592, 0.6903455, 0, 0.976296, 0.21643962, -0.7071067, -0.15304592, 0.6903455, 7, 3.8, 7)
+projection = 1
+size = 7.433
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=526605951]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.17906)
+transform = Transform3D(0.8660254, 0.25, -0.4330127, 0, 0.8660254, 0.5, 0.5, -0.4330127, 0.75, 0, 0, 5)
+light_energy = 1.202
 
 [node name="BoardContainer" parent="." unique_id=1009866573 instance=ExtResource("3_8b3xw")]
+
+[node name="MahjongTile" parent="." unique_id=696403091 instance=ExtResource("2_7fpns")]
+transform = Transform3D(0.9659258, 0, -0.25881904, 0, 1, 0, 0.25881904, 0, 0.9659258, 0, 0, 0)
+visible = false
+
+[node name="Background" type="CanvasLayer" parent="." unique_id=1910045739]
+layer = -1
+
+[node name="TextureRect" type="TextureRect" parent="Background" unique_id=226413781]
+offset_right = 1500.0
+offset_bottom = 844.0
+scale = Vector2(0.766318, 0.7671596)
+texture = ExtResource("4_cagae")
+
+[node name="GUI" type="CanvasLayer" parent="." unique_id=251925684]
+
+[node name="Control" type="Control" parent="GUI" unique_id=133810718]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="RightArrowBtn" type="TextureButton" parent="GUI/Control" unique_id=1949707549]
+layout_mode = 0
+offset_left = 1049.0
+offset_top = 547.0
+offset_right = 1139.0
+offset_bottom = 637.0
+texture_normal = ExtResource("4_g0sq7")
+texture_pressed = ExtResource("5_cagae")
+texture_hover = ExtResource("5_cagae")
+
+[node name="LeftArrowBtn" type="TextureButton" parent="GUI/Control" unique_id=1645824941]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 544.0
+offset_right = 108.0
+offset_bottom = 634.0
+texture_normal = ExtResource("4_g0sq7")
+texture_pressed = ExtResource("5_cagae")
+texture_hover = ExtResource("5_cagae")
+flip_h = true
+
+[node name="ShuffleBtn" type="TextureButton" parent="GUI/Control" unique_id=1637463676]
+layout_mode = 0
+offset_left = 1042.0
+offset_top = 12.000001
+offset_right = 1166.0
+offset_bottom = 123.0
+scale = Vector2(0.7786331, 0.7700989)
+texture_normal = ExtResource("7_0bi8h")
+texture_pressed = ExtResource("8_aqgsf")
+texture_hover = ExtResource("8_aqgsf")

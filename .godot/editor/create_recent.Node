@@ -1,3 +1,9 @@
+TextureButton
+Button
+MeshInstance3D
+TextureRect
+CanvasLayer
+Control
 Node3D
 OmniLight3D
 WorldEnvironment
@@ -5,4 +11,3 @@ DirectionalLight3D
 Camera3D
 CollisionShape3D
 StaticBody3D
-MeshInstance3D

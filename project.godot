@@ -13,7 +13,14 @@ config_version=5
 config/name="3D Mahjong"
 run/main_scene="uid://cvn7p2vhfjjrj"
 config/features=PackedStringArray("4.6", "Mobile")
+boot_splash/bg_color=Color(0.02745098, 0.105882354, 0.08627451, 1)
+boot_splash/stretch_mode=0
+boot_splash/image="uid://76wtmrdiqw0t"
 config/icon="res://icon.svg"
+
+[display]
+
+window/stretch/mode="canvas_items"
 
 [physics]
 

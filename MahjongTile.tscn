@@ -1,15 +1,73 @@
 [gd_scene format=3 uid="uid://d3xjwwjp5260l"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_7fpns"]
+[ext_resource type="Texture2D" uid="uid://dhyleexn6jvry" path="res://assets/images/icons_tiles/icon_1.png" id="1_2nfmx"]
+[ext_resource type="Script" uid="uid://i74dukwu73es" path="res://scripts/mahjong_tile.gd" id="1_tcin4"]
+[ext_resource type="PackedScene" uid="uid://flylkiw8gla4" path="res://tmp/cube.blend" id="2_f62oh"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8b3xw"]
 
-[node name="MahjongTile" type="Node3D" unique_id=696403091]
+[sub_resource type="PlaneMesh" id="PlaneMesh_tcin4"]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=641904708]
-mesh = SubResource("BoxMesh_7fpns")
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f62oh"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+shading_mode = 2
+albedo_texture = ExtResource("1_2nfmx")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_2nfmx"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tcin4"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+shading_mode = 2
+albedo_texture = ExtResource("1_2nfmx")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_f62oh"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_72yyq"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+shading_mode = 2
+albedo_texture = ExtResource("1_2nfmx")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fexna"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+shading_mode = 2
+albedo_texture = ExtResource("1_2nfmx")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_tgw4c"]
+material = SubResource("StandardMaterial3D_fexna")
+
+[node name="MahjongTile" type="Node3D" unique_id=696403091]
+script = ExtResource("1_tcin4")
+
+[node name="cube" parent="." unique_id=597950962 instance=ExtResource("2_f62oh")]
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1350261931]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=532209214]
 shape = SubResource("BoxShape3D_8b3xw")
+
+[node name="FaceFront" type="MeshInstance3D" parent="." unique_id=1345649226]
+transform = Transform3D(0.5, 0, 0, 0, -2.1855694e-08, -0.5, 0, 0.5, -2.1855694e-08, 0, 0, 0.57)
+mesh = SubResource("PlaneMesh_tcin4")
+surface_material_override/0 = SubResource("StandardMaterial3D_f62oh")
+
+[node name="FaceBack" type="MeshInstance3D" parent="." unique_id=680389109]
+transform = Transform3D(2.1855694e-08, 0.5, 2.1855694e-08, 0, 2.1855694e-08, -0.5, 0.5, -2.1855694e-08, -9.553427e-16, 0.57, 0, 0)
+mesh = SubResource("PlaneMesh_2nfmx")
+surface_material_override/0 = SubResource("StandardMaterial3D_tcin4")
+
+[node name="FaceLeft" type="MeshInstance3D" parent="." unique_id=535742240]
+transform = Transform3D(-0.5, 7.54979e-08, -3.300118e-15, 0, -2.1855694e-08, -0.5, -7.54979e-08, -0.5, 2.1855694e-08, 0, 0, -0.51)
+mesh = SubResource("PlaneMesh_f62oh")
+surface_material_override/0 = SubResource("StandardMaterial3D_72yyq")
+
+[node name="FaceRight" type="MeshInstance3D" parent="." unique_id=1264959633]
+transform = Transform3D(-2.1855694e-08, -0.5, 0, -2.1855694e-08, 9.553427e-16, -0.5, 0.5, -2.1855694e-08, -2.1855694e-08, -0.57, 0, 0)
+mesh = SubResource("PlaneMesh_tgw4c")
