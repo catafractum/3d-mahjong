@@ -1,7 +1,5 @@
-res://MahjongTile.tscn
-res://board_scene.tscn
-res://scenes/cube.tscn
 res://scripts/board_container.gd
+res://scenes/MahjongTile.tscn
+res://scenes/board_scene.tscn
 res://scripts/board_scene.gd
-res://scripts/mahjong_tile.gd
-res://scripts/tile_data.gd
+res://scripts/gui_controller.gd

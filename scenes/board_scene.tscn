@@ -4,13 +4,26 @@
 [ext_resource type="PackedScene" uid="uid://d3xjwwjp5260l" path="res://scenes/MahjongTile.tscn" id="2_7fpns"]
 [ext_resource type="PackedScene" uid="uid://dgvb6o0nf3m7y" path="res://scenes/board_container.tscn" id="3_8b3xw"]
 [ext_resource type="Texture2D" uid="uid://dhyleexn6jvry" path="res://assets/images/icons_tiles/icon_1.png" id="4_esmum"]
-[ext_resource type="Texture2D" uid="uid://c44ota7ymi83j" path="res://assets/images/btn_arrow_off.png" id="4_g0sq7"]
-[ext_resource type="Texture2D" uid="uid://6hpb3icyo3qm" path="res://assets/images/btn_arrow_on.png" id="5_cagae"]
+[ext_resource type="Texture2D" uid="uid://c44ota7ymi83j" path="res://assets/images/buttons/btn_arrow_off.png" id="4_g0sq7"]
+[ext_resource type="Texture2D" uid="uid://6hpb3icyo3qm" path="res://assets/images/buttons/btn_arrow_on.png" id="5_cagae"]
 [ext_resource type="Texture2D" uid="uid://cq7fjagl6nbju" path="res://assets/images/icons_tiles/icon_2.png" id="5_q6jyi"]
 [ext_resource type="Texture2D" uid="uid://cll8xwwdv46we" path="res://assets/images/background.jpg" id="6_4d81t"]
-[ext_resource type="Texture2D" uid="uid://b82ismf5gaamr" path="res://assets/images/btn_shuffle_off.png" id="7_0bi8h"]
-[ext_resource type="Texture2D" uid="uid://hdn7sxfh1tps" path="res://assets/images/btn_shuffle_on.png" id="8_aqgsf"]
+[ext_resource type="Texture2D" uid="uid://b82ismf5gaamr" path="res://assets/images/buttons/btn_shuffle_off.png" id="7_0bi8h"]
+[ext_resource type="Texture2D" uid="uid://hdn7sxfh1tps" path="res://assets/images/buttons/btn_shuffle_on.png" id="8_aqgsf"]
+[ext_resource type="Texture2D" uid="uid://ic10ws4jssj3" path="res://assets/images/buttons/btn_settings_off.png" id="9_g2hxh"]
+[ext_resource type="Texture2D" uid="uid://dcox3uft1xb2t" path="res://assets/images/buttons/btn_settings_on.png" id="10_17jkw"]
 [ext_resource type="Script" uid="uid://cukbj00rlfhmg" path="res://scripts/board_manager.gd" id="11_q6jyi"]
+[ext_resource type="Texture2D" uid="uid://dyq0ggulxd6fl" path="res://assets/images/buttons/btn_sfx_on_off.png" id="13_mepxe"]
+[ext_resource type="Texture2D" uid="uid://d3sgmurfd3j2x" path="res://assets/images/buttons/btn_sfx_on_on.png" id="14_uu4lp"]
+[ext_resource type="Texture2D" uid="uid://b6gdcvp0d0055" path="res://assets/images/buttons/btn_sfx_off_off.png" id="15_q4par"]
+[ext_resource type="Texture2D" uid="uid://pvpwj2iwbgoc" path="res://assets/images/buttons/btn_sfx_off_on.png" id="16_4khhe"]
+[ext_resource type="Texture2D" uid="uid://cqghs8u3d41s1" path="res://assets/images/buttons/btn_soundtrack_on_off.png" id="17_6nm2w"]
+[ext_resource type="Texture2D" uid="uid://ds2yg3ca5aqln" path="res://assets/images/buttons/btn_home_off.png" id="17_mepxe"]
+[ext_resource type="Texture2D" uid="uid://dvmxgq2fn5xv4" path="res://assets/images/buttons/btn_soundtrack_on_on.png" id="18_tiohw"]
+[ext_resource type="Texture2D" uid="uid://cgokeqfykbd83" path="res://assets/images/buttons/btn_home_on.png" id="18_uu4lp"]
+[ext_resource type="Texture2D" uid="uid://b8lj6d7m2wpts" path="res://assets/images/buttons/btn_soundtrack_off_off.png" id="19_p5g5a"]
+[ext_resource type="Texture2D" uid="uid://c8uotvrss3yed" path="res://assets/images/buttons/btn_soundtrack_off_on.png" id="20_oys70"]
+[ext_resource type="Script" uid="uid://bs4da1eyefnkb" path="res://scripts/gui_controller.gd" id="21_guictl"]
 
 [sub_resource type="Environment" id="Environment_8l4tr"]
 background_mode = 3
@@ -60,6 +73,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+script = ExtResource("21_guictl")
 
 [node name="RightArrowBtn" type="TextureButton" parent="GUI/Control" unique_id=1949707549]
 layout_mode = 0
@@ -84,14 +98,76 @@ flip_h = true
 
 [node name="ShuffleBtn" type="TextureButton" parent="GUI/Control" unique_id=1637463676]
 layout_mode = 0
-offset_left = 1042.0
-offset_top = 12.000001
-offset_right = 1166.0
-offset_bottom = 123.0
+offset_left = 925.0
+offset_top = 13.000001
+offset_right = 1049.0
+offset_bottom = 124.0
 scale = Vector2(0.7786331, 0.7700989)
 texture_normal = ExtResource("7_0bi8h")
 texture_pressed = ExtResource("8_aqgsf")
 texture_hover = ExtResource("8_aqgsf")
+
+[node name="AudioSfxBtn_on" type="TextureButton" parent="GUI/Control" unique_id=1320069662]
+layout_mode = 0
+offset_left = 940.0
+offset_top = 108.0
+offset_right = 1026.0
+offset_bottom = 197.0
+texture_normal = ExtResource("13_mepxe")
+texture_pressed = ExtResource("14_uu4lp")
+texture_hover = ExtResource("14_uu4lp")
+
+[node name="AudioSfxBtn_off" type="TextureButton" parent="GUI/Control" unique_id=350160741]
+layout_mode = 0
+offset_left = 1044.0
+offset_top = 105.0
+offset_right = 1130.0
+offset_bottom = 194.0
+texture_normal = ExtResource("15_q4par")
+texture_pressed = ExtResource("16_4khhe")
+texture_hover = ExtResource("16_4khhe")
+
+[node name="AudioSoundtrackBtn_on" type="TextureButton" parent="GUI/Control" unique_id=387258833]
+layout_mode = 0
+offset_left = 939.0
+offset_top = 200.0
+offset_right = 1025.0
+offset_bottom = 289.0
+texture_normal = ExtResource("17_6nm2w")
+texture_pressed = ExtResource("18_tiohw")
+texture_hover = ExtResource("18_tiohw")
+
+[node name="AudioSoundtrackBtn_off" type="TextureButton" parent="GUI/Control" unique_id=1252805751]
+layout_mode = 0
+offset_left = 1046.0
+offset_top = 199.0
+offset_right = 1132.0
+offset_bottom = 288.0
+texture_normal = ExtResource("19_p5g5a")
+texture_pressed = ExtResource("20_oys70")
+texture_hover = ExtResource("20_oys70")
+
+[node name="SettingsBtn" type="TextureButton" parent="GUI/Control" unique_id=134889578]
+layout_mode = 0
+offset_left = 1041.0
+offset_top = 7.0
+offset_right = 1152.0
+offset_bottom = 121.0
+scale = Vector2(0.8799902, 0.8799902)
+texture_normal = ExtResource("9_g2hxh")
+texture_pressed = ExtResource("10_17jkw")
+texture_hover = ExtResource("10_17jkw")
+
+[node name="HomeBtn" type="TextureButton" parent="GUI/Control" unique_id=658344993]
+layout_mode = 0
+offset_left = 1056.0
+offset_top = 289.0
+offset_right = 1146.0
+offset_bottom = 398.0
+scale = Vector2(0.8403344, 0.8097891)
+texture_normal = ExtResource("17_mepxe")
+texture_pressed = ExtResource("18_uu4lp")
+texture_hover = ExtResource("18_uu4lp")
 
 [node name="BoardManager" type="Node" parent="." unique_id=1800542772]
 script = ExtResource("11_q6jyi")

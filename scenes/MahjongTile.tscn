@@ -12,6 +12,12 @@
 [ext_resource type="Texture2D" uid="uid://bljia2g0touao" path="res://assets/images/icons_tiles/icon_8.png" id="9_5eehs"]
 [ext_resource type="Texture2D" uid="uid://bdhic3n32uy0b" path="res://assets/images/icons_tiles/icon_9.png" id="10_3rkng"]
 [ext_resource type="Texture2D" uid="uid://c7eq85aj1hver" path="res://assets/images/icons_tiles/icon_10.png" id="11_50oml"]
+[ext_resource type="Texture2D" uid="uid://drq37rnufn7tg" path="res://assets/images/icons_tiles/icon_11.png" id="12_3ytjk"]
+[ext_resource type="Texture2D" uid="uid://dyd86kuc5pn64" path="res://assets/images/icons_tiles/icon_12.png" id="13_b8gk3"]
+[ext_resource type="Texture2D" uid="uid://clrldrhpl5jwq" path="res://assets/images/icons_tiles/icon_13.png" id="14_vdv3u"]
+[ext_resource type="Texture2D" uid="uid://c4dlt8iq2e6t0" path="res://assets/images/icons_tiles/icon_14.png" id="15_q4idj"]
+[ext_resource type="Texture2D" uid="uid://bm5juixmos3p3" path="res://assets/images/icons_tiles/icon_15.png" id="16_gpobp"]
+[ext_resource type="Texture2D" uid="uid://bfh2iqarkwjnn" path="res://assets/images/icons_tiles/icon_16.png" id="17_nl117"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8b3xw"]
 
@@ -54,7 +60,7 @@ material = SubResource("StandardMaterial3D_fexna")
 
 [node name="MahjongTile" type="Node3D" unique_id=696403091]
 script = ExtResource("1_tcin4")
-tile_icons = Array[Texture2D]([ExtResource("1_2nfmx"), ExtResource("3_fexna"), ExtResource("4_tgw4c"), ExtResource("5_k7sh6"), ExtResource("6_dvjdc"), ExtResource("7_ayrhh"), ExtResource("8_y81hs"), ExtResource("9_5eehs"), ExtResource("10_3rkng"), ExtResource("11_50oml"), null])
+tile_icons = Array[Texture2D]([ExtResource("1_2nfmx"), ExtResource("3_fexna"), ExtResource("4_tgw4c"), ExtResource("5_k7sh6"), ExtResource("6_dvjdc"), ExtResource("7_ayrhh"), ExtResource("8_y81hs"), ExtResource("9_5eehs"), ExtResource("10_3rkng"), ExtResource("11_50oml"), ExtResource("12_3ytjk"), ExtResource("13_b8gk3"), ExtResource("14_vdv3u"), ExtResource("15_q4idj"), ExtResource("16_gpobp"), ExtResource("17_nl117")])
 
 [node name="cube" parent="." unique_id=597950962 instance=ExtResource("2_f62oh")]
 

@@ -3,6 +3,7 @@ extends Node3D
 @onready var camera: Camera3D = $Camera3D
 @onready var board_container: Node3D = $BoardContainer
 @onready var board_manager: Node = $BoardManager
+@onready var gui: Control = $GUI/Control
 
 func _ready() -> void:
 	board_container.tile_selected.connect(board_manager.on_tile_selected)
@@ -13,6 +14,9 @@ func _ready() -> void:
 	$GUI/Control/RightArrowBtn.pressed.connect(_on_rotate_right)
 	$GUI/Control/LeftArrowBtn.pressed.connect(_on_rotate_left)
 	$GUI/Control/ShuffleBtn.pressed.connect(_on_shuffle)
+	gui.home_pressed.connect(_on_home)
+	gui.sfx_toggled.connect(_on_sfx_toggled)
+	gui.soundtrack_toggled.connect(_on_soundtrack_toggled)
 
 func _on_rotate_right() -> void:
 	board_container.rotate_board(true)
@@ -22,3 +26,12 @@ func _on_rotate_left() -> void:
 
 func _on_shuffle() -> void:
 	board_container.shuffle()
+
+func _on_home() -> void:
+	get_tree().change_scene_to_file("res://scenes/splash_scene.tscn")
+
+func _on_sfx_toggled(is_on: bool) -> void:
+	AudioServer.set_bus_mute(AudioServer.get_bus_index("SFX"), not is_on)
+
+func _on_soundtrack_toggled(is_on: bool) -> void:
+	AudioServer.set_bus_mute(AudioServer.get_bus_index("Music"), not is_on)

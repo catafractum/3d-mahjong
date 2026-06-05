@@ -3,7 +3,7 @@ extends Node3D
 const TileDataRes = preload("res://scripts/tile_data.gd")
 
 @export var tile_scene: PackedScene
-@export var icon_type_count: int = 10
+@export var icon_type_count: int = 16
 
 signal tile_selected(tile: Node3D)
 signal board_ready(tiles: Array[Node3D])
