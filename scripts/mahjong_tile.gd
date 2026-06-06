@@ -69,7 +69,7 @@ func remove_tile() -> void:
 	var tween := create_tween()
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_CUBIC)
-	tween.tween_property(self, "scale", Vector3.ONE * 1.075, 0.15)
+	tween.tween_property(self, "scale", Vector3.ONE * 1.1, 0.25)
 	tween.tween_property(self, "scale", Vector3.ZERO, 0.4)
 	tween.tween_callback(queue_free)
 

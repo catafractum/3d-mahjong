@@ -15,6 +15,7 @@ func _ready() -> void:
 	$GUI/Control/LeftArrowBtn.pressed.connect(_on_rotate_left)
 	$GUI/Control/ShuffleBtn.pressed.connect(_on_shuffle)
 	gui.home_pressed.connect(_on_home)
+	gui.reset_pressed.connect(_on_reset)
 	gui.sfx_toggled.connect(_on_sfx_toggled)
 	gui.soundtrack_toggled.connect(_on_soundtrack_toggled)
 
@@ -29,6 +30,9 @@ func _on_shuffle() -> void:
 
 func _on_home() -> void:
 	get_tree().change_scene_to_file("res://scenes/splash_scene.tscn")
+
+func _on_reset() -> void:
+	get_tree().reload_current_scene()
 
 func _on_sfx_toggled(is_on: bool) -> void:
 	AudioServer.set_bus_mute(AudioServer.get_bus_index("SFX"), not is_on)

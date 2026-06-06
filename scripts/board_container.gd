@@ -1,6 +1,7 @@
 extends Node3D
 
 const TileDataRes = preload("res://scripts/tile_data.gd")
+const LEVELS_PATH := "res://data/levels.json"
 
 @export var tile_scene: PackedScene
 @export var icon_type_count: int = 16
@@ -24,7 +25,7 @@ var _tracking_pointer := false
 
 func _ready() -> void:
 	rotate_y(-10 * PI / 180)
-	_create_cube_board()
+	_create_cube_board(1)
 	board_ready.emit(_get_tiles())
 
 func _process(_delta: float) -> void:
@@ -201,21 +202,79 @@ func _snap_rotation_degrees(rot: Vector3) -> Vector3:
 		round(rot.z / 90.0) * 90.0
 	)
 
-func _create_cube_board() -> void:
+func _create_cube_board(level_id: int) -> void:
+	var level := _get_level_data(level_id)
+	if level.is_empty():
+		push_error("BoardContainer: level id %d not found" % level_id)
+		return
+
+	var tile_coords: Array = level.get("tiles", [])
+	if tile_coords.is_empty():
+		push_error("BoardContainer: level id %d has no tiles" % level_id)
+		return
+
+	var bounds := _get_level_bounds(tile_coords)
+	var center_x: float = (bounds.min_x + bounds.max_x) * 0.5
+	var center_z: float = (bounds.min_z + bounds.max_z) * 0.5
 	var count := 0
-	for x in range(4):
-		for y in range(4):
-			for z in range(4):
-				var tile = tile_scene.instantiate()
-				add_child(tile)
-				tile.position = Vector3((x - 1.5) * spacing, y * spacing, (z - 1.5) * spacing)
-				tile.name = "Tile_%d" % count
-				tile.id = count
-				var data := TileDataRes.new()
-				data.grid_pos = Vector3(x, y, z)
-				data.icon_type = randi() % icon_type_count
-				tile.set_tile_data(data, data.icon_type)
-				count += 1
+	for coord in tile_coords:
+		if coord.size() < 3:
+			push_warning("BoardContainer: skipping invalid tile coordinate in level %d" % level_id)
+			continue
+
+		var x := int(coord[0])
+		var y := int(coord[1])
+		var z := int(coord[2])
+		var tile = tile_scene.instantiate()
+		add_child(tile)
+		tile.position = Vector3((x - center_x) * spacing, y * spacing, (z - center_z) * spacing)
+		tile.name = "Tile_%d" % count
+		tile.id = count
+		var data := TileDataRes.new()
+		data.grid_pos = Vector3(x, y, z)
+		data.icon_type = randi() % icon_type_count
+		tile.set_tile_data(data, data.icon_type)
+		count += 1
+
+func _get_level_data(level_id: int) -> Dictionary:
+	var file := FileAccess.open(LEVELS_PATH, FileAccess.READ)
+	if file == null:
+		push_error("BoardContainer: could not open %s" % LEVELS_PATH)
+		return {}
+
+	var parsed = JSON.parse_string(file.get_as_text())
+	if not parsed is Dictionary:
+		push_error("BoardContainer: invalid levels JSON")
+		return {}
+
+	for level in parsed.get("levels", []):
+		if level is Dictionary and int(level.get("id", -1)) == level_id:
+			return level
+	return {}
+
+func _get_level_bounds(tile_coords: Array) -> Dictionary:
+	var first: Array = tile_coords[0]
+	var min_x := int(first[0])
+	var max_x := min_x
+	var min_z := int(first[2])
+	var max_z := min_z
+
+	for coord in tile_coords:
+		if coord.size() < 3:
+			continue
+		var x := int(coord[0])
+		var z := int(coord[2])
+		min_x = mini(min_x, x)
+		max_x = maxi(max_x, x)
+		min_z = mini(min_z, z)
+		max_z = maxi(max_z, z)
+
+	return {
+		"min_x": min_x,
+		"max_x": max_x,
+		"min_z": min_z,
+		"max_z": max_z
+	}
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:

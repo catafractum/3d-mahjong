@@ -1,6 +1,7 @@
 extends Control
 
 signal home_pressed
+signal reset_pressed
 signal sfx_toggled(is_on: bool)
 signal soundtrack_toggled(is_on: bool)
 
@@ -9,6 +10,7 @@ signal soundtrack_toggled(is_on: bool)
 @onready var sfx_off_btn: TextureButton = $AudioSfxBtn_off
 @onready var soundtrack_on_btn: TextureButton = $AudioSoundtrackBtn_on
 @onready var soundtrack_off_btn: TextureButton = $AudioSoundtrackBtn_off
+@onready var reset_btn: TextureButton = $ResetBtn
 @onready var home_btn: TextureButton = $HomeBtn
 
 var _settings_open: bool = false
@@ -17,15 +19,21 @@ var _soundtrack_on: bool = true
 
 var _sfx_slot_y: float
 var _st_slot_y: float
+var _reset_slot_y: float
 var _home_slot_y: float
 var _hidden_y: float
+var _button_base_scales: Dictionary = {}
+var _button_scale_tweens: Dictionary = {}
 
 func _ready() -> void:
 	_hidden_y = settings_btn.position.y
+	for btn in _all_buttons():
+		_setup_button_scale_feedback(btn)
 
 	# Guardar Y destino de cada slot desde los botones _on (referencia del editor)
 	_sfx_slot_y = sfx_on_btn.position.y
 	_st_slot_y = soundtrack_on_btn.position.y
+	_reset_slot_y = reset_btn.position.y
 	_home_slot_y = home_btn.position.y
 
 	# Forzar X del settings, z_index por debajo de settings, y ocultar
@@ -41,14 +49,47 @@ func _ready() -> void:
 	sfx_off_btn.pressed.connect(_on_sfx_pressed.bind(false))
 	soundtrack_on_btn.pressed.connect(_on_soundtrack_pressed.bind(true))
 	soundtrack_off_btn.pressed.connect(_on_soundtrack_pressed.bind(false))
+	reset_btn.pressed.connect(func(): reset_pressed.emit())
 	home_btn.pressed.connect(func(): home_pressed.emit())
 
 func _align_x(btn: TextureButton) -> void:
-	var settings_center_x := settings_btn.position.x + (settings_btn.size.x * settings_btn.scale.x * 0.5)
-	btn.position.x = settings_center_x - (btn.size.x * btn.scale.x * 0.5)
+	var settings_scale := _base_scale(settings_btn)
+	var btn_scale := _base_scale(btn)
+	var settings_center_x := settings_btn.position.x + (settings_btn.size.x * settings_scale.x * 0.5)
+	btn.position.x = settings_center_x - (btn.size.x * btn_scale.x * 0.5)
 
 func _all_deployable() -> Array[TextureButton]:
-	return [sfx_on_btn, sfx_off_btn, soundtrack_on_btn, soundtrack_off_btn, home_btn]
+	return [sfx_on_btn, sfx_off_btn, soundtrack_on_btn, soundtrack_off_btn, reset_btn, home_btn]
+
+func _all_buttons() -> Array[TextureButton]:
+	var buttons: Array[TextureButton] = []
+	for child in get_children():
+		if child is TextureButton:
+			buttons.append(child)
+	return buttons
+
+func _base_scale(btn: TextureButton) -> Vector2:
+	return _button_base_scales.get(btn, btn.scale)
+
+func _setup_button_scale_feedback(btn: TextureButton) -> void:
+	_button_base_scales[btn] = btn.scale
+	btn.pivot_offset = btn.size * 0.5
+	btn.mouse_entered.connect(func(): _tween_button_scale(btn, 1.05))
+	btn.mouse_exited.connect(func(): _tween_button_scale(btn, 1.0))
+	btn.button_down.connect(func(): _tween_button_scale(btn, 1.05))
+	btn.button_up.connect(func():
+		_tween_button_scale(btn, 1.05 if btn.is_hovered() else 1.0)
+	)
+
+func _tween_button_scale(btn: TextureButton, multiplier: float) -> void:
+	var existing_tween: Tween = _button_scale_tweens.get(btn)
+	if existing_tween != null:
+		existing_tween.kill()
+	var tween := create_tween()
+	_button_scale_tweens[btn] = tween
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_CUBIC)
+	tween.tween_property(btn, "scale", _base_scale(btn) * multiplier, 0.08)
 
 func _current_sfx_btn() -> TextureButton:
 	return sfx_on_btn if _sfx_on else sfx_off_btn
@@ -67,7 +108,7 @@ func _deploy() -> void:
 	var sfx_btn := _current_sfx_btn()
 	var st_btn := _current_soundtrack_btn()
 
-	for btn in [sfx_btn, st_btn, home_btn]:
+	for btn in [sfx_btn, st_btn, reset_btn, home_btn]:
 		_align_x(btn)
 		btn.position.y = _hidden_y
 		btn.visible = true
@@ -76,6 +117,8 @@ func _deploy() -> void:
 	tween.parallel().tween_property(sfx_btn, "position:y", _sfx_slot_y, 0.25) \
 		.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
 	tween.parallel().tween_property(st_btn, "position:y", _st_slot_y, 0.25) \
+		.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
+	tween.parallel().tween_property(reset_btn, "position:y", _reset_slot_y, 0.25) \
 		.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
 	tween.parallel().tween_property(home_btn, "position:y", _home_slot_y, 0.25) \
 		.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
@@ -90,10 +133,12 @@ func _collapse() -> void:
 		.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_BACK)
 	tween.parallel().tween_property(st_btn, "position:y", _hidden_y, 0.2) \
 		.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_BACK)
+	tween.parallel().tween_property(reset_btn, "position:y", _hidden_y, 0.2) \
+		.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_BACK)
 	tween.parallel().tween_property(home_btn, "position:y", _hidden_y, 0.2) \
 		.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_BACK)
 	tween.tween_callback(func():
-		for btn in [sfx_btn, st_btn, home_btn]:
+		for btn in [sfx_btn, st_btn, reset_btn, home_btn]:
 			btn.visible = false
 	)
 

@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://dhyleexn6jvry" path="res://assets/images/icons_tiles/icon_1.png" id="1_2nfmx"]
 [ext_resource type="Script" uid="uid://i74dukwu73es" path="res://scripts/mahjong_tile.gd" id="1_tcin4"]
-[ext_resource type="PackedScene" uid="uid://flylkiw8gla4" path="res://tmp/cube.blend" id="2_f62oh"]
+[ext_resource type="PackedScene" path="res://assets/models/cube.scn" id="2_f62oh"]
 [ext_resource type="Texture2D" uid="uid://cq7fjagl6nbju" path="res://assets/images/icons_tiles/icon_2.png" id="3_fexna"]
 [ext_resource type="Texture2D" uid="uid://cxff4nukh4m8g" path="res://assets/images/icons_tiles/icon_3.png" id="4_tgw4c"]
 [ext_resource type="Texture2D" uid="uid://bkth2fr85alul" path="res://assets/images/icons_tiles/icon_4.png" id="5_k7sh6"]
