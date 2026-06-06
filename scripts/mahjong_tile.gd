@@ -15,6 +15,7 @@ var tile_data = null
 var _body_meshes: Array[MeshInstance3D] = []
 var _body_original_surface_materials: Dictionary = {}
 var _selection_light: OmniLight3D
+var _is_removing: bool = false
 
 func _icon_faces() -> Array[MeshInstance3D]:
 	return [face_front, face_back, face_left, face_right]
@@ -60,7 +61,17 @@ func deselect() -> void:
 		_selection_light.visible = false
 
 func remove_tile() -> void:
-	queue_free()
+	if _is_removing:
+		return
+	_is_removing = true
+	deselect()
+
+	var tween := create_tween()
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_CUBIC)
+	tween.tween_property(self, "scale", Vector3.ONE * 1.075, 0.15)
+	tween.tween_property(self, "scale", Vector3.ZERO, 0.4)
+	tween.tween_callback(queue_free)
 
 func counter_rotate_icons(delta_rad: float) -> void:
 	for face in _icon_faces():

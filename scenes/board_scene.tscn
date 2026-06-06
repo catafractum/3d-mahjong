@@ -55,6 +55,7 @@ light_energy = 1.202
 
 [node name="MahjongTile" parent="." unique_id=696403091 instance=ExtResource("2_7fpns")]
 transform = Transform3D(0.9659258, 0, -0.25881904, 0, 1, 0, 0.25881904, 0, 0.9659258, 0, 0, 0)
+visible = false
 tile_icons = Array[Texture2D]([ExtResource("4_esmum"), ExtResource("5_q6jyi")])
 
 [node name="Background" type="CanvasLayer" parent="." unique_id=1910045739]
