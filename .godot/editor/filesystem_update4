@@ -1,6 +1,7 @@
-res://scripts/board_manager.gd
-res://scripts/board_container.gd
-res://scripts/level_editor.gd
-res://scenes/board_scene.tscn
-res://scenes/board_container.tscn
 res://data/levels.json
+res://scenes/board_container.tscn
+res://scripts/board_container.gd
+res://scripts/board_scene.gd
+res://scripts/level_editor.gd
+res://scripts/mahjong_tile.gd
+res://scripts/game_state.gd

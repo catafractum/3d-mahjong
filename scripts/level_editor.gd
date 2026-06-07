@@ -3,9 +3,12 @@ extends Node3D
 const TileDataRes = preload("res://scripts/tile_data.gd")
 const LevelNormalizer = preload("res://scripts/level_normalizer.gd")
 const LEVELS_PATH := "res://data/levels.json"
+const BOARD_SCENE := "res://scenes/board_scene.tscn"
 const GRID_SIZE := 7
 const GRID_CENTER := float(GRID_SIZE - 1) * 0.5
 const VIEW_Y_OFFSET := -3.0
+const TOP_VIEW_CELL_SIZE := 24.0
+const TOP_VIEW_TILE_INSET := 3.0
 const DIFFICULTIES := ["easy", "medium", "hard"]
 
 @export var tile_scene: PackedScene
@@ -21,6 +24,7 @@ const DIFFICULTIES := ["easy", "medium", "hard"]
 
 var _occupied: Dictionary = {}
 var _tile_nodes: Dictionary = {}
+var _top_view_tile_nodes: Dictionary = {}
 var _cell_nodes: Dictionary = {}
 var _layer_grid_lines: Array[MeshInstance3D] = []
 var _visual_offset := Vector3.ZERO
@@ -30,11 +34,17 @@ var _slot_spin: SpinBox
 var _layer_spin: SpinBox
 var _count_label: Label
 var _status_label: Label
+var _top_view_root: Control
+var _top_view_grid_root: Control
+var _top_view_tiles_root: Control
 
 func _ready() -> void:
 	_build_ui()
+	_build_play_button()
+	_build_top_view()
 	_build_grid()
 	_build_layer_grid()
+	_apply_selected_level_from_game_state()
 	_load_selected_slot()
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -107,6 +117,24 @@ func _build_ui() -> void:
 	panel.add_child(_status_label)
 	_update_status("Ready")
 
+func _build_play_button() -> void:
+	var play_button := Button.new()
+	play_button.text = "Play"
+	play_button.custom_minimum_size = Vector2(128, 64)
+	play_button.anchors_preset = Control.PRESET_BOTTOM_RIGHT
+	play_button.anchor_left = 1.0
+	play_button.anchor_top = 1.0
+	play_button.anchor_right = 1.0
+	play_button.anchor_bottom = 1.0
+	play_button.offset_left = -160.0
+	play_button.offset_top = -96.0
+	play_button.offset_right = -32.0
+	play_button.offset_bottom = -32.0
+	play_button.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	play_button.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	play_button.pressed.connect(_play_selected_slot)
+	$UI.add_child(play_button)
+
 func _build_grid() -> void:
 	var grid_mat := StandardMaterial3D.new()
 	grid_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
@@ -137,6 +165,62 @@ func _build_grid() -> void:
 				mesh_instance.material_override = grid_mat
 				body.add_child(mesh_instance)
 	_set_active_layer(_active_layer)
+
+func _build_top_view() -> void:
+	var board_size := float(GRID_SIZE) * TOP_VIEW_CELL_SIZE
+
+	_top_view_root = Control.new()
+	_top_view_root.mouse_filter = Control.MOUSE_FILTER_STOP
+	_top_view_root.anchors_preset = Control.PRESET_TOP_RIGHT
+	_top_view_root.anchor_left = 1.0
+	_top_view_root.anchor_right = 1.0
+	_top_view_root.offset_left = -board_size - 48.0
+	_top_view_root.offset_top = 24.0
+	_top_view_root.offset_right = -48.0
+	_top_view_root.offset_bottom = 24.0 + board_size
+	_top_view_root.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	_top_view_root.gui_input.connect(_on_top_view_gui_input)
+	$UI.add_child(_top_view_root)
+
+	var background := ColorRect.new()
+	background.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	background.color = Color(0.02, 0.025, 0.03, 0.72)
+	background.position = Vector2.ZERO
+	background.size = Vector2(board_size, board_size)
+	_top_view_root.add_child(background)
+
+	_top_view_grid_root = Control.new()
+	_top_view_grid_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_top_view_grid_root.position = Vector2.ZERO
+	_top_view_grid_root.size = Vector2(board_size, board_size)
+	_top_view_root.add_child(_top_view_grid_root)
+
+	_top_view_tiles_root = Control.new()
+	_top_view_tiles_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_top_view_tiles_root.position = Vector2.ZERO
+	_top_view_tiles_root.size = Vector2(board_size, board_size)
+	_top_view_root.add_child(_top_view_tiles_root)
+
+	var line_color := Color(1.0, 0.05, 0.04, 0.82)
+	for i in range(GRID_SIZE + 1):
+		var line_position := float(i) * TOP_VIEW_CELL_SIZE
+		_add_top_view_line(Vector2(0.0, line_position), Vector2(board_size, 1.0), line_color)
+		_add_top_view_line(Vector2(line_position, 0.0), Vector2(1.0, board_size), line_color)
+
+func _add_top_view_line(position: Vector2, size: Vector2, color: Color) -> void:
+	var line := ColorRect.new()
+	line.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	line.color = color
+	line.position = position
+	line.size = size
+	_top_view_grid_root.add_child(line)
+
+func _on_top_view_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		var coord := _top_view_position_to_coord(event.position)
+		if _is_valid_coord(coord):
+			_toggle_cell(coord)
+			get_viewport().set_input_as_handled()
 
 func _build_layer_grid() -> void:
 	var line_mat := StandardMaterial3D.new()
@@ -212,7 +296,9 @@ func _add_tile(coord: Vector3i) -> void:
 	tile.id = _tile_nodes.size()
 	tile.set_tile_data(data, data.icon_type)
 	_tile_nodes[coord] = tile
+	_add_top_view_tile(coord)
 	_set_tile_collision(tile, coord.y == _active_layer)
+	_set_tile_dimmed(tile, coord.y != _active_layer)
 	_update_count_label()
 
 func _remove_tile(coord: Vector3i) -> void:
@@ -220,13 +306,19 @@ func _remove_tile(coord: Vector3i) -> void:
 	if _tile_nodes.has(coord):
 		_tile_nodes[coord].queue_free()
 		_tile_nodes.erase(coord)
+	if _top_view_tile_nodes.has(coord):
+		_top_view_tile_nodes[coord].queue_free()
+		_top_view_tile_nodes.erase(coord)
 	_update_count_label()
 
 func _clear_level() -> void:
 	for tile in _tile_nodes.values():
 		tile.queue_free()
+	for tile in _top_view_tile_nodes.values():
+		tile.queue_free()
 	_occupied.clear()
 	_tile_nodes.clear()
+	_top_view_tile_nodes.clear()
 	_visual_offset = Vector3.ZERO
 	_update_count_label()
 	_update_status("Cleared")
@@ -243,13 +335,20 @@ func _set_active_layer(layer: int) -> void:
 		cell.collision_layer = 1 if is_active else 0
 	for coord: Vector3i in _tile_nodes.keys():
 		_set_tile_collision(_tile_nodes[coord], coord.y == _active_layer)
-	layer_grid_root.position.y = (float(_active_layer) + VIEW_Y_OFFSET) * spacing
+		_set_tile_dimmed(_tile_nodes[coord], coord.y != _active_layer)
+	for coord: Vector3i in _top_view_tile_nodes.keys():
+		_update_top_view_tile_material(coord)
+	layer_grid_root.position = Vector3(0.0, (float(_active_layer) + VIEW_Y_OFFSET) * spacing, 0.0)
 	_update_status("Layer Y %d" % _active_layer)
 
 func _set_tile_collision(tile: Node, enabled: bool) -> void:
 	var body := tile.get_node_or_null("StaticBody3D") as StaticBody3D
 	if body != null:
 		body.collision_layer = 1 if enabled else 0
+
+func _set_tile_dimmed(tile: Node, is_dimmed: bool) -> void:
+	if tile.has_method("set_editor_dimmed"):
+		tile.set_editor_dimmed(is_dimmed)
 
 func _load_selected_slot() -> void:
 	_clear_level()
@@ -265,7 +364,7 @@ func _load_selected_slot() -> void:
 			_add_tile(coord)
 	_update_status("Loaded %s" % _selected_level_name())
 
-func _save_selected_slot() -> void:
+func _save_selected_slot() -> bool:
 	var levels_data := _read_levels_file()
 	var levels: Array = levels_data.get("levels", [])
 	var level_id := _selected_level_id()
@@ -295,9 +394,32 @@ func _save_selected_slot() -> void:
 	var file := FileAccess.open(LEVELS_PATH, FileAccess.WRITE)
 	if file == null:
 		_update_status("Save failed: %s" % LEVELS_PATH)
-		return
+		return false
 	file.store_string(JSON.stringify(levels_data, "\t"))
 	_update_status("Saved %s (%d tiles)" % [_selected_level_name(), _occupied.size()])
+	return true
+
+func _play_selected_slot() -> void:
+	if not _save_selected_slot():
+		return
+	GameState.selected_level_id = _selected_level_id()
+	GameState.has_selected_level = true
+	get_tree().change_scene_to_file(BOARD_SCENE)
+
+func _apply_selected_level_from_game_state() -> void:
+	if not GameState.has_selected_level:
+		return
+
+	var level_id := clampi(GameState.selected_level_id, 0, DIFFICULTIES.size() * 10 - 1)
+	var difficulty_index := clampi(int(level_id / 10), 0, DIFFICULTIES.size() - 1)
+	var slot := clampi(level_id % 10, 0, 9)
+
+	_difficulty_option.set_block_signals(true)
+	_slot_spin.set_block_signals(true)
+	_difficulty_option.select(difficulty_index)
+	_slot_spin.value = slot + 1
+	_slot_spin.set_block_signals(false)
+	_difficulty_option.set_block_signals(false)
 
 func _read_levels_file() -> Dictionary:
 	if not FileAccess.file_exists(LEVELS_PATH):
@@ -341,6 +463,46 @@ func _coord_to_position(coord: Vector3i) -> Vector3:
 		(float(coord.y) + VIEW_Y_OFFSET) * spacing,
 		(float(coord.z) - GRID_CENTER + _visual_offset.z) * spacing
 	)
+
+func _add_top_view_tile(coord: Vector3i) -> void:
+	var tile := ColorRect.new()
+	tile.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	tile.color = _make_top_view_tile_color(coord.y, coord.y != _active_layer)
+	tile.z_index = _top_view_tile_z_index(coord)
+	tile.position = _top_view_coord_to_position(coord)
+	tile.size = Vector2.ONE * (TOP_VIEW_CELL_SIZE - TOP_VIEW_TILE_INSET * 2.0)
+	_top_view_tiles_root.add_child(tile)
+	_top_view_tile_nodes[coord] = tile
+
+func _top_view_coord_to_position(coord: Vector3i) -> Vector2:
+	return Vector2(
+		float(coord.x) * TOP_VIEW_CELL_SIZE + TOP_VIEW_TILE_INSET,
+		float(coord.z) * TOP_VIEW_CELL_SIZE + TOP_VIEW_TILE_INSET
+	)
+
+func _top_view_position_to_coord(position: Vector2) -> Vector3i:
+	return Vector3i(
+		int(floor(position.x / TOP_VIEW_CELL_SIZE)),
+		_active_layer,
+		int(floor(position.y / TOP_VIEW_CELL_SIZE))
+	)
+
+func _update_top_view_tile_material(coord: Vector3i) -> void:
+	if not _top_view_tile_nodes.has(coord):
+		return
+	var tile := _top_view_tile_nodes[coord] as ColorRect
+	tile.color = _make_top_view_tile_color(coord.y, coord.y != _active_layer)
+	tile.z_index = _top_view_tile_z_index(coord)
+
+func _top_view_tile_z_index(coord: Vector3i) -> int:
+	return 100 + coord.y if coord.y == _active_layer else coord.y
+
+func _make_top_view_tile_color(layer: int, is_dimmed: bool) -> Color:
+	var t: float = float(layer) / maxf(1.0, float(GRID_SIZE - 1))
+	var color := Color(1.0, 0.85 - t * 0.35, 0.22 + t * 0.28, 1.0)
+	if is_dimmed:
+		color = color * Color(0.25, 0.25, 0.25, 1.0)
+	return color
 
 func _selected_difficulty() -> String:
 	return DIFFICULTIES[_difficulty_option.selected]

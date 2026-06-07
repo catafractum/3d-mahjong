@@ -14,6 +14,7 @@ var id: int = -1
 var tile_data = null
 var _body_meshes: Array[MeshInstance3D] = []
 var _body_original_surface_materials: Dictionary = {}
+var _editor_dim_original_surface_materials: Dictionary = {}
 var _selection_light: OmniLight3D
 var _is_removing: bool = false
 
@@ -78,6 +79,33 @@ func counter_rotate_icons(delta_rad: float) -> void:
 		var face_normal: Vector3 = face.global_transform.basis.y.normalized()
 		face.global_rotate(face_normal, delta_rad)
 
+func set_editor_dimmed(is_dimmed: bool) -> void:
+	var meshes := _collect_body_meshes(self)
+
+	if is_dimmed:
+		if not _editor_dim_original_surface_materials.is_empty():
+			return
+		for mesh_instance in meshes:
+			if mesh_instance.mesh == null:
+				continue
+			var surface_count := mesh_instance.mesh.get_surface_count()
+			if not _editor_dim_original_surface_materials.has(mesh_instance):
+				var original_materials: Array[Material] = []
+				for surface_index in range(surface_count):
+					original_materials.append(mesh_instance.get_surface_override_material(surface_index))
+				_editor_dim_original_surface_materials[mesh_instance] = original_materials
+			for surface_index in range(surface_count):
+				mesh_instance.set_surface_override_material(surface_index, _make_editor_dimmed_material(mesh_instance, surface_index))
+		return
+
+	for mesh_instance in _editor_dim_original_surface_materials.keys():
+		if not is_instance_valid(mesh_instance):
+			continue
+		var original_materials: Array = _editor_dim_original_surface_materials[mesh_instance]
+		for surface_index in range(original_materials.size()):
+			mesh_instance.set_surface_override_material(surface_index, original_materials[surface_index])
+	_editor_dim_original_surface_materials.clear()
+
 func _collect_body_meshes(root: Node) -> Array[MeshInstance3D]:
 	var meshes: Array[MeshInstance3D] = []
 	if root is MeshInstance3D:
@@ -95,6 +123,15 @@ func _make_selected_body_material(body_mesh: MeshInstance3D, surface_index: int)
 	mat.emission_enabled = true
 	mat.emission = Color.WHITE
 	mat.emission_energy_multiplier = 0.75
+	return mat
+
+func _make_editor_dimmed_material(mesh_instance: MeshInstance3D, surface_index: int) -> StandardMaterial3D:
+	var base_mat := mesh_instance.get_active_material(surface_index) as StandardMaterial3D
+	var mat := StandardMaterial3D.new()
+	if base_mat != null:
+		mat = base_mat.duplicate()
+	mat.albedo_color = mat.albedo_color * Color(0.24, 0.24, 0.24, 1.0)
+	mat.emission_enabled = false
 	return mat
 
 func _ensure_selection_light() -> void:

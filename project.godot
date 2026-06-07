@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="3D Mahjong"
-run/main_scene="uid://cvn7p2vhfjjrj"
+run/main_scene="res://scenes/level_editor.tscn"
 config/features=PackedStringArray("4.6", "Mobile")
 boot_splash/bg_color=Color(0.02745098, 0.105882354, 0.08627451, 1)
 boot_splash/stretch_mode=0
@@ -25,6 +25,10 @@ window/size/viewport_height=900
 window/size/window_width_override=2880
 window/size/window_height_override=1800
 window/stretch/mode="canvas_items"
+
+[autoload]
+
+GameState="*res://scripts/game_state.gd"
 
 [filesystem]
 

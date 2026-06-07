@@ -5,10 +5,15 @@ const LevelNormalizer = preload("res://scripts/level_normalizer.gd")
 const LEVELS_PATH := "res://data/levels.json"
 const DEFAULT_GRID_SIZE := 7
 const BOARD_Y_OFFSET := -0.25
+const LEVEL_SCALE_BY_HEIGHT := {
+	6: 0.875,
+	7: 0.775
+}
 
 @export var tile_scene: PackedScene
 @export var icon_type_count: int = 16
 @export var grid_size: int = DEFAULT_GRID_SIZE
+@export var level_id := 20
 
 signal tile_selected(tile: Node3D)
 signal board_ready(tiles: Array[Node3D])
@@ -38,8 +43,9 @@ var _press_position := Vector2.ZERO
 var _tracking_pointer := false
 
 func _ready() -> void:
+	level_id = GameState.selected_level_id
 	rotate_y(-10 * PI / 180)
-	_create_cube_board(22)
+	_create_cube_board(level_id)
 	board_ready.emit(_get_tiles())
 
 func rotate_board(right: bool) -> void:
@@ -241,6 +247,7 @@ func _create_cube_board(level_id: int) -> void:
 	_visual_offset = normalized_level.visual_offset
 	_rotation_visual_offset = normalized_level.rotation_visual_offset
 	_rotation_bounds = normalized_level.rotation_bounds
+	scale = Vector3.ONE * _get_level_scale(_get_y_height(tile_coords))
 	var center_x: float = float(grid_size - 1) * 0.5
 	var center_z: float = float(grid_size - 1) * 0.5
 	var count := 0
@@ -266,6 +273,20 @@ func _create_cube_board(level_id: int) -> void:
 		data.icon_type = randi() % icon_type_count
 		tile.set_tile_data(data, data.icon_type)
 		count += 1
+
+func _get_level_scale(y_height: int) -> float:
+	return float(LEVEL_SCALE_BY_HEIGHT.get(y_height, 1.0))
+
+func _get_y_height(coords: Array) -> int:
+	if coords.is_empty():
+		return 0
+
+	var min_y := int(coords[0].y)
+	var max_y := min_y
+	for coord in coords:
+		min_y = mini(min_y, int(coord.y))
+		max_y = maxi(max_y, int(coord.y))
+	return max_y - min_y + 1
 
 func _get_level_data(level_id: int) -> Dictionary:
 	var file := FileAccess.open(LEVELS_PATH, FileAccess.READ)
