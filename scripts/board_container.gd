@@ -1,14 +1,18 @@
 extends Node3D
 
 const TileDataRes = preload("res://scripts/tile_data.gd")
+const LevelNormalizer = preload("res://scripts/level_normalizer.gd")
 const LEVELS_PATH := "res://data/levels.json"
+const DEFAULT_GRID_SIZE := 7
+const BOARD_Y_OFFSET := -0.25
 
 @export var tile_scene: PackedScene
 @export var icon_type_count: int = 16
+@export var grid_size: int = DEFAULT_GRID_SIZE
 
 signal tile_selected(tile: Node3D)
 signal board_ready(tiles: Array[Node3D])
-signal layer_rotated(axis_name: String, layer_value: float, angle_degrees: float)
+signal layer_rotated(axis_name: String, layer_value: float, angle_degrees: float, visual_offset: Vector3)
 
 @onready var camera: Camera3D = get_viewport().get_camera_3d()
 
@@ -19,17 +23,24 @@ const TAP_MAX_DISTANCE := 16.0
 const SWIPE_MIN_DISTANCE := 80.0
 const SWIPE_VERTICAL_TOLERANCE := 0.6
 var _sync_tiles: Array[Node3D] = []
+var _visual_offset := Vector3(0.0, BOARD_Y_OFFSET, 0.0)
+var _rotation_visual_offset := Vector3(0.0, BOARD_Y_OFFSET, 0.0)
+var _rotation_bounds := {
+	"min_x": 0,
+	"max_x": DEFAULT_GRID_SIZE - 1,
+	"min_y": 0,
+	"max_y": DEFAULT_GRID_SIZE - 1,
+	"min_z": 0,
+	"max_z": DEFAULT_GRID_SIZE - 1
+}
 var _last_sync_angle := 0.0
 var _press_position := Vector2.ZERO
 var _tracking_pointer := false
 
 func _ready() -> void:
 	rotate_y(-10 * PI / 180)
-	_create_cube_board(1)
+	_create_cube_board(22)
 	board_ready.emit(_get_tiles())
-
-func _process(_delta: float) -> void:
-	pass
 
 func rotate_board(right: bool) -> void:
 	if _rotating:
@@ -134,7 +145,7 @@ func _rotate_layer(axis_name: String, layer_value: float, angle_degrees: float) 
 		tile.position = _snap_position(tile.position)
 
 	pivot.queue_free()
-	layer_rotated.emit(axis_name, layer_value, angle_degrees)
+	layer_rotated.emit(axis_name, layer_value, angle_degrees, _visual_offset)
 
 func _on_sync_angle(current_angle: float) -> void:
 	var delta_rad := deg_to_rad(current_angle - _last_sync_angle)
@@ -148,7 +159,8 @@ func _get_axis_layers(axis_name: String) -> Array[float]:
 	var layers: Array[float] = []
 	var snap_step: float = spacing / 2.0
 	for tile in tiles:
-		var snapped_value: float = round(_axis_value(tile.position, axis_name) / snap_step) * snap_step
+		var offset := _axis_snap_offset(axis_name)
+		var snapped_value: float = round((_axis_value(tile.position, axis_name) - offset) / snap_step) * snap_step + offset
 		var exists := false
 		for v in layers:
 			if abs(v - snapped_value) <= 0.05:
@@ -174,33 +186,43 @@ func _axis_value(v: Vector3, axis_name: String) -> float:
 		_: return 0.0
 
 func _get_layer_center(axis_name: String, layer_value: float) -> Vector3:
-	var grid_center_y := (4 - 1) * spacing / 2.0
+	var center_x := _axis_center_world("x")
+	var center_y := _axis_center_world("y")
+	var center_z := _axis_center_world("z")
 	match axis_name:
-		"x": return Vector3(layer_value, grid_center_y, 0.0)
-		"y": return Vector3(0.0, layer_value, 0.0)
-		"z": return Vector3(0.0, grid_center_y, layer_value)
+		"x": return Vector3(layer_value, center_y, center_z)
+		"y": return Vector3(center_x, layer_value, center_z)
+		"z": return Vector3(center_x, center_y, layer_value)
 	return Vector3.ZERO
 
-func _average_global_position(nodes: Array[Node3D]) -> Vector3:
-	var acc := Vector3.ZERO
-	for n in nodes:
-		acc += n.global_position
-	return acc / float(nodes.size())
+func _axis_center_world(axis_name: String) -> float:
+	match axis_name:
+		"x":
+			return _coord_center_to_world(float(_rotation_bounds.min_x), float(_rotation_bounds.max_x), _rotation_visual_offset.x)
+		"y":
+			return (((float(_rotation_bounds.min_y) + float(_rotation_bounds.max_y)) * 0.5) + _rotation_visual_offset.y) * spacing
+		"z":
+			return _coord_center_to_world(float(_rotation_bounds.min_z), float(_rotation_bounds.max_z), _rotation_visual_offset.z)
+	return 0.0
+
+func _coord_center_to_world(min_value: float, max_value: float, axis_visual_offset: float) -> float:
+	var grid_center := float(grid_size - 1) * 0.5
+	return (((min_value + max_value) * 0.5) - grid_center + axis_visual_offset) * spacing
 
 func _snap_position(p: Vector3) -> Vector3:
 	var snap_step := spacing / 2.0
 	return Vector3(
-		round(p.x / snap_step) * snap_step,
-		round(p.y / snap_step) * snap_step,
-		round(p.z / snap_step) * snap_step
+		round((p.x - _axis_snap_offset("x")) / snap_step) * snap_step + _axis_snap_offset("x"),
+		round((p.y - _axis_snap_offset("y")) / snap_step) * snap_step + _axis_snap_offset("y"),
+		round((p.z - _axis_snap_offset("z")) / snap_step) * snap_step + _axis_snap_offset("z")
 	)
 
-func _snap_rotation_degrees(rot: Vector3) -> Vector3:
-	return Vector3(
-		round(rot.x / 90.0) * 90.0,
-		round(rot.y / 90.0) * 90.0,
-		round(rot.z / 90.0) * 90.0
-	)
+func _axis_snap_offset(axis_name: String) -> float:
+	match axis_name:
+		"x": return _visual_offset.x * spacing
+		"y": return _visual_offset.y * spacing
+		"z": return _visual_offset.z * spacing
+	return 0.0
 
 func _create_cube_board(level_id: int) -> void:
 	var level := _get_level_data(level_id)
@@ -213,21 +235,30 @@ func _create_cube_board(level_id: int) -> void:
 		push_error("BoardContainer: level id %d has no tiles" % level_id)
 		return
 
-	var bounds := _get_level_bounds(tile_coords)
-	var center_x: float = (bounds.min_x + bounds.max_x) * 0.5
-	var center_z: float = (bounds.min_z + bounds.max_z) * 0.5
+	grid_size = int(level.get("grid_size", DEFAULT_GRID_SIZE))
+	var normalized_level := LevelNormalizer.normalize(tile_coords, grid_size, BOARD_Y_OFFSET)
+	tile_coords = normalized_level.coords
+	_visual_offset = normalized_level.visual_offset
+	_rotation_visual_offset = normalized_level.rotation_visual_offset
+	_rotation_bounds = normalized_level.rotation_bounds
+	var center_x: float = float(grid_size - 1) * 0.5
+	var center_z: float = float(grid_size - 1) * 0.5
 	var count := 0
 	for coord in tile_coords:
-		if coord.size() < 3:
-			push_warning("BoardContainer: skipping invalid tile coordinate in level %d" % level_id)
+		var x := int(coord.x)
+		var y := int(coord.y)
+		var z := int(coord.z)
+		if not LevelNormalizer.is_inside_grid(Vector3i(x, y, z), grid_size):
+			push_warning("BoardContainer: skipping out-of-grid tile coordinate in level %d" % level_id)
 			continue
 
-		var x := int(coord[0])
-		var y := int(coord[1])
-		var z := int(coord[2])
 		var tile = tile_scene.instantiate()
 		add_child(tile)
-		tile.position = Vector3((x - center_x) * spacing, y * spacing, (z - center_z) * spacing)
+		tile.position = Vector3(
+			(x - center_x + _visual_offset.x) * spacing,
+			(y + BOARD_Y_OFFSET) * spacing,
+			(z - center_z + _visual_offset.z) * spacing
+		)
 		tile.name = "Tile_%d" % count
 		tile.id = count
 		var data := TileDataRes.new()
@@ -251,30 +282,6 @@ func _get_level_data(level_id: int) -> Dictionary:
 		if level is Dictionary and int(level.get("id", -1)) == level_id:
 			return level
 	return {}
-
-func _get_level_bounds(tile_coords: Array) -> Dictionary:
-	var first: Array = tile_coords[0]
-	var min_x := int(first[0])
-	var max_x := min_x
-	var min_z := int(first[2])
-	var max_z := min_z
-
-	for coord in tile_coords:
-		if coord.size() < 3:
-			continue
-		var x := int(coord[0])
-		var z := int(coord[2])
-		min_x = mini(min_x, x)
-		max_x = maxi(max_x, x)
-		min_z = mini(min_z, z)
-		max_z = maxi(max_z, z)
-
-	return {
-		"min_x": min_x,
-		"max_x": max_x,
-		"min_z": min_z,
-		"max_z": max_z
-	}
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:

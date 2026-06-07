@@ -1,3 +1,6 @@
+res://scripts/board_manager.gd
 res://scripts/board_container.gd
+res://scripts/level_editor.gd
 res://scenes/board_scene.tscn
+res://scenes/board_container.tscn
 res://data/levels.json
