@@ -15,7 +15,7 @@ const LEVEL_SCALE_BY_HEIGHT := {
 @export var grid_size: int = DEFAULT_GRID_SIZE
 @export var level_id := 20
 
-signal tile_selected(tile: Node3D)
+signal tile_selected(tile: Node3D, hit_normal: Vector3)
 signal board_ready(tiles: Array[Node3D])
 signal layer_rotated(axis_name: String, layer_value: float, angle_degrees: float, visual_offset: Vector3)
 
@@ -184,6 +184,9 @@ func _get_tiles() -> Array[Node3D]:
 			tiles.append(child)
 	return tiles
 
+func get_tiles() -> Array[Node3D]:
+	return _get_tiles()
+
 func _axis_value(v: Vector3, axis_name: String) -> float:
 	match axis_name:
 		"x": return v.x
@@ -341,4 +344,16 @@ func pick_tile(mouse_pos: Vector2) -> void:
 	var query = PhysicsRayQueryParameters3D.create(from, to)
 	var result = get_world_3d().direct_space_state.intersect_ray(query)
 	if result:
-		tile_selected.emit(result.collider.get_parent())
+		var tile := _tile_from_collider(result.collider)
+		if tile != null:
+			tile_selected.emit(tile, result.normal)
+
+func _tile_from_collider(collider: Object) -> Node3D:
+	if collider == null or not (collider is Node):
+		return null
+	var candidate := (collider as Node).get_parent()
+	if candidate is Node3D \
+			and str(candidate.name).begins_with("Tile_") \
+			and candidate.get("tile_data") != null:
+		return candidate
+	return null

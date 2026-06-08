@@ -53,8 +53,8 @@ func _ready() -> void:
 	home_btn.pressed.connect(func(): home_pressed.emit())
 
 func _align_x(btn: TextureButton) -> void:
-	var settings_center_x := settings_btn.position.x + settings_btn.pivot_offset.x
-	btn.position.x = settings_center_x - btn.pivot_offset.x
+	var settings_center_x := settings_btn.position.x + _visual_width(settings_btn) * 0.5
+	btn.position.x = settings_center_x - _visual_width(btn) * 0.5
 
 func _all_deployable() -> Array[TextureButton]:
 	return [sfx_on_btn, sfx_off_btn, soundtrack_on_btn, soundtrack_off_btn, reset_btn, home_btn]
@@ -68,6 +68,11 @@ func _all_buttons() -> Array[TextureButton]:
 
 func _base_scale(btn: TextureButton) -> Vector2:
 	return _button_base_scales.get(btn, btn.scale)
+
+func _visual_width(btn: TextureButton) -> float:
+	if btn.texture_normal != null:
+		return btn.texture_normal.get_width() * _base_scale(btn).x
+	return btn.size.x * _base_scale(btn).x
 
 func _setup_button_scale_feedback(btn: TextureButton) -> void:
 	_button_base_scales[btn] = btn.scale

@@ -3,6 +3,12 @@ extends Node
 const GRID_SIZE := 7
 const GRID_MAX := GRID_SIZE - 1
 const GRID_CENTER_OFFSET := float(GRID_MAX) * 0.5
+const VERTICAL_SIDE_DIRECTIONS: Array[Vector3i] = [
+	Vector3i(1, 0, 0),
+	Vector3i(-1, 0, 0),
+	Vector3i(0, 0, 1),
+	Vector3i(0, 0, -1)
+]
 
 var _grid := []
 var _selected_tile = null
@@ -63,7 +69,17 @@ func on_layer_rotated(axis_name: String, layer_value: float, angle_degrees: floa
 		_grid[new_pos.x][new_pos.y][new_pos.z] = tile
 		tile.tile_data.grid_pos = Vector3(new_pos.x, new_pos.y, new_pos.z)
 
-func on_tile_selected(tile: Node3D) -> void:
+func on_tile_selected(tile: Node3D, hit_normal := Vector3.ZERO) -> void:
+	if tile == null or tile.get("tile_data") == null:
+		return
+	var tile_pos := _tile_grid_pos(tile)
+	if not _is_tile_free(tile_pos):
+		tile.shake(hit_normal)
+		if _selected_tile != null:
+			_selected_tile.deselect()
+			_selected_tile = null
+		return
+
 	if _selected_tile == null:
 		_selected_tile = tile
 		tile.select()
@@ -74,11 +90,10 @@ func on_tile_selected(tile: Node3D) -> void:
 		_selected_tile = null
 		return
 
-	if _selected_tile.tile_data.icon_type == tile.tile_data.icon_type:
-		var p1 := Vector3i(int(_selected_tile.tile_data.grid_pos.x), int(_selected_tile.tile_data.grid_pos.y), int(_selected_tile.tile_data.grid_pos.z))
-		var p2 := Vector3i(int(tile.tile_data.grid_pos.x), int(tile.tile_data.grid_pos.y), int(tile.tile_data.grid_pos.z))
+	var p1 := _tile_grid_pos(_selected_tile)
+	if _selected_tile.tile_data.icon_type == tile.tile_data.icon_type and _is_tile_free(p1):
 		_grid[p1.x][p1.y][p1.z] = null
-		_grid[p2.x][p2.y][p2.z] = null
+		_grid[tile_pos.x][tile_pos.y][tile_pos.z] = null
 		_selected_tile.remove_tile()
 		tile.remove_tile()
 		_selected_tile = null
@@ -86,6 +101,37 @@ func on_tile_selected(tile: Node3D) -> void:
 		_selected_tile.deselect()
 		_selected_tile = tile
 		tile.select()
+
+func _tile_grid_pos(tile: Node3D) -> Vector3i:
+	return Vector3i(
+		int(tile.tile_data.grid_pos.x),
+		int(tile.tile_data.grid_pos.y),
+		int(tile.tile_data.grid_pos.z)
+	)
+
+func _is_tile_free(pos: Vector3i) -> bool:
+	var free_sides := _free_vertical_sides(pos)
+	return free_sides.size() >= 2 and _has_adjacent_sides(free_sides)
+
+func _free_vertical_sides(pos: Vector3i) -> Array[Vector3i]:
+	var free_sides: Array[Vector3i] = []
+	for direction: Vector3i in VERTICAL_SIDE_DIRECTIONS:
+		var neighbor: Vector3i = pos + direction
+		if not _is_inside_grid(neighbor) or _grid[neighbor.x][neighbor.y][neighbor.z] == null:
+			free_sides.append(direction)
+	return free_sides
+
+func _has_adjacent_sides(sides: Array[Vector3i]) -> bool:
+	for i in range(sides.size()):
+		for j in range(i + 1, sides.size()):
+			if sides[i] + sides[j] != Vector3i.ZERO:
+				return true
+	return false
+
+func _is_inside_grid(pos: Vector3i) -> bool:
+	return pos.x >= 0 and pos.x < GRID_SIZE \
+		and pos.y >= 0 and pos.y < GRID_SIZE \
+		and pos.z >= 0 and pos.z < GRID_SIZE
 
 func _transform_pos(pos: Vector3i, axis: String, angle: int) -> Vector3i:
 	var x := pos.x

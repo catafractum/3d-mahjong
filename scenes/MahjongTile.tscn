@@ -70,20 +70,20 @@ tile_icons = Array[Texture2D]([ExtResource("1_2nfmx"), ExtResource("3_fexna"), E
 shape = SubResource("BoxShape3D_8b3xw")
 
 [node name="FaceFront" type="MeshInstance3D" parent="." unique_id=1345649226]
-transform = Transform3D(0.375, 0, 0, 0, -1.639177e-08, -0.375, 0, 0.375, -1.639177e-08, 0, 0, 0.51)
+transform = Transform3D(0.36, 0, 0, 0, -1.639177e-08, -0.36, 0, 0.36, -1.639177e-08, 0, 0, 0.51)
 mesh = SubResource("PlaneMesh_tcin4")
 surface_material_override/0 = SubResource("StandardMaterial3D_f62oh")
 
 [node name="FaceBack" type="MeshInstance3D" parent="." unique_id=680389109]
-transform = Transform3D(-1.639177e-08, 0.375, -1.639177e-08, 0, -1.639177e-08, -0.375, -0.375, -1.639177e-08, 7.165071e-16, 0.51, 0, 0)
+transform = Transform3D(-1.639177e-08, 0.36, -1.639177e-08, 0, -1.639177e-08, -0.36, -0.36, -1.639177e-08, 7.165071e-16, 0.51, 0, 0)
 mesh = SubResource("PlaneMesh_2nfmx")
 surface_material_override/0 = SubResource("StandardMaterial3D_tcin4")
 
 [node name="FaceLeft" type="MeshInstance3D" parent="." unique_id=535742240]
-transform = Transform3D(-0.375, 5.6623428e-08, -2.4750885e-15, 0, -1.639177e-08, -0.375, -5.6623428e-08, -0.375, 1.639177e-08, 0, 0, -0.51)
+transform = Transform3D(-0.36, 5.6623428e-08, -2.4750885e-15, 0, -1.639177e-08, -0.36, -5.6623428e-08, -0.36, 1.639177e-08, 0, 0, -0.51)
 mesh = SubResource("PlaneMesh_f62oh")
 surface_material_override/0 = SubResource("StandardMaterial3D_72yyq")
 
 [node name="FaceRight" type="MeshInstance3D" parent="." unique_id=1264959633]
-transform = Transform3D(-1.639177e-08, -0.375, 1.639177e-08, 0, -1.639177e-08, -0.375, 0.375, -1.639177e-08, 7.165071e-16, -0.51, 0, 0)
+transform = Transform3D(-1.639177e-08, -0.36, 1.639177e-08, 0, -1.639177e-08, -0.36, 0.36, -1.639177e-08, 7.165071e-16, -0.51, 0, 0)
 mesh = SubResource("PlaneMesh_tgw4c")

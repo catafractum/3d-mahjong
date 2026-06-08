@@ -2,7 +2,11 @@ extends Node3D
 
 const TileDataRes = preload("res://scripts/tile_data.gd")
 const DISAPPEAR_PARTICLES = preload("res://scenes/TileDisappearParticles.tscn")
+const TILE_OUTLINE_SHADER = preload("res://shaders/tile_outline.gdshader")
 const CUBE_ALBEDO := Color("#EEEAE6")
+const ICON_FACE_BASE_SCALE := 0.36
+const SHAKE_DELTA := 0.048
+const SHAKE_STEP_DURATION := 0.03375
 
 @onready var face_front: MeshInstance3D = $FaceFront
 @onready var face_back: MeshInstance3D = $FaceBack
@@ -18,6 +22,7 @@ var _body_meshes: Array[MeshInstance3D] = []
 var _body_original_surface_materials: Dictionary = {}
 var _editor_dim_original_surface_materials: Dictionary = {}
 var _selection_light: OmniLight3D
+var _shake_tween: Tween
 var _is_removing: bool = false
 
 func _icon_faces() -> Array[MeshInstance3D]:
@@ -26,6 +31,7 @@ func _icon_faces() -> Array[MeshInstance3D]:
 func _ready() -> void:
 	_body_meshes = _collect_body_meshes(cube_root)
 	_apply_cube_albedo()
+	_add_shader_outline()
 
 func set_tile_data(data: Resource, icon_type: int) -> void:
 	tile_data = data
@@ -37,6 +43,7 @@ func set_tile_data(data: Resource, icon_type: int) -> void:
 		var mat: StandardMaterial3D = face.get_active_material(0).duplicate()
 		mat.albedo_texture = texture
 		face.set_surface_override_material(0, mat)
+		_apply_icon_aspect_ratio(face, texture)
 
 func select() -> void:
 	for body_mesh in _body_meshes:
@@ -82,6 +89,26 @@ func counter_rotate_icons(delta_rad: float) -> void:
 	for face in _icon_faces():
 		var face_normal: Vector3 = face.global_transform.basis.y.normalized()
 		face.global_rotate(face_normal, delta_rad)
+
+func shake(hit_normal: Vector3) -> void:
+	if _shake_tween != null:
+		_shake_tween.kill()
+
+	var local_normal := global_transform.basis.inverse() * hit_normal.normalized()
+	var shake_axis := Vector3.ZERO
+	if absf(local_normal.z) >= absf(local_normal.x):
+		shake_axis = _local_axis_to_parent_offset(Vector3.RIGHT)
+	else:
+		shake_axis = _local_axis_to_parent_offset(Vector3.FORWARD)
+
+	var base_position := position
+	_shake_tween = create_tween()
+	_shake_tween.set_ease(Tween.EASE_IN_OUT)
+	_shake_tween.set_trans(Tween.TRANS_SINE)
+	_shake_tween.tween_property(self, "position", base_position + shake_axis * SHAKE_DELTA, SHAKE_STEP_DURATION)
+	_shake_tween.tween_property(self, "position", base_position - shake_axis * SHAKE_DELTA, SHAKE_STEP_DURATION)
+	_shake_tween.tween_property(self, "position", base_position + shake_axis * (SHAKE_DELTA * 0.5), SHAKE_STEP_DURATION)
+	_shake_tween.tween_property(self, "position", base_position, SHAKE_STEP_DURATION)
 
 func set_editor_dimmed(is_dimmed: bool) -> void:
 	var meshes := _collect_body_meshes(self)
@@ -138,6 +165,42 @@ func _spawn_disappear_particles() -> void:
 	parent.add_child(particles)
 	particles.global_position = global_position
 	particles.call("play_effect")
+
+func _local_axis_to_parent_offset(local_axis: Vector3) -> Vector3:
+	var global_axis := global_transform.basis * local_axis
+	if get_parent() is Node3D:
+		return (get_parent() as Node3D).global_transform.basis.inverse() * global_axis.normalized()
+	return global_axis.normalized()
+
+func _apply_icon_aspect_ratio(face: MeshInstance3D, texture: Texture2D) -> void:
+	var texture_size := texture.get_size()
+	if texture_size.x <= 0.0 or texture_size.y <= 0.0:
+		return
+	var current_scale := face.scale
+	var aspect := texture_size.y / texture_size.x
+	var width_scale := ICON_FACE_BASE_SCALE
+	var height_scale := ICON_FACE_BASE_SCALE
+	if aspect > 1.0:
+		width_scale = ICON_FACE_BASE_SCALE / aspect
+	else:
+		height_scale = ICON_FACE_BASE_SCALE * aspect
+	face.scale = Vector3(width_scale, current_scale.y, height_scale)
+
+func _add_shader_outline() -> void:
+	for body_mesh in _body_meshes:
+		if body_mesh.mesh == null:
+			continue
+		var outline := MeshInstance3D.new()
+		outline.name = "ShaderOutline"
+		outline.mesh = body_mesh.mesh
+		outline.material_override = _make_shader_outline_material()
+		outline.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		body_mesh.add_child(outline)
+
+func _make_shader_outline_material() -> ShaderMaterial:
+	var material := ShaderMaterial.new()
+	material.shader = TILE_OUTLINE_SHADER
+	return material
 
 func _make_selected_body_material(body_mesh: MeshInstance3D, surface_index: int) -> StandardMaterial3D:
 	var base_mat := body_mesh.get_active_material(surface_index) as StandardMaterial3D

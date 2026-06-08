@@ -17,6 +17,7 @@ func _ready() -> void:
 	_build_editor_controls()
 	board_container.tile_selected.connect(board_manager.on_tile_selected)
 	board_container.board_ready.connect(board_manager.on_board_ready)
+	board_manager.on_board_ready(board_container.get_tiles())
 	board_container.layer_rotated.connect(func(axis, value, angle, visual_offset):
 		board_manager.on_layer_rotated(axis, value, angle, board_container.spacing, visual_offset)
 	)
