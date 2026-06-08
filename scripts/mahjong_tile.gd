@@ -1,6 +1,8 @@
 extends Node3D
 
 const TileDataRes = preload("res://scripts/tile_data.gd")
+const DISAPPEAR_PARTICLES = preload("res://scenes/TileDisappearParticles.tscn")
+const CUBE_ALBEDO := Color("#EEEAE6")
 
 @onready var face_front: MeshInstance3D = $FaceFront
 @onready var face_back: MeshInstance3D = $FaceBack
@@ -23,6 +25,7 @@ func _icon_faces() -> Array[MeshInstance3D]:
 
 func _ready() -> void:
 	_body_meshes = _collect_body_meshes(cube_root)
+	_apply_cube_albedo()
 
 func set_tile_data(data: Resource, icon_type: int) -> void:
 	tile_data = data
@@ -71,6 +74,7 @@ func remove_tile() -> void:
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_CUBIC)
 	tween.tween_property(self, "scale", Vector3.ONE * 1.1, 0.25)
+	tween.tween_callback(_spawn_disappear_particles)
 	tween.tween_property(self, "scale", Vector3.ZERO, 0.4)
 	tween.tween_callback(queue_free)
 
@@ -113,6 +117,27 @@ func _collect_body_meshes(root: Node) -> Array[MeshInstance3D]:
 	for child in root.get_children():
 		meshes.append_array(_collect_body_meshes(child))
 	return meshes
+
+func _apply_cube_albedo() -> void:
+	for body_mesh in _body_meshes:
+		if body_mesh.mesh == null:
+			continue
+		for surface_index in range(body_mesh.mesh.get_surface_count()):
+			var base_mat := body_mesh.get_active_material(surface_index) as StandardMaterial3D
+			var mat := StandardMaterial3D.new()
+			if base_mat != null:
+				mat = base_mat.duplicate()
+			mat.albedo_color = CUBE_ALBEDO
+			body_mesh.set_surface_override_material(surface_index, mat)
+
+func _spawn_disappear_particles() -> void:
+	var parent := get_parent()
+	if parent == null:
+		return
+	var particles := DISAPPEAR_PARTICLES.instantiate() as Node3D
+	parent.add_child(particles)
+	particles.global_position = global_position
+	particles.call("play_effect")
 
 func _make_selected_body_material(body_mesh: MeshInstance3D, surface_index: int) -> StandardMaterial3D:
 	var base_mat := body_mesh.get_active_material(surface_index) as StandardMaterial3D

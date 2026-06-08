@@ -42,7 +42,7 @@ size = 7.433
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=526605951]
 transform = Transform3D(0.8660254, 0.25, -0.4330127, 0, 0.8660254, 0.5, 0.5, -0.4330127, 0.75, 0, 0, 5)
-light_energy = 1.202
+light_energy = 0.85
 
 [node name="BoardContainer" parent="." unique_id=1009866573 instance=ExtResource("3_8b3xw")]
 
@@ -84,12 +84,13 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -130.0
-offset_top = -130.0
-offset_right = -40.0
-offset_bottom = -40.0
+offset_left = -213.0
+offset_top = -118.0
+offset_right = -9.0
+offset_bottom = -5.0
 grow_horizontal = 0
 grow_vertical = 0
+scale = Vector2(0.95, 0.95)
 texture_normal = ExtResource("4_g0sq7")
 
 [node name="LeftArrowBtn" type="TextureButton" parent="GUI/Control" unique_id=1645824941]
@@ -97,11 +98,12 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 40.0
-offset_top = -130.0
-offset_right = 130.0
-offset_bottom = -40.0
+offset_left = 25.000002
+offset_top = -118.0
+offset_right = 229.0
+offset_bottom = -5.0
 grow_vertical = 0
+scale = Vector2(0.95, 0.95)
 texture_normal = ExtResource("4_g0sq7")
 flip_h = true
 
@@ -110,12 +112,12 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -260.0
-offset_top = 24.0
-offset_right = -136.0
-offset_bottom = 135.0
+offset_left = -261.99988
+offset_top = 16.0
+offset_right = -137.99988
+offset_bottom = 131.0
 grow_horizontal = 0
-scale = Vector2(0.7786331, 0.7700989)
+scale = Vector2(0.9287576, 0.8625481)
 texture_normal = ExtResource("7_0bi8h")
 
 [node name="AudioSfxBtn_on" type="TextureButton" parent="GUI/Control" unique_id=1320069662]
@@ -123,11 +125,12 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -246.0
-offset_top = 132.0
-offset_right = -160.0
-offset_bottom = 221.0
+offset_left = -115.0
+offset_top = 119.0
+offset_right = -3.0
+offset_bottom = 190.0
 grow_horizontal = 0
+scale = Vector2(0.81, 0.81)
 texture_normal = ExtResource("13_mepxe")
 
 [node name="AudioSfxBtn_off" type="TextureButton" parent="GUI/Control" unique_id=350160741]
@@ -135,11 +138,12 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -246.0
-offset_top = 132.0
-offset_right = -160.0
-offset_bottom = 221.0
+offset_left = -216.0
+offset_top = 121.0
+offset_right = -105.0
+offset_bottom = 191.0
 grow_horizontal = 0
+scale = Vector2(0.81, 0.81)
 texture_normal = ExtResource("15_q4par")
 
 [node name="AudioSoundtrackBtn_on" type="TextureButton" parent="GUI/Control" unique_id=387258833]
@@ -147,11 +151,12 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -246.0
-offset_top = 224.0
-offset_right = -160.0
-offset_bottom = 313.0
+offset_left = -114.0
+offset_top = 184.99998
+offset_right = -2.0
+offset_bottom = 256.0
 grow_horizontal = 0
+scale = Vector2(0.81, 0.81)
 texture_normal = ExtResource("17_6nm2w")
 
 [node name="AudioSoundtrackBtn_off" type="TextureButton" parent="GUI/Control" unique_id=1252805751]
@@ -159,11 +164,12 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -246.0
-offset_top = 224.0
-offset_right = -160.0
-offset_bottom = 313.0
+offset_left = -218.0
+offset_top = 186.0
+offset_right = -101.0
+offset_bottom = 255.0
 grow_horizontal = 0
+scale = Vector2(0.81, 0.81)
 texture_normal = ExtResource("19_p5g5a")
 
 [node name="SettingsBtn" type="TextureButton" parent="GUI/Control" unique_id=134889578]
@@ -171,12 +177,11 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -109.0
-offset_top = 17.999998
-offset_right = 2.0
-offset_bottom = 132.0
+offset_left = -124.0
+offset_top = 16.0
+offset_bottom = 131.0
 grow_horizontal = 0
-scale = Vector2(1.0083929, 0.9742314)
+scale = Vector2(0.9148177, 0.87402207)
 texture_normal = ExtResource("9_g2hxh")
 
 [node name="ResetBtn" type="TextureButton" parent="GUI/Control" unique_id=1661862950]
@@ -184,12 +189,12 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -246.0
-offset_top = 316.0
-offset_right = -156.0
-offset_bottom = 405.0
+offset_left = -112.99988
+offset_top = 252.0
+offset_right = -0.9998779
+offset_bottom = 323.0
 grow_horizontal = 0
-scale = Vector2(0.77250856, 0.78171116)
+scale = Vector2(0.808, 0.81)
 texture_normal = ExtResource("22_4khhe")
 
 [node name="HomeBtn" type="TextureButton" parent="GUI/Control" unique_id=658344993]
@@ -197,12 +202,12 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -246.0
-offset_top = 408.0
-offset_right = -156.0
-offset_bottom = 517.0
+offset_left = -114.0
+offset_top = 319.99997
+offset_right = -2.0
+offset_bottom = 390.99997
 grow_horizontal = 0
-scale = Vector2(0.8403344, 0.8097891)
+scale = Vector2(0.84, 0.81)
 texture_normal = ExtResource("17_mepxe")
 
 [node name="BoardManager" type="Node" parent="." unique_id=1800542772]

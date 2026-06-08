@@ -1,7 +1,6 @@
+res://scenes/board_scene.tscn
 res://data/levels.json
-res://scenes/board_container.tscn
-res://scripts/board_container.gd
-res://scripts/board_scene.gd
-res://scripts/level_editor.gd
 res://scripts/mahjong_tile.gd
-res://scripts/game_state.gd
+res://scripts/gui_controller.gd
+res://scenes/TileDisappearParticles.tscn
+res://scripts/tile_disappear_particles.gd

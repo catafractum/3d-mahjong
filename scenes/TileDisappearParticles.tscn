@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cd8130ximyrnv"]
+
+[ext_resource type="Script" path="res://scripts/tile_disappear_particles.gd" id="1_particles_script"]
+
+[node name="TileDisappearParticles" type="Node3D"]
+script = ExtResource("1_particles_script")
