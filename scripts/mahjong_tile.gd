@@ -7,6 +7,12 @@ const CUBE_ALBEDO := Color("#F3E8D2")
 const ICON_FACE_BASE_SCALE := 0.36
 const SHAKE_DELTA := 0.048
 const SHAKE_STEP_DURATION := 0.03375
+const DESELECT_TRANSITION_DURATION := 0.3
+const DISAPPEAR_GROW_DURATION := 0.225
+const DISAPPEAR_SHRINK_DURATION := 0.36
+const REMOVAL_LIGHT_EXTRA_DURATION := 0.2
+const SELECTION_LIGHT_ENERGY := 0.45
+const SELECTION_LIGHT_DESELECT_DURATION := 0.45
 
 @onready var face_front: MeshInstance3D = $FaceFront
 @onready var face_back: MeshInstance3D = $FaceBack
@@ -72,6 +78,8 @@ func select() -> void:
 			mat.albedo_color = Color(0.5, 0.5, 0.5)
 
 	_ensure_selection_light()
+	if not _selection_light.visible:
+		_selection_light.light_energy = 0.0
 	_selection_light.visible = true
 
 	_select_tween = create_tween()
@@ -89,6 +97,7 @@ func select() -> void:
 		var mat := face.get_surface_override_material(0) as StandardMaterial3D
 		if mat != null:
 			_select_tween.tween_property(mat, "albedo_color", Color(1.0, 1.0, 1.0, 0.9), 0.3)
+	_select_tween.tween_property(_selection_light, "light_energy", SELECTION_LIGHT_ENERGY, 0.3)
 
 func deselect() -> void:
 	if _select_tween != null:
@@ -101,9 +110,6 @@ func deselect() -> void:
 		if mat != null:
 			mat.albedo_color = Color(0.5, 0.5, 0.5)
 
-	if _selection_light != null:
-		_selection_light.visible = false
-
 	_select_tween = create_tween()
 	_select_tween.set_parallel(true)
 	_select_tween.set_ease(Tween.EASE_IN)
@@ -114,11 +120,13 @@ func deselect() -> void:
 		for i in range(body_mesh.mesh.get_surface_count()):
 			var mat := body_mesh.get_surface_override_material(i) as StandardMaterial3D
 			if mat != null:
-				_select_tween.tween_property(mat, "emission_energy_multiplier", 0.0, 0.15)
+				_select_tween.tween_property(mat, "emission_energy_multiplier", 0.0, DESELECT_TRANSITION_DURATION)
 	for face in _icon_faces():
 		var mat := face.get_surface_override_material(0) as StandardMaterial3D
 		if mat != null:
-			_select_tween.tween_property(mat, "albedo_color", Color.WHITE, 0.15)
+			_select_tween.tween_property(mat, "albedo_color", Color.WHITE, DESELECT_TRANSITION_DURATION)
+	if _selection_light != null:
+		_select_tween.tween_property(_selection_light, "light_energy", 0.0, SELECTION_LIGHT_DESELECT_DURATION)
 	_select_tween.finished.connect(_finish_deselect, CONNECT_ONE_SHOT)
 
 func _finish_deselect() -> void:
@@ -131,18 +139,70 @@ func _finish_deselect() -> void:
 	_body_original_surface_materials.clear()
 	_select_tween = null
 
-func remove_tile() -> void:
+func _clear_selection_visuals() -> void:
+	if _select_tween != null:
+		_select_tween.kill()
+		_select_tween = null
+	if _selection_light != null:
+		_selection_light.light_energy = 0.0
+		_selection_light.visible = false
+	_apply_icon_texture(_normal_icon_texture)
+	_finish_deselect()
+
+func _show_removal_selection_visuals() -> void:
+	if _select_tween != null:
+		_select_tween.kill()
+		_select_tween = null
+	for body_mesh in _body_meshes:
+		if body_mesh.mesh == null:
+			continue
+		var surface_count := body_mesh.mesh.get_surface_count()
+		if not _body_original_surface_materials.has(body_mesh):
+			var original_materials: Array[Material] = []
+			for surface_index in range(surface_count):
+				original_materials.append(body_mesh.get_surface_override_material(surface_index))
+			_body_original_surface_materials[body_mesh] = original_materials
+		for surface_index in range(surface_count):
+			var mat := _make_selected_body_material(body_mesh, surface_index)
+			mat.emission_energy_multiplier = 0.75
+			body_mesh.set_surface_override_material(surface_index, mat)
+	_apply_icon_texture(_selected_icon_texture)
+	for face in _icon_faces():
+		var mat := face.get_surface_override_material(0) as StandardMaterial3D
+		if mat != null:
+			mat.albedo_color = Color(1.0, 1.0, 1.0, 0.9)
+	_ensure_selection_light()
+	_selection_light.light_energy = SELECTION_LIGHT_ENERGY
+	_selection_light.visible = true
+
+func remove_tile(illuminate_for_removal := false) -> void:
 	if _is_removing:
 		return
 	_is_removing = true
-	deselect()
+	if illuminate_for_removal:
+		_show_removal_selection_visuals()
+	else:
+		_clear_selection_visuals()
+
+	if illuminate_for_removal and _selection_light != null:
+		var light_tween := create_tween()
+		light_tween.set_ease(Tween.EASE_IN)
+		light_tween.set_trans(Tween.TRANS_CUBIC)
+		light_tween.tween_property(
+			_selection_light,
+			"light_energy",
+			0.0,
+			DISAPPEAR_GROW_DURATION + DISAPPEAR_SHRINK_DURATION + REMOVAL_LIGHT_EXTRA_DURATION
+		)
 
 	var tween := create_tween()
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_CUBIC)
-	tween.tween_property(self, "scale", Vector3.ONE * 1.1, 0.25)
+	tween.tween_property(self, "scale", Vector3.ONE * 1.1, DISAPPEAR_GROW_DURATION)
 	tween.tween_callback(_spawn_disappear_particles)
-	tween.tween_property(self, "scale", Vector3.ZERO, 0.4)
+	tween.tween_property(self, "scale", Vector3.ZERO, DISAPPEAR_SHRINK_DURATION)
+	if illuminate_for_removal:
+		tween.tween_interval(REMOVAL_LIGHT_EXTRA_DURATION)
 	tween.tween_callback(queue_free)
 
 func counter_rotate_icons(delta_rad: float) -> void:
@@ -309,7 +369,7 @@ func _ensure_selection_light() -> void:
 	_selection_light = OmniLight3D.new()
 	_selection_light.name = "SelectionLight"
 	_selection_light.light_color = Color.WHITE
-	_selection_light.light_energy = 0.45
+	_selection_light.light_energy = SELECTION_LIGHT_ENERGY
 	_selection_light.omni_range = 1.35
 	_selection_light.position = Vector3.ZERO
 	add_child(_selection_light)

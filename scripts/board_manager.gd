@@ -90,8 +90,8 @@ func on_tile_selected(tile: Node3D, hit_normal := Vector3.ZERO) -> void:
 	if _selected_tile.tile_data.icon_type == tile.tile_data.icon_type and _is_tile_free(p1):
 		_grid[p1.x][p1.y][p1.z] = null
 		_grid[tile_pos.x][tile_pos.y][tile_pos.z] = null
-		_selected_tile.remove_tile()
-		tile.remove_tile()
+		_selected_tile.remove_tile(true)
+		tile.remove_tile(true)
 		_selected_tile = null
 	else:
 		_selected_tile.deselect()

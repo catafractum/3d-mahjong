@@ -1,11 +1,3 @@
-res://scenes/board_scene.tscn
-res://data/levels.json
 res://scripts/mahjong_tile.gd
-res://scripts/gui_controller.gd
-res://scenes/TileDisappearParticles.tscn
-res://scripts/tile_disappear_particles.gd
 res://scripts/board_manager.gd
-res://scenes/MahjongTile.tscn
-res://scripts/board_container.gd
-res://scripts/board_scene.gd
-res://shaders/tile_outline.gdshader
+res://scripts/tile_disappear_particles.gd

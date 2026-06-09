@@ -2,12 +2,13 @@ extends Node3D
 
 const SPARK_TEXTURES := [
 	preload("res://assets/images/spark_01.png"),
-	preload("res://assets/images/spark_02.png")
+	preload("res://assets/images/spark_02.png"),
+	preload("res://assets/images/icons_tiles/spark_03.png")
 ]
 const PARTICLE_COUNT := 36
 const TILE_HALF_EDGE := 0.42
 const TILE_EDGE := TILE_HALF_EDGE * 2.0
-const SPARK_SIZE := Vector2(0.16, 0.2)
+const SPARK_SIZE := Vector2(0.16, 0.2) * 2.0625
 const MAX_SPARK_SCALE := 3.0
 const START_ALPHA := 0.0
 const PEAK_ALPHA := 1.0
