@@ -2,6 +2,7 @@ extends Node3D
 
 const TileDataRes = preload("res://scripts/tile_data.gd")
 const LevelNormalizer = preload("res://scripts/level_normalizer.gd")
+const SymbolAssigner = preload("res://scripts/solver/symbol_assigner.gd")
 const LEVELS_PATH := "res://data/levels.json"
 const DEFAULT_GRID_SIZE := 7
 const BOARD_Y_OFFSET := -0.25
@@ -253,6 +254,12 @@ func _create_cube_board(level_id: int) -> void:
 	scale = Vector3.ONE * _get_level_scale(_get_y_height(tile_coords))
 	var center_x: float = float(grid_size - 1) * 0.5
 	var center_z: float = float(grid_size - 1) * 0.5
+	var icon_assignment := SymbolAssigner.assign_solvable_icons(
+		tile_coords,
+		grid_size,
+		icon_type_count,
+		str(level.get("difficulty", "easy"))
+	)
 	var count := 0
 	for coord in tile_coords:
 		var x := int(coord.x)
@@ -273,7 +280,7 @@ func _create_cube_board(level_id: int) -> void:
 		tile.id = count
 		var data := TileDataRes.new()
 		data.grid_pos = Vector3(x, y, z)
-		data.icon_type = randi() % icon_type_count
+		data.icon_type = int(icon_assignment.get(Vector3i(x, y, z), count % maxi(icon_type_count, 1)))
 		tile.set_tile_data(data, data.icon_type)
 		count += 1
 

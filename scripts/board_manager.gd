@@ -1,14 +1,10 @@
 extends Node
 
+const TileRules = preload("res://scripts/solver/tile_rules.gd")
+const MahjongSolver = preload("res://scripts/solver/mahjong_solver.gd")
 const GRID_SIZE := 7
 const GRID_MAX := GRID_SIZE - 1
 const GRID_CENTER_OFFSET := float(GRID_MAX) * 0.5
-const VERTICAL_SIDE_DIRECTIONS: Array[Vector3i] = [
-	Vector3i(1, 0, 0),
-	Vector3i(-1, 0, 0),
-	Vector3i(0, 0, 1),
-	Vector3i(0, 0, -1)
-]
 
 var _grid := []
 var _selected_tile = null
@@ -109,29 +105,33 @@ func _tile_grid_pos(tile: Node3D) -> Vector3i:
 		int(tile.tile_data.grid_pos.z)
 	)
 
+func is_current_board_solvable() -> bool:
+	return MahjongSolver.is_solvable(_make_icon_state(), GRID_SIZE)
+
+func has_available_moves() -> bool:
+	return MahjongSolver.has_any_move(_make_icon_state(), GRID_SIZE)
+
+func _make_icon_state() -> Dictionary:
+	var icon_by_pos := {}
+	for x in range(GRID_SIZE):
+		for y in range(GRID_SIZE):
+			for z in range(GRID_SIZE):
+				var tile = _grid[x][y][z]
+				if tile != null and tile.get("tile_data") != null:
+					icon_by_pos[Vector3i(x, y, z)] = int(tile.tile_data.icon_type)
+	return icon_by_pos
+
 func _is_tile_free(pos: Vector3i) -> bool:
-	var free_sides := _free_vertical_sides(pos)
-	return free_sides.size() >= 2 and _has_adjacent_sides(free_sides)
+	return TileRules.is_tile_free(pos, _make_occupancy(), GRID_SIZE)
 
-func _free_vertical_sides(pos: Vector3i) -> Array[Vector3i]:
-	var free_sides: Array[Vector3i] = []
-	for direction: Vector3i in VERTICAL_SIDE_DIRECTIONS:
-		var neighbor: Vector3i = pos + direction
-		if not _is_inside_grid(neighbor) or _grid[neighbor.x][neighbor.y][neighbor.z] == null:
-			free_sides.append(direction)
-	return free_sides
-
-func _has_adjacent_sides(sides: Array[Vector3i]) -> bool:
-	for i in range(sides.size()):
-		for j in range(i + 1, sides.size()):
-			if sides[i] + sides[j] != Vector3i.ZERO:
-				return true
-	return false
-
-func _is_inside_grid(pos: Vector3i) -> bool:
-	return pos.x >= 0 and pos.x < GRID_SIZE \
-		and pos.y >= 0 and pos.y < GRID_SIZE \
-		and pos.z >= 0 and pos.z < GRID_SIZE
+func _make_occupancy() -> Dictionary:
+	var occupancy := {}
+	for x in range(GRID_SIZE):
+		for y in range(GRID_SIZE):
+			for z in range(GRID_SIZE):
+				if _grid[x][y][z] != null:
+					occupancy[Vector3i(x, y, z)] = true
+	return occupancy
 
 func _transform_pos(pos: Vector3i, axis: String, angle: int) -> Vector3i:
 	var x := pos.x

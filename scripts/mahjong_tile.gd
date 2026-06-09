@@ -3,7 +3,7 @@ extends Node3D
 const TileDataRes = preload("res://scripts/tile_data.gd")
 const DISAPPEAR_PARTICLES = preload("res://scenes/TileDisappearParticles.tscn")
 const TILE_OUTLINE_SHADER = preload("res://shaders/tile_outline.gdshader")
-const CUBE_ALBEDO := Color("#EEEAE6")
+const CUBE_ALBEDO := Color("#F3E8D2")
 const ICON_FACE_BASE_SCALE := 0.36
 const SHAKE_DELTA := 0.048
 const SHAKE_STEP_DURATION := 0.03375
@@ -23,7 +23,11 @@ var _body_original_surface_materials: Dictionary = {}
 var _editor_dim_original_surface_materials: Dictionary = {}
 var _selection_light: OmniLight3D
 var _shake_tween: Tween
+var _select_tween: Tween
 var _is_removing: bool = false
+var _current_icon_type: int = -1
+var _normal_icon_texture: Texture2D
+var _selected_icon_texture: Texture2D
 
 func _icon_faces() -> Array[MeshInstance3D]:
 	return [face_front, face_back, face_left, face_right]
@@ -38,14 +42,15 @@ func set_tile_data(data: Resource, icon_type: int) -> void:
 	if tile_icons.is_empty():
 		push_error("MahjongTile: tile_icons is empty — assign textures in the Inspector")
 		return
-	var texture: Texture2D = tile_icons[icon_type % tile_icons.size()]
-	for face in _icon_faces():
-		var mat: StandardMaterial3D = face.get_active_material(0).duplicate()
-		mat.albedo_texture = texture
-		face.set_surface_override_material(0, mat)
-		_apply_icon_aspect_ratio(face, texture)
+	_current_icon_type = icon_type
+	_normal_icon_texture = tile_icons[icon_type % tile_icons.size()]
+	_selected_icon_texture = _load_selected_icon_texture(icon_type)
+	_apply_icon_texture(_normal_icon_texture)
 
 func select() -> void:
+	if _select_tween != null:
+		_select_tween.kill()
+
 	for body_mesh in _body_meshes:
 		if body_mesh.mesh == null:
 			continue
@@ -56,11 +61,67 @@ func select() -> void:
 				original_materials.append(body_mesh.get_surface_override_material(surface_index))
 			_body_original_surface_materials[body_mesh] = original_materials
 		for surface_index in range(surface_count):
-			body_mesh.set_surface_override_material(surface_index, _make_selected_body_material(body_mesh, surface_index))
+			var mat := _make_selected_body_material(body_mesh, surface_index)
+			mat.emission_energy_multiplier = 0.0
+			body_mesh.set_surface_override_material(surface_index, mat)
+
+	_apply_icon_texture(_selected_icon_texture)
+	for face in _icon_faces():
+		var mat := face.get_surface_override_material(0) as StandardMaterial3D
+		if mat != null:
+			mat.albedo_color = Color(0.5, 0.5, 0.5)
+
 	_ensure_selection_light()
 	_selection_light.visible = true
 
+	_select_tween = create_tween()
+	_select_tween.set_parallel(true)
+	_select_tween.set_ease(Tween.EASE_OUT)
+	_select_tween.set_trans(Tween.TRANS_CUBIC)
+	for body_mesh in _body_meshes:
+		if body_mesh.mesh == null:
+			continue
+		for i in range(body_mesh.mesh.get_surface_count()):
+			var mat := body_mesh.get_surface_override_material(i) as StandardMaterial3D
+			if mat != null:
+				_select_tween.tween_property(mat, "emission_energy_multiplier", 0.75, 0.3)
+	for face in _icon_faces():
+		var mat := face.get_surface_override_material(0) as StandardMaterial3D
+		if mat != null:
+			_select_tween.tween_property(mat, "albedo_color", Color(1.0, 1.0, 1.0, 0.9), 0.3)
+
 func deselect() -> void:
+	if _select_tween != null:
+		_select_tween.kill()
+		_select_tween = null
+
+	_apply_icon_texture(_normal_icon_texture)
+	for face in _icon_faces():
+		var mat := face.get_surface_override_material(0) as StandardMaterial3D
+		if mat != null:
+			mat.albedo_color = Color(0.5, 0.5, 0.5)
+
+	if _selection_light != null:
+		_selection_light.visible = false
+
+	_select_tween = create_tween()
+	_select_tween.set_parallel(true)
+	_select_tween.set_ease(Tween.EASE_IN)
+	_select_tween.set_trans(Tween.TRANS_CUBIC)
+	for body_mesh in _body_meshes:
+		if body_mesh.mesh == null:
+			continue
+		for i in range(body_mesh.mesh.get_surface_count()):
+			var mat := body_mesh.get_surface_override_material(i) as StandardMaterial3D
+			if mat != null:
+				_select_tween.tween_property(mat, "emission_energy_multiplier", 0.0, 0.15)
+	for face in _icon_faces():
+		var mat := face.get_surface_override_material(0) as StandardMaterial3D
+		if mat != null:
+			_select_tween.tween_property(mat, "albedo_color", Color.WHITE, 0.15)
+	_select_tween.finished.connect(_finish_deselect, CONNECT_ONE_SHOT)
+
+func _finish_deselect() -> void:
 	for body_mesh in _body_meshes:
 		if not _body_original_surface_materials.has(body_mesh):
 			continue
@@ -68,8 +129,7 @@ func deselect() -> void:
 		for surface_index in range(original_materials.size()):
 			body_mesh.set_surface_override_material(surface_index, original_materials[surface_index])
 	_body_original_surface_materials.clear()
-	if _selection_light != null:
-		_selection_light.visible = false
+	_select_tween = null
 
 func remove_tile() -> void:
 	if _is_removing:
@@ -185,6 +245,27 @@ func _apply_icon_aspect_ratio(face: MeshInstance3D, texture: Texture2D) -> void:
 	else:
 		height_scale = ICON_FACE_BASE_SCALE * aspect
 	face.scale = Vector3(width_scale, current_scale.y, height_scale)
+
+func _apply_icon_texture(texture: Texture2D) -> void:
+	if texture == null:
+		return
+	for face in _icon_faces():
+		var mat := StandardMaterial3D.new()
+		var base_mat := face.get_active_material(0) as StandardMaterial3D
+		if base_mat != null:
+			mat = base_mat.duplicate()
+		mat.albedo_texture = texture
+		mat.albedo_color = Color.WHITE
+		face.set_surface_override_material(0, mat)
+		_apply_icon_aspect_ratio(face, texture)
+
+func _load_selected_icon_texture(icon_type: int) -> Texture2D:
+	var icon_number := (icon_type % tile_icons.size()) + 1
+	var path := "res://assets/images/icons_tiles/icon_%d_on.png" % icon_number
+	if not ResourceLoader.exists(path):
+		push_warning("MahjongTile: selected icon texture not found: %s" % path)
+		return _normal_icon_texture
+	return load(path) as Texture2D
 
 func _add_shader_outline() -> void:
 	for body_mesh in _body_meshes:
