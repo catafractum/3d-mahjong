@@ -8,3 +8,4 @@ res://scripts/board_manager.gd
 res://scenes/MahjongTile.tscn
 res://scripts/board_container.gd
 res://scripts/board_scene.gd
+res://shaders/tile_outline.gdshader
