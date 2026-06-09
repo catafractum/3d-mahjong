@@ -1,11 +1,8 @@
 [gd_scene format=3 uid="uid://cvn7p2vhfjjrj"]
 
 [ext_resource type="Script" uid="uid://c6mhr310p1o3o" path="res://scripts/board_scene.gd" id="1_8l4tr"]
-[ext_resource type="PackedScene" uid="uid://d3xjwwjp5260l" path="res://scenes/MahjongTile.tscn" id="2_7fpns"]
 [ext_resource type="PackedScene" uid="uid://dgvb6o0nf3m7y" path="res://scenes/board_container.tscn" id="3_8b3xw"]
-[ext_resource type="Texture2D" uid="uid://dhyleexn6jvry" path="res://assets/images/icons_tiles/icon_1.png" id="4_esmum"]
 [ext_resource type="Texture2D" uid="uid://c44ota7ymi83j" path="res://assets/images/buttons/btn_arrow.png" id="4_g0sq7"]
-[ext_resource type="Texture2D" uid="uid://cq7fjagl6nbju" path="res://assets/images/icons_tiles/icon_2.png" id="5_q6jyi"]
 [ext_resource type="Texture2D" uid="uid://cll8xwwdv46we" path="res://assets/images/background.jpg" id="6_4d81t"]
 [ext_resource type="Texture2D" uid="uid://b82ismf5gaamr" path="res://assets/images/buttons/btn_shuffle.png" id="7_0bi8h"]
 [ext_resource type="Texture2D" uid="uid://ic10ws4jssj3" path="res://assets/images/buttons/btn_settings.png" id="9_g2hxh"]
@@ -45,11 +42,6 @@ transform = Transform3D(0.8660254, 0.25, -0.4330127, 0, 0.8660254, 0.5, 0.5, -0.
 light_energy = 0.85
 
 [node name="BoardContainer" parent="." unique_id=1009866573 instance=ExtResource("3_8b3xw")]
-
-[node name="MahjongTile" parent="." unique_id=696403091 instance=ExtResource("2_7fpns")]
-transform = Transform3D(0.9659258, 0, -0.25881904, 0, 1, 0, 0.25881904, 0, 0.9659258, 0, 0, 0)
-visible = false
-tile_icons = Array[Texture2D]([ExtResource("4_esmum"), ExtResource("5_q6jyi")])
 
 [node name="Background" type="CanvasLayer" parent="." unique_id=1910045739]
 layer = -1
