@@ -11,6 +11,8 @@ const DESELECT_TRANSITION_DURATION := 0.3
 const DISAPPEAR_GROW_DURATION := 0.225
 const DISAPPEAR_SHRINK_DURATION := 0.36
 const REMOVAL_LIGHT_EXTRA_DURATION := 0.2
+const HOVER_EMISSION_ENERGY := 0.1
+const HOVER_TRANSITION_DURATION := 0.18
 const SELECTION_LIGHT_ENERGY := 0.45
 const SELECTION_LIGHT_DESELECT_DURATION := 0.45
 
@@ -28,9 +30,12 @@ var _body_meshes: Array[MeshInstance3D] = []
 var _body_original_surface_materials: Dictionary = {}
 var _editor_dim_original_surface_materials: Dictionary = {}
 var _selection_light: OmniLight3D
+var _hover_tween: Tween
 var _shake_tween: Tween
 var _select_tween: Tween
 var _is_removing: bool = false
+var _is_selected: bool = false
+var _is_hovered: bool = false
 var _current_icon_type: int = -1
 var _normal_icon_texture: Texture2D
 var _selected_icon_texture: Texture2D
@@ -54,6 +59,10 @@ func set_tile_data(data: Resource, icon_type: int) -> void:
 	_apply_icon_texture(_normal_icon_texture)
 
 func select() -> void:
+	_is_selected = true
+	if _hover_tween != null:
+		_hover_tween.kill()
+		_hover_tween = null
 	if _select_tween != null:
 		_select_tween.kill()
 
@@ -100,6 +109,7 @@ func select() -> void:
 	_select_tween.tween_property(_selection_light, "light_energy", SELECTION_LIGHT_ENERGY, 0.3)
 
 func deselect() -> void:
+	_is_selected = false
 	if _select_tween != null:
 		_select_tween.kill()
 		_select_tween = null
@@ -138,11 +148,17 @@ func _finish_deselect() -> void:
 			body_mesh.set_surface_override_material(surface_index, original_materials[surface_index])
 	_body_original_surface_materials.clear()
 	_select_tween = null
+	if _is_hovered and not _is_removing:
+		_apply_hover_visuals()
 
 func _clear_selection_visuals() -> void:
+	_is_selected = false
 	if _select_tween != null:
 		_select_tween.kill()
 		_select_tween = null
+	if _hover_tween != null:
+		_hover_tween.kill()
+		_hover_tween = null
 	if _selection_light != null:
 		_selection_light.light_energy = 0.0
 		_selection_light.visible = false
@@ -150,9 +166,13 @@ func _clear_selection_visuals() -> void:
 	_finish_deselect()
 
 func _show_removal_selection_visuals() -> void:
+	_is_selected = true
 	if _select_tween != null:
 		_select_tween.kill()
 		_select_tween = null
+	if _hover_tween != null:
+		_hover_tween.kill()
+		_hover_tween = null
 	for body_mesh in _body_meshes:
 		if body_mesh.mesh == null:
 			continue
@@ -179,6 +199,7 @@ func remove_tile(illuminate_for_removal := false) -> void:
 	if _is_removing:
 		return
 	_is_removing = true
+	_is_hovered = false
 	if illuminate_for_removal:
 		_show_removal_selection_visuals()
 	else:
@@ -257,6 +278,15 @@ func set_editor_dimmed(is_dimmed: bool) -> void:
 			mesh_instance.set_surface_override_material(surface_index, original_materials[surface_index])
 	_editor_dim_original_surface_materials.clear()
 
+func on_hover(is_hovered: bool) -> void:
+	_is_hovered = is_hovered
+	if _is_removing or _is_selected:
+		return
+	if is_hovered:
+		_apply_hover_visuals()
+	else:
+		_clear_hover_visuals()
+
 func _collect_body_meshes(root: Node) -> Array[MeshInstance3D]:
 	var meshes: Array[MeshInstance3D] = []
 	if root is MeshInstance3D:
@@ -276,6 +306,74 @@ func _apply_cube_albedo() -> void:
 				mat = base_mat.duplicate()
 			mat.albedo_color = CUBE_ALBEDO
 			body_mesh.set_surface_override_material(surface_index, mat)
+
+func _apply_hover_visuals() -> void:
+	if _hover_tween != null:
+		_hover_tween.kill()
+
+	_hover_tween = create_tween()
+	_hover_tween.set_parallel(true)
+	_hover_tween.set_ease(Tween.EASE_OUT)
+	_hover_tween.set_trans(Tween.TRANS_CUBIC)
+
+	for body_mesh in _body_meshes:
+		if body_mesh.mesh == null:
+			continue
+		var surface_count := body_mesh.mesh.get_surface_count()
+		if not _body_original_surface_materials.has(body_mesh):
+			var original_materials: Array[Material] = []
+			for surface_index in range(surface_count):
+				original_materials.append(body_mesh.get_surface_override_material(surface_index))
+			_body_original_surface_materials[body_mesh] = original_materials
+		for surface_index in range(surface_count):
+			var mat := _make_hover_body_material(body_mesh, surface_index)
+			mat.emission_energy_multiplier = 0.0
+			body_mesh.set_surface_override_material(surface_index, mat)
+			_hover_tween.tween_property(
+				mat,
+				"emission_energy_multiplier",
+				HOVER_EMISSION_ENERGY,
+				HOVER_TRANSITION_DURATION
+			)
+
+func _clear_hover_visuals() -> void:
+	if _hover_tween != null:
+		_hover_tween.kill()
+
+	if _body_original_surface_materials.is_empty():
+		_hover_tween = null
+		return
+
+	_hover_tween = create_tween()
+	_hover_tween.set_parallel(true)
+	_hover_tween.set_ease(Tween.EASE_IN)
+	_hover_tween.set_trans(Tween.TRANS_CUBIC)
+
+	for body_mesh in _body_meshes:
+		if body_mesh.mesh == null:
+			continue
+		for surface_index in range(body_mesh.mesh.get_surface_count()):
+			var mat := body_mesh.get_surface_override_material(surface_index) as StandardMaterial3D
+			if mat != null:
+				_hover_tween.tween_property(
+					mat,
+					"emission_energy_multiplier",
+					0.0,
+					HOVER_TRANSITION_DURATION
+				)
+	_hover_tween.finished.connect(_finish_hover_clear, CONNECT_ONE_SHOT)
+
+func _finish_hover_clear() -> void:
+	if _is_hovered or _is_selected or _is_removing:
+		return
+	for body_mesh in _body_meshes:
+		if not _body_original_surface_materials.has(body_mesh):
+			continue
+		var original_materials: Array = _body_original_surface_materials[body_mesh]
+		for surface_index in range(original_materials.size()):
+			body_mesh.set_surface_override_material(surface_index, original_materials[surface_index])
+	_body_original_surface_materials.clear()
+	_hover_tween = null
 
 func _spawn_disappear_particles() -> void:
 	var parent := get_parent()
@@ -352,6 +450,17 @@ func _make_selected_body_material(body_mesh: MeshInstance3D, surface_index: int)
 	mat.emission_enabled = true
 	mat.emission = Color.WHITE
 	mat.emission_energy_multiplier = 0.75
+	return mat
+
+func _make_hover_body_material(body_mesh: MeshInstance3D, surface_index: int) -> StandardMaterial3D:
+	var base_mat := body_mesh.get_active_material(surface_index) as StandardMaterial3D
+	var mat := StandardMaterial3D.new()
+	if base_mat != null:
+		mat = base_mat.duplicate()
+	mat.albedo_color = Color.WHITE
+	mat.emission_enabled = true
+	mat.emission = Color.WHITE
+	mat.emission_energy_multiplier = HOVER_EMISSION_ENERGY
 	return mat
 
 func _make_editor_dimmed_material(mesh_instance: MeshInstance3D, surface_index: int) -> StandardMaterial3D:

@@ -42,12 +42,16 @@ var _rotation_bounds := {
 var _last_sync_angle := 0.0
 var _press_position := Vector2.ZERO
 var _tracking_pointer := false
+var _hovered_tile: Node3D = null
 
 func _ready() -> void:
 	level_id = GameState.selected_level_id
 	rotate_y(-10 * PI / 180)
 	_create_cube_board(level_id)
 	board_ready.emit(_get_tiles())
+
+func _process(_delta: float) -> void:
+	_update_hovered_tile()
 
 func rotate_board(right: bool) -> void:
 	if _rotating:
@@ -346,6 +350,34 @@ func _end_pointer(position: Vector2) -> void:
 		pick_tile(position)
 
 func pick_tile(mouse_pos: Vector2) -> void:
+	var result := _raycast_tile(mouse_pos)
+	if result.is_empty():
+		return
+	tile_selected.emit(result.tile, result.normal)
+
+func _update_hovered_tile() -> void:
+	if _rotating or _tracking_pointer or camera == null:
+		_set_hovered_tile(null)
+		return
+
+	var hovered_control := get_viewport().gui_get_hovered_control()
+	if hovered_control != null:
+		_set_hovered_tile(null)
+		return
+
+	var result := _raycast_tile(get_viewport().get_mouse_position())
+	_set_hovered_tile(result.get("tile", null))
+
+func _set_hovered_tile(tile: Node3D) -> void:
+	if tile == _hovered_tile:
+		return
+	if _hovered_tile != null and is_instance_valid(_hovered_tile):
+		_hovered_tile.on_hover(false)
+	_hovered_tile = tile
+	if _hovered_tile != null and is_instance_valid(_hovered_tile):
+		_hovered_tile.on_hover(true)
+
+func _raycast_tile(mouse_pos: Vector2) -> Dictionary:
 	var from = camera.project_ray_origin(mouse_pos)
 	var to = from + camera.project_ray_normal(mouse_pos) * 1000
 	var query = PhysicsRayQueryParameters3D.create(from, to)
@@ -353,7 +385,11 @@ func pick_tile(mouse_pos: Vector2) -> void:
 	if result:
 		var tile := _tile_from_collider(result.collider)
 		if tile != null:
-			tile_selected.emit(tile, result.normal)
+			return {
+				"tile": tile,
+				"normal": result.normal
+			}
+	return {}
 
 func _tile_from_collider(collider: Object) -> Node3D:
 	if collider == null or not (collider is Node):
