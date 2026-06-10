@@ -3,8 +3,12 @@ extends Node3D
 const SPARK_TEXTURES := [
 	preload("res://assets/images/spark_01.png"),
 	preload("res://assets/images/spark_02.png"),
-	preload("res://assets/images/icons_tiles/spark_03.png")
+	preload("res://assets/images/spark_03.png"),
+	preload("res://assets/images/spark_04.png")
 ]
+const SPARK_WEIGHTS := [4, 4, 4, 1]
+const SPARK_DISTANCE_MULTIPLIERS := [1.0, 1.0, 1.0, 1.35]
+const SPARK_DURATION_MULTIPLIERS := [1.0, 1.0, 1.0, 0.55]
 const PARTICLE_COUNT := 36
 const TILE_HALF_EDGE := 0.42
 const TILE_EDGE := TILE_HALF_EDGE * 2.0
@@ -27,8 +31,9 @@ func play_effect() -> void:
 	get_tree().create_timer(TOTAL_DURATION * MAX_DURATION_MULTIPLIER).timeout.connect(queue_free)
 
 func _spawn_spark() -> void:
+	var spark_type := _random_spark_type()
 	var spark := MeshInstance3D.new()
-	spark.mesh = _make_spark_mesh(_random_spark_texture())
+	spark.mesh = _make_spark_mesh(SPARK_TEXTURES[spark_type])
 	spark.scale = Vector3.ONE * randf_range(1.0, MAX_SPARK_SCALE)
 	spark.position = Vector3.ZERO
 	spark.rotation_degrees.z = randf_range(0.0, 360.0)
@@ -36,8 +41,10 @@ func _spawn_spark() -> void:
 
 	var material := spark.mesh.material as StandardMaterial3D
 	var direction := _random_direction()
-	var end_position := direction * TILE_EDGE
-	var duration := TOTAL_DURATION * randf_range(MIN_DURATION_MULTIPLIER, MAX_DURATION_MULTIPLIER)
+	var end_position := direction * TILE_EDGE * float(SPARK_DISTANCE_MULTIPLIERS[spark_type])
+	var duration := TOTAL_DURATION \
+		* randf_range(MIN_DURATION_MULTIPLIER, MAX_DURATION_MULTIPLIER) \
+		* float(SPARK_DURATION_MULTIPLIERS[spark_type])
 	var alpha_half_duration := duration * 0.5
 
 	var movement_tween := create_tween()
@@ -84,8 +91,18 @@ func _make_spark_mesh(texture: Texture2D) -> QuadMesh:
 	mesh.material = material
 	return mesh
 
-func _random_spark_texture() -> Texture2D:
-	return SPARK_TEXTURES[randi() % SPARK_TEXTURES.size()]
+func _random_spark_type() -> int:
+	var total_weight := 0
+	for weight in SPARK_WEIGHTS:
+		total_weight += int(weight)
+
+	var roll := randi() % total_weight
+	for i in range(SPARK_WEIGHTS.size()):
+		roll -= int(SPARK_WEIGHTS[i])
+		if roll < 0:
+			return i
+
+	return SPARK_WEIGHTS.size() - 1
 
 func _set_material_alpha(alpha: float, material: StandardMaterial3D) -> void:
 	var albedo := material.albedo_color

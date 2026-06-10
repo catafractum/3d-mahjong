@@ -15,7 +15,7 @@
 [ext_resource type="Script" uid="uid://bs4da1eyefnkb" path="res://scripts/gui_controller.gd" id="21_guictl"]
 [ext_resource type="Texture2D" uid="uid://dwtjdlhjpxmc3" path="res://assets/images/buttons/btn_reset.png" id="22_4khhe"]
 [ext_resource type="PackedScene" uid="uid://b83gk0omj3j2b" path="res://scenes/timer_container.tscn" id="23_timer"]
-[ext_resource type="Texture2D" uid="uid://c3wxolxk27dd2" path="res://assets/images/bg_next_level.png" id="24_next_bg"]
+[ext_resource type="Texture2D" uid="uid://bqmaqhgjapsgm" path="res://assets/images/bg_next_level.png" id="24_next_bg"]
 [ext_resource type="Texture2D" uid="uid://cyyix8x2dsplv" path="res://assets/images/buttons/btn_play_next_level.png" id="25_next_btn"]
 [ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="26_next_font"]
 [ext_resource type="Texture2D" uid="uid://coo2rbapj7107" path="res://assets/images/medium_conplete_label.png" id="27_complete_label"]
@@ -272,10 +272,10 @@ stretch_mode = 5
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_left = 92.25
-offset_top = 139.28992
-offset_right = -32.75
-offset_bottom = 170.28992
+offset_left = 94.75119
+offset_top = 132.31023
+offset_right = -30.24881
+offset_bottom = 163.31023
 grow_horizontal = 2
 scale = Vector2(0.757, 0.724)
 text = "MEDIUM UNLOCKED"
@@ -290,10 +290,10 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -123.25
-offset_top = -116.71008
-offset_right = 119.75
-offset_bottom = -62.710083
+offset_left = -123.21087
+offset_top = -96.677765
+offset_right = 119.78912
+offset_bottom = -42.677765
 grow_horizontal = 2
 grow_vertical = 0
 texture_normal = ExtResource("25_next_btn")

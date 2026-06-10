@@ -3,8 +3,6 @@
 [ext_resource type="Script" path="res://scripts/calendar_day_container.gd" id="1_calendar"]
 [ext_resource type="Texture2D" uid="uid://b3bju8bn8fm1y" path="res://assets/images/splash/bg_calendar_day.png" id="2_bg"]
 [ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="3_montserrat"]
-[ext_resource type="FontFile" uid="uid://dy1al2nw1uiyq" path="res://assets/fonts/Cinzel-Medium.ttf" id="4_cinzel"]
-
 [sub_resource type="LabelSettings" id="LabelSettings_month"]
 font = ExtResource("3_montserrat")
 font_size = 34
@@ -18,7 +16,7 @@ font_size = 38
 font_color = Color(0.184314, 0.0745098, 0.309804, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_day"]
-font = ExtResource("4_cinzel")
+font = ExtResource("3_montserrat")
 font_size = 160
 font_color = Color(0.184314, 0.0745098, 0.309804, 1)
 shadow_size = 4

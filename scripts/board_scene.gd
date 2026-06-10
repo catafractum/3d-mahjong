@@ -3,9 +3,11 @@ extends Node3D
 const LEVEL_EDITOR_SCENE := "res://scenes/level_editor.tscn"
 const DIFFICULTIES := ["easy", "medium", "hard"]
 const EDITOR_CONTROLS_Y := 124.0
+const BOARD_INITIAL_ROTATION_DEGREES := Vector3(0.0, -10.0, 0.0)
 const LEVEL_COMPLETE_MENU_DELAY := 0.9
 const ROTATION_BUTTON_FADE_DURATION := 0.22
 const NEXT_LEVEL_BUTTON_HOVER_SCALE := 1.025
+const NEXT_LEVEL_BG_PATH := "res://assets/images/bg_next_level.png"
 const COMPLETE_LABEL_PATHS := {
 	"easy": "res://assets/images/easy_complete_label.png",
 	"medium": "res://assets/images/medium_conplete_label.png"
@@ -22,6 +24,7 @@ const COMPLETE_LABEL_PATHS := {
 @onready var left_arrow_btn: TextureButton = $GUI/Control/LeftArrowBtn
 @onready var shuffle_btn: TextureButton = $GUI/Control/ShuffleBtn
 @onready var next_level_menu: Control = $GUI/Control/NextLevelMenu
+@onready var next_level_panel: TextureRect = $GUI/Control/NextLevelMenu/Panel
 @onready var next_level_title: Label = $GUI/Control/NextLevelMenu/Panel/TitleLabel
 @onready var next_level_complete_label: TextureRect = $GUI/Control/NextLevelMenu/Panel/CompleteLabelImage
 @onready var next_level_button: TextureButton = $GUI/Control/NextLevelMenu/Panel/PlayNextLevelBtn
@@ -34,6 +37,7 @@ var _rotation_buttons_tween: Tween
 var _next_level_button_base_scale := Vector2.ONE
 var _next_level_button_scale_tween: Tween
 var _next_level_button_hovered := false
+var _level_complete_token := 0
 
 func _enter_tree() -> void:
 	level_id = GameState.selected_level_id
@@ -59,6 +63,7 @@ func _ready() -> void:
 	gui.reset_pressed.connect(_on_reset)
 	gui.sfx_toggled.connect(_on_sfx_toggled)
 	gui.soundtrack_toggled.connect(_on_soundtrack_toggled)
+	_apply_next_level_panel_texture()
 	next_level_menu.visible = false
 	next_level_menu.modulate.a = 0.0
 
@@ -107,7 +112,14 @@ func _on_editor() -> void:
 	get_tree().change_scene_to_file(LEVEL_EDITOR_SCENE)
 
 func _on_reset() -> void:
-	get_tree().reload_current_scene()
+	_level_complete_token += 1
+	_hide_next_level_menu()
+	_next_level_button_hovered = false
+	_on_next_level_button_hover(false)
+	board_container.rotation_degrees = BOARD_INITIAL_ROTATION_DEGREES
+	board_container.load_level(level_id)
+	timer_container.resume()
+	_fade_rotation_buttons(true)
 
 func _on_sfx_toggled(is_on: bool) -> void:
 	AudioServer.set_bus_mute(AudioServer.get_bus_index("SFX"), not is_on)
@@ -116,12 +128,17 @@ func _on_soundtrack_toggled(is_on: bool) -> void:
 	AudioServer.set_bus_mute(AudioServer.get_bus_index("Music"), not is_on)
 
 func _on_level_completed() -> void:
+	_level_complete_token += 1
+	var complete_token := _level_complete_token
 	timer_container.pause()
 	_fade_rotation_buttons(false)
 	await get_tree().create_timer(LEVEL_COMPLETE_MENU_DELAY).timeout
+	if complete_token != _level_complete_token:
+		return
 	_show_next_level_menu()
 
 func _show_next_level_menu() -> void:
+	_apply_next_level_panel_texture()
 	_next_level_id = _get_next_level_id(level_id)
 	var current_difficulty := _difficulty_for_level_id(level_id)
 	var unlocked_difficulty := _difficulty_for_level_id(_next_level_id)
@@ -145,6 +162,7 @@ func _show_next_level_menu() -> void:
 func _on_play_next_level() -> void:
 	if _is_final_level(level_id):
 		return
+	_level_complete_token += 1
 	GameState.selected_level_id = _next_level_id
 	GameState.has_selected_level = true
 	level_id = _next_level_id
@@ -231,3 +249,9 @@ func _set_complete_label_image(difficulty: String) -> void:
 			push_warning("BoardScene: missing complete label image %s" % label_path)
 	else:
 		next_level_complete_label.visible = false
+
+func _apply_next_level_panel_texture() -> void:
+	if ResourceLoader.exists(NEXT_LEVEL_BG_PATH):
+		next_level_panel.texture = load(NEXT_LEVEL_BG_PATH)
+	else:
+		push_warning("BoardScene: missing next level background image %s" % NEXT_LEVEL_BG_PATH)
