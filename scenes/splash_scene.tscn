@@ -1,8 +1,12 @@
 [gd_scene format=3 uid="uid://brugxgm251okg"]
 
-[ext_resource type="Script" path="res://scripts/splash_scene.gd" id="1_splash"]
+[ext_resource type="Script" uid="uid://bgaluprhitr5k" path="res://scripts/splash_scene.gd" id="1_splash"]
 [ext_resource type="Texture2D" uid="uid://cll8xwwdv46we" path="res://assets/images/background.jpg" id="2_lkc75"]
-[ext_resource type="Texture2D" uid="uid://dy4dtrdnge65v" path="res://assets/images/game_logo.png" id="3_lkc75"]
+[ext_resource type="Texture2D" uid="uid://dy4dtrdnge65v" path="res://assets/images/splash/game_logo.png" id="3_lkc75"]
+[ext_resource type="PackedScene" uid="uid://ch0y113d7s06o" path="res://scenes/calendar_day_container.tscn" id="4_calendar"]
+[ext_resource type="PackedScene" uid="uid://vgobuowp8go1" path="res://scenes/streak_container.tscn" id="5_streak"]
+[ext_resource type="PackedScene" uid="uid://dmbco1arpfs6l" path="res://scenes/challenge_container.tscn" id="6_challenge"]
+[ext_resource type="PackedScene" path="res://scenes/days_carousel_container.tscn" id="7_days"]
 
 [node name="SplashScene" type="Control" unique_id=378663134]
 layout_mode = 3
@@ -33,36 +37,79 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.03, 0.02, 0.05, 0.34)
 
-[node name="Content" type="VBoxContainer" parent="." unique_id=487429165]
+[node name="Content" type="Control" parent="." unique_id=487429165]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -260.0
-offset_top = -190.0
-offset_right = 260.0
-offset_bottom = 190.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-alignment = 1
 
 [node name="Logo" type="TextureRect" parent="Content" unique_id=923173486]
 custom_minimum_size = Vector2(360, 400)
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -142.0
+offset_top = -5.0
+offset_right = 218.0
+offset_bottom = 395.0
+grow_horizontal = 2
+scale = Vector2(0.7, 0.7)
 texture = ExtResource("3_lkc75")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Spacer" type="Control" parent="Content" unique_id=2098211534]
-custom_minimum_size = Vector2(0, 18)
-layout_mode = 2
+[node name="CalendarDayContainer" parent="Content" unique_id=553834949 instance=ExtResource("4_calendar")]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -291.0
+offset_top = 251.0
+offset_right = 72.0
+offset_bottom = 773.0
+grow_horizontal = 2
+scale = Vector2(0.56, 0.56)
 
-[node name="StartButton" type="Button" parent="Content" unique_id=1018340545]
+[node name="ChallengeContainer" parent="Content" unique_id=1847863337 instance=ExtResource("6_challenge")]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(260, 72)
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 30
-text = "PLAY"
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -69.0
+offset_top = 277.0
+offset_right = 322.0
+offset_bottom = 567.0
+grow_horizontal = 2
+scale = Vector2(0.92, 0.92)
+
+[node name="DaysCarouselContainer" parent="Content" unique_id=1007581945 instance=ExtResource("7_days")]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -296.0
+offset_top = -338.0
+offset_right = 300.0
+offset_bottom = -195.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="StreakContainer" parent="Content" unique_id=1960853129 instance=ExtResource("5_streak")]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -299.0
+offset_top = -184.0
+offset_right = 302.0
+offset_bottom = -77.0
+grow_horizontal = 2
+grow_vertical = 0

@@ -1,2 +1,7 @@
-res://scripts/board_container.gd
-res://scripts/mahjong_tile.gd
+res://scenes/calendar_day_container.tscn
+res://scenes/streak_container.tscn
+res://scripts/splash_scene.gd
+res://scenes/challenge_container.tscn
+res://scenes/splash_scene.tscn
+res://data/levels.json
+res://scripts/challenge_container.gd

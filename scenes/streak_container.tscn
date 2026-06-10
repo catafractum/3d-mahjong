@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://vgobuowp8go1"]
+
+[ext_resource type="Script" path="res://scripts/streak_container.gd" id="1_streak"]
+[ext_resource type="Texture2D" uid="uid://ctvcnfictrub1" path="res://assets/images/splash/bg_streak_landscape.png" id="2_bg"]
+[ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="3_montserrat"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_value"]
+font = ExtResource("3_montserrat")
+font_size = 24
+font_color = Color(1, 0.772549, 0.427451, 1)
+
+[node name="StreakContainer" type="Control" unique_id=1460233615]
+custom_minimum_size = Vector2(601, 107)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 601.0
+offset_bottom = 107.0
+script = ExtResource("1_streak")
+
+[node name="Background" type="TextureRect" parent="." unique_id=383181099]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_bg")
+stretch_mode = 5
+
+[node name="CurrentStreakValue" type="Label" parent="." unique_id=392900269]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = 127.0
+offset_top = 53.0
+offset_right = 191.0
+offset_bottom = 84.0
+text = "0"
+label_settings = SubResource("LabelSettings_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="BestStreakValue" type="Label" parent="." unique_id=594105811]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = 410.0
+offset_top = 53.0
+offset_right = 474.0
+offset_bottom = 84.0
+text = "0"
+label_settings = SubResource("LabelSettings_value")
+horizontal_alignment = 2
+vertical_alignment = 1

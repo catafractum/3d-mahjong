@@ -2,10 +2,10 @@ extends Control
 
 const BOARD_SCENE := "res://scenes/board_scene.tscn"
 
-@onready var start_button: Button = %StartButton
+@onready var challenge_container: Control = %ChallengeContainer
 
 func _ready() -> void:
-	start_button.pressed.connect(_on_start_button_pressed)
+	challenge_container.play_pressed.connect(_on_play_pressed)
 
-func _on_start_button_pressed() -> void:
+func _on_play_pressed() -> void:
 	get_tree().change_scene_to_file(BOARD_SCENE)
