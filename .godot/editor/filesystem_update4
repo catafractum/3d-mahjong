@@ -5,3 +5,10 @@ res://scenes/challenge_container.tscn
 res://scenes/splash_scene.tscn
 res://data/levels.json
 res://scripts/challenge_container.gd
+res://scenes/timer_container.tscn
+res://scenes/board_scene.tscn
+res://scripts/board_scene.gd
+res://scripts/timer_container.gd
+res://scripts/board_container.gd
+res://scripts/game_state.gd
+res://scripts/board_manager.gd

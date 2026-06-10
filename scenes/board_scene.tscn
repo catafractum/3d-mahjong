@@ -14,6 +14,11 @@
 [ext_resource type="Texture2D" uid="uid://b8lj6d7m2wpts" path="res://assets/images/buttons/btn_soundtrack_off.png" id="19_p5g5a"]
 [ext_resource type="Script" uid="uid://bs4da1eyefnkb" path="res://scripts/gui_controller.gd" id="21_guictl"]
 [ext_resource type="Texture2D" uid="uid://dwtjdlhjpxmc3" path="res://assets/images/buttons/btn_reset.png" id="22_4khhe"]
+[ext_resource type="PackedScene" uid="uid://b83gk0omj3j2b" path="res://scenes/timer_container.tscn" id="23_timer"]
+[ext_resource type="Texture2D" uid="uid://c3wxolxk27dd2" path="res://assets/images/bg_next_level.png" id="24_next_bg"]
+[ext_resource type="Texture2D" uid="uid://cyyix8x2dsplv" path="res://assets/images/buttons/btn_play_next_level.png" id="25_next_btn"]
+[ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="26_next_font"]
+[ext_resource type="Texture2D" uid="uid://coo2rbapj7107" path="res://assets/images/medium_conplete_label.png" id="27_complete_label"]
 
 [sub_resource type="Environment" id="Environment_8l4tr"]
 background_mode = 3
@@ -21,6 +26,15 @@ background_color = Color(0.14117648, 0.0627451, 0.19607843, 1)
 ambient_light_source = 2
 ambient_light_color = Color(1, 1, 1, 1)
 ambient_light_energy = 0.59
+
+[sub_resource type="LabelSettings" id="LabelSettings_next_title"]
+font = ExtResource("26_next_font")
+font_size = 24
+font_color = Color(0.98039216, 0.8352941, 0.3019608, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_next_button"]
+font = ExtResource("26_next_font")
+font_size = 18
 
 [node name="BoardScene" type="Node3D" unique_id=2038322144]
 script = ExtResource("1_8l4tr")
@@ -68,6 +82,17 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("21_guictl")
+
+[node name="TimerContainer" parent="GUI/Control" unique_id=1721438568 instance=ExtResource("23_timer")]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -709.0
+offset_top = 14.0
+offset_right = -461.0
+offset_bottom = 103.0
+grow_horizontal = 2
 
 [node name="RightArrowBtn" type="TextureButton" parent="GUI/Control" unique_id=1949707549]
 layout_mode = 1
@@ -201,6 +226,94 @@ offset_bottom = 390.99997
 grow_horizontal = 0
 scale = Vector2(0.84, 0.81)
 texture_normal = ExtResource("17_mepxe")
+
+[node name="NextLevelMenu" type="Control" parent="GUI/Control" unique_id=605575179]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 48.0
+offset_bottom = 48.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Panel" type="TextureRect" parent="GUI/Control/NextLevelMenu" unique_id=2136674370]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -234.0
+offset_top = -250.0
+offset_right = 149.0
+offset_bottom = 218.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.1714892, 1.1714892)
+texture = ExtResource("24_next_bg")
+stretch_mode = 5
+
+[node name="CompleteLabelImage" type="TextureRect" parent="GUI/Control/NextLevelMenu/Panel" unique_id=752851214]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 66.25
+offset_top = 36.289917
+offset_right = -61.75
+offset_bottom = 126.28992
+grow_horizontal = 2
+texture = ExtResource("27_complete_label")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TitleLabel" type="Label" parent="GUI/Control/NextLevelMenu/Panel" unique_id=2124613664]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 92.25
+offset_top = 139.28992
+offset_right = -32.75
+offset_bottom = 170.28992
+grow_horizontal = 2
+scale = Vector2(0.757, 0.724)
+text = "MEDIUM UNLOCKED"
+label_settings = SubResource("LabelSettings_next_title")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PlayNextLevelBtn" type="TextureButton" parent="GUI/Control/NextLevelMenu/Panel" unique_id=957112430]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -123.25
+offset_top = -116.71008
+offset_right = 119.75
+offset_bottom = -62.710083
+grow_horizontal = 2
+grow_vertical = 0
+texture_normal = ExtResource("25_next_btn")
+
+[node name="ButtonLabel" type="Label" parent="GUI/Control/NextLevelMenu/Panel/PlayNextLevelBtn" unique_id=1536159819]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -39.0
+offset_top = -8.0
+offset_right = -39.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.33, 1.33)
+text = "PLAY MEDIUM"
+label_settings = SubResource("LabelSettings_next_button")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="BoardManager" type="Node" parent="." unique_id=1800542772]
 script = ExtResource("11_q6jyi")

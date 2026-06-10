@@ -2,6 +2,14 @@ extends Node3D
 
 const LEVEL_EDITOR_SCENE := "res://scenes/level_editor.tscn"
 const DIFFICULTIES := ["easy", "medium", "hard"]
+const EDITOR_CONTROLS_Y := 124.0
+const LEVEL_COMPLETE_MENU_DELAY := 0.9
+const ROTATION_BUTTON_FADE_DURATION := 0.22
+const NEXT_LEVEL_BUTTON_HOVER_SCALE := 1.025
+const COMPLETE_LABEL_PATHS := {
+	"easy": "res://assets/images/easy_complete_label.png",
+	"medium": "res://assets/images/medium_conplete_label.png"
+}
 
 @export var level_id := 20
 
@@ -9,6 +17,23 @@ const DIFFICULTIES := ["easy", "medium", "hard"]
 @onready var board_container: Node3D = $BoardContainer
 @onready var board_manager: Node = $BoardManager
 @onready var gui: Control = $GUI/Control
+@onready var timer_container: Control = $GUI/Control/TimerContainer
+@onready var right_arrow_btn: TextureButton = $GUI/Control/RightArrowBtn
+@onready var left_arrow_btn: TextureButton = $GUI/Control/LeftArrowBtn
+@onready var shuffle_btn: TextureButton = $GUI/Control/ShuffleBtn
+@onready var next_level_menu: Control = $GUI/Control/NextLevelMenu
+@onready var next_level_title: Label = $GUI/Control/NextLevelMenu/Panel/TitleLabel
+@onready var next_level_complete_label: TextureRect = $GUI/Control/NextLevelMenu/Panel/CompleteLabelImage
+@onready var next_level_button: TextureButton = $GUI/Control/NextLevelMenu/Panel/PlayNextLevelBtn
+@onready var next_level_button_label: Label = $GUI/Control/NextLevelMenu/Panel/PlayNextLevelBtn/ButtonLabel
+
+var _level_label: Label
+var _next_level_id := 0
+var _menu_tween: Tween
+var _rotation_buttons_tween: Tween
+var _next_level_button_base_scale := Vector2.ONE
+var _next_level_button_scale_tween: Tween
+var _next_level_button_hovered := false
 
 func _enter_tree() -> void:
 	level_id = GameState.selected_level_id
@@ -18,16 +43,27 @@ func _ready() -> void:
 	board_container.tile_selected.connect(board_manager.on_tile_selected)
 	board_container.board_ready.connect(board_manager.on_board_ready)
 	board_manager.on_board_ready(board_container.get_tiles())
+	board_manager.level_completed.connect(_on_level_completed)
 	board_container.layer_rotated.connect(func(axis, value, angle, visual_offset):
 		board_manager.on_layer_rotated(axis, value, angle, board_container.spacing, visual_offset)
 	)
-	$GUI/Control/RightArrowBtn.pressed.connect(_on_rotate_right)
-	$GUI/Control/LeftArrowBtn.pressed.connect(_on_rotate_left)
-	$GUI/Control/ShuffleBtn.pressed.connect(_on_shuffle)
+	right_arrow_btn.pressed.connect(_on_rotate_right)
+	left_arrow_btn.pressed.connect(_on_rotate_left)
+	shuffle_btn.pressed.connect(_on_shuffle)
+	_next_level_button_base_scale = next_level_button.scale
+	next_level_button.pivot_offset = next_level_button.size * 0.5
+	next_level_button.pressed.connect(_on_play_next_level)
+	next_level_button.mouse_entered.connect(_on_next_level_button_hover.bind(true))
+	next_level_button.mouse_exited.connect(_on_next_level_button_hover.bind(false))
 	gui.home_pressed.connect(_on_home)
 	gui.reset_pressed.connect(_on_reset)
 	gui.sfx_toggled.connect(_on_sfx_toggled)
 	gui.soundtrack_toggled.connect(_on_soundtrack_toggled)
+	next_level_menu.visible = false
+	next_level_menu.modulate.a = 0.0
+
+func _process(_delta: float) -> void:
+	_update_next_level_button_hover()
 
 func _build_editor_controls() -> void:
 	var editor_button := Button.new()
@@ -35,20 +71,20 @@ func _build_editor_controls() -> void:
 	editor_button.custom_minimum_size = Vector2(128, 56)
 	editor_button.anchors_preset = Control.PRESET_TOP_LEFT
 	editor_button.offset_left = 24.0
-	editor_button.offset_top = 24.0
+	editor_button.offset_top = EDITOR_CONTROLS_Y
 	editor_button.offset_right = 152.0
-	editor_button.offset_bottom = 80.0
+	editor_button.offset_bottom = EDITOR_CONTROLS_Y + 56.0
 	editor_button.pressed.connect(_on_editor)
 	gui.add_child(editor_button)
 
-	var level_label := Label.new()
-	level_label.text = _get_level_label()
-	level_label.anchors_preset = Control.PRESET_TOP_LEFT
-	level_label.offset_left = 168.0
-	level_label.offset_top = 32.0
-	level_label.offset_right = 440.0
-	level_label.offset_bottom = 72.0
-	gui.add_child(level_label)
+	_level_label = Label.new()
+	_level_label.text = _get_level_label()
+	_level_label.anchors_preset = Control.PRESET_TOP_LEFT
+	_level_label.offset_left = 168.0
+	_level_label.offset_top = EDITOR_CONTROLS_Y + 8.0
+	_level_label.offset_right = 440.0
+	_level_label.offset_bottom = EDITOR_CONTROLS_Y + 48.0
+	gui.add_child(_level_label)
 
 func _get_level_label() -> String:
 	var difficulty_index := clampi(int(level_id / 10), 0, DIFFICULTIES.size() - 1)
@@ -78,3 +114,120 @@ func _on_sfx_toggled(is_on: bool) -> void:
 
 func _on_soundtrack_toggled(is_on: bool) -> void:
 	AudioServer.set_bus_mute(AudioServer.get_bus_index("Music"), not is_on)
+
+func _on_level_completed() -> void:
+	timer_container.pause()
+	_fade_rotation_buttons(false)
+	await get_tree().create_timer(LEVEL_COMPLETE_MENU_DELAY).timeout
+	_show_next_level_menu()
+
+func _show_next_level_menu() -> void:
+	_next_level_id = _get_next_level_id(level_id)
+	var current_difficulty := _difficulty_for_level_id(level_id)
+	var unlocked_difficulty := _difficulty_for_level_id(_next_level_id)
+	next_level_title.text = "%s UNLOCKED" % unlocked_difficulty.to_upper()
+	_set_complete_label_image(current_difficulty)
+	next_level_button.visible = not _is_final_level(level_id)
+	next_level_button.disabled = _is_final_level(level_id)
+	_next_level_button_hovered = false
+	_on_next_level_button_hover(false)
+	if not _is_final_level(level_id):
+		next_level_button_label.text = "PLAY %s" % unlocked_difficulty.to_upper()
+	next_level_menu.visible = true
+	next_level_menu.mouse_filter = Control.MOUSE_FILTER_STOP
+	if _menu_tween != null:
+		_menu_tween.kill()
+	_menu_tween = create_tween()
+	_menu_tween.set_ease(Tween.EASE_OUT)
+	_menu_tween.set_trans(Tween.TRANS_CUBIC)
+	_menu_tween.tween_property(next_level_menu, "modulate:a", 1.0, 0.22)
+
+func _on_play_next_level() -> void:
+	if _is_final_level(level_id):
+		return
+	GameState.selected_level_id = _next_level_id
+	GameState.has_selected_level = true
+	level_id = _next_level_id
+	if _level_label != null:
+		_level_label.text = _get_level_label()
+	_hide_next_level_menu()
+	board_container.load_level(level_id)
+	timer_container.resume()
+	_fade_rotation_buttons(true)
+
+func _on_next_level_button_hover(is_hovered: bool) -> void:
+	if _next_level_button_scale_tween != null:
+		_next_level_button_scale_tween.kill()
+	var target_scale := _next_level_button_base_scale * (NEXT_LEVEL_BUTTON_HOVER_SCALE if is_hovered else 1.0)
+	_next_level_button_scale_tween = create_tween()
+	_next_level_button_scale_tween.set_ease(Tween.EASE_OUT)
+	_next_level_button_scale_tween.set_trans(Tween.TRANS_CUBIC)
+	_next_level_button_scale_tween.tween_property(next_level_button, "scale", target_scale, 0.08)
+
+func _update_next_level_button_hover() -> void:
+	var should_hover := next_level_menu.visible \
+		and next_level_button.visible \
+		and not next_level_button.disabled \
+		and next_level_button.get_global_rect().has_point(get_viewport().get_mouse_position())
+	if should_hover == _next_level_button_hovered:
+		return
+	_next_level_button_hovered = should_hover
+	_on_next_level_button_hover(_next_level_button_hovered)
+
+func _hide_next_level_menu() -> void:
+	next_level_menu.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if _menu_tween != null:
+		_menu_tween.kill()
+	_menu_tween = create_tween()
+	_menu_tween.set_ease(Tween.EASE_IN)
+	_menu_tween.set_trans(Tween.TRANS_CUBIC)
+	_menu_tween.tween_property(next_level_menu, "modulate:a", 0.0, 0.18)
+	_menu_tween.tween_callback(func(): next_level_menu.visible = false)
+
+func _fade_rotation_buttons(show_buttons: bool) -> void:
+	if _rotation_buttons_tween != null:
+		_rotation_buttons_tween.kill()
+	var target_alpha := 1.0 if show_buttons else 0.0
+	for button in _gameplay_action_buttons():
+		button.disabled = not show_buttons
+		if show_buttons:
+			button.visible = true
+	_rotation_buttons_tween = create_tween()
+	_rotation_buttons_tween.set_parallel(true)
+	_rotation_buttons_tween.set_ease(Tween.EASE_OUT)
+	_rotation_buttons_tween.set_trans(Tween.TRANS_CUBIC)
+	for button in _gameplay_action_buttons():
+		_rotation_buttons_tween.tween_property(button, "modulate:a", target_alpha, ROTATION_BUTTON_FADE_DURATION)
+	if not show_buttons:
+		_rotation_buttons_tween.chain().tween_callback(func():
+			for button in _gameplay_action_buttons():
+				button.visible = false
+		)
+
+func _gameplay_action_buttons() -> Array[TextureButton]:
+	return [right_arrow_btn, left_arrow_btn, shuffle_btn]
+
+func _get_next_level_id(current_level_id: int) -> int:
+	var difficulty_index := clampi(int(current_level_id / 10), 0, DIFFICULTIES.size() - 1)
+	var next_difficulty_index := mini(difficulty_index + 1, DIFFICULTIES.size() - 1)
+	return next_difficulty_index * 10
+
+func _difficulty_for_level_id(current_level_id: int) -> String:
+	var difficulty_index := clampi(int(current_level_id / 10), 0, DIFFICULTIES.size() - 1)
+	return DIFFICULTIES[difficulty_index]
+
+func _is_final_level(current_level_id: int) -> bool:
+	var difficulty_index := clampi(int(current_level_id / 10), 0, DIFFICULTIES.size() - 1)
+	return difficulty_index >= DIFFICULTIES.size() - 1
+
+func _set_complete_label_image(difficulty: String) -> void:
+	var label_path: String = COMPLETE_LABEL_PATHS.get(difficulty, "")
+	if label_path != "":
+		if ResourceLoader.exists(label_path):
+			next_level_complete_label.texture = load(label_path)
+			next_level_complete_label.visible = true
+		else:
+			next_level_complete_label.visible = false
+			push_warning("BoardScene: missing complete label image %s" % label_path)
+	else:
+		next_level_complete_label.visible = false

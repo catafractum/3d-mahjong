@@ -3,7 +3,6 @@ extends Node3D
 const TileDataRes = preload("res://scripts/tile_data.gd")
 const LevelNormalizer = preload("res://scripts/level_normalizer.gd")
 const SymbolAssigner = preload("res://scripts/solver/symbol_assigner.gd")
-const LEVELS_PATH := "res://data/levels.json"
 const DEFAULT_GRID_SIZE := 7
 const BOARD_Y_OFFSET := -0.25
 const LEVEL_SCALE_BY_HEIGHT := {
@@ -47,8 +46,7 @@ var _hovered_tile: Node3D = null
 func _ready() -> void:
 	level_id = GameState.selected_level_id
 	rotate_y(-10 * PI / 180)
-	_create_cube_board(level_id)
-	board_ready.emit(_get_tiles())
+	load_level(level_id)
 
 func _process(_delta: float) -> void:
 	_update_hovered_tile()
@@ -192,6 +190,21 @@ func _get_tiles() -> Array[Node3D]:
 func get_tiles() -> Array[Node3D]:
 	return _get_tiles()
 
+func load_level(new_level_id: int) -> void:
+	clear_board()
+	level_id = new_level_id
+	_create_cube_board(level_id)
+	board_ready.emit(_get_tiles())
+
+func clear_board() -> void:
+	_set_hovered_tile(null)
+	_tracking_pointer = false
+	_rotating = false
+	_sync_tiles.clear()
+	for tile in _get_tiles():
+		remove_child(tile)
+		tile.queue_free()
+
 func _axis_value(v: Vector3, axis_name: String) -> float:
 	match axis_name:
 		"x": return v.x
@@ -303,9 +316,10 @@ func _get_y_height(coords: Array) -> int:
 	return max_y - min_y + 1
 
 func _get_level_data(level_id: int) -> Dictionary:
-	var file := FileAccess.open(LEVELS_PATH, FileAccess.READ)
+	var levels_path := GameState.LEVELS_PATH
+	var file := FileAccess.open(levels_path, FileAccess.READ)
 	if file == null:
-		push_error("BoardContainer: could not open %s" % LEVELS_PATH)
+		push_error("BoardContainer: could not open %s" % levels_path)
 		return {}
 
 	var parsed = JSON.parse_string(file.get_as_text())

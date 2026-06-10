@@ -8,6 +8,7 @@ const GRID_CENTER_OFFSET := float(GRID_MAX) * 0.5
 
 var _grid := []
 var _selected_tile = null
+var _level_completed := false
 var _rotation_bounds := {
 	"min_x": 0,
 	"max_x": GRID_MAX,
@@ -16,6 +17,8 @@ var _rotation_bounds := {
 	"min_z": 0,
 	"max_z": GRID_MAX
 }
+
+signal level_completed
 
 func _ready() -> void:
 	_init_grid()
@@ -33,6 +36,8 @@ func _init_grid() -> void:
 
 func on_board_ready(tiles: Array[Node3D]) -> void:
 	_init_grid()
+	_selected_tile = null
+	_level_completed = false
 	_update_rotation_bounds(tiles)
 	for tile in tiles:
 		var gp: Vector3 = tile.tile_data.grid_pos
@@ -93,6 +98,9 @@ func on_tile_selected(tile: Node3D, hit_normal := Vector3.ZERO) -> void:
 		_selected_tile.remove_tile(true)
 		tile.remove_tile(true)
 		_selected_tile = null
+		if not _level_completed and _make_icon_state().is_empty():
+			_level_completed = true
+			level_completed.emit()
 	else:
 		_selected_tile.deselect()
 		_selected_tile = tile
