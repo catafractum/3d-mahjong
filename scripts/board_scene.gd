@@ -6,6 +6,8 @@ const EDITOR_CONTROLS_Y := 124.0
 const BOARD_INITIAL_ROTATION_DEGREES := Vector3(0.0, -10.0, 0.0)
 const LEVEL_COMPLETE_MENU_DELAY := 0.9
 const ROTATION_BUTTON_FADE_DURATION := 0.22
+const LEVEL_COMPLETE_OVERLAY_FADE_IN_DURATION := 0.3
+const LEVEL_COMPLETE_OVERLAY_FADE_OUT_DURATION := 0.2
 const NEXT_LEVEL_BUTTON_HOVER_SCALE := 1.025
 const NEXT_LEVEL_BG_PATH := "res://assets/images/bg_next_level.png"
 const COMPLETE_LABEL_PATHS := {
@@ -23,6 +25,7 @@ const COMPLETE_LABEL_PATHS := {
 @onready var right_arrow_btn: TextureButton = $GUI/Control/RightArrowBtn
 @onready var left_arrow_btn: TextureButton = $GUI/Control/LeftArrowBtn
 @onready var shuffle_btn: TextureButton = $GUI/Control/ShuffleBtn
+@onready var level_complete_overlay: ColorRect = $GUI/Control/LevelCompleteOverlay
 @onready var next_level_menu: Control = $GUI/Control/NextLevelMenu
 @onready var next_level_panel: TextureRect = $GUI/Control/NextLevelMenu/Panel
 @onready var next_level_title: Label = $GUI/Control/NextLevelMenu/Panel/TitleLabel
@@ -33,6 +36,7 @@ const COMPLETE_LABEL_PATHS := {
 var _level_label: Label
 var _next_level_id := 0
 var _menu_tween: Tween
+var _level_complete_overlay_tween: Tween
 var _rotation_buttons_tween: Tween
 var _next_level_button_base_scale := Vector2.ONE
 var _next_level_button_scale_tween: Tween
@@ -64,6 +68,8 @@ func _ready() -> void:
 	gui.sfx_toggled.connect(_on_sfx_toggled)
 	gui.soundtrack_toggled.connect(_on_soundtrack_toggled)
 	_apply_next_level_panel_texture()
+	level_complete_overlay.visible = false
+	level_complete_overlay.modulate.a = 0.0
 	next_level_menu.visible = false
 	next_level_menu.modulate.a = 0.0
 
@@ -114,6 +120,7 @@ func _on_editor() -> void:
 func _on_reset() -> void:
 	_level_complete_token += 1
 	_hide_next_level_menu()
+	_fade_level_complete_overlay(false)
 	_next_level_button_hovered = false
 	_on_next_level_button_hover(false)
 	board_container.rotation_degrees = BOARD_INITIAL_ROTATION_DEGREES
@@ -132,6 +139,7 @@ func _on_level_completed() -> void:
 	var complete_token := _level_complete_token
 	timer_container.pause()
 	_fade_rotation_buttons(false)
+	_fade_level_complete_overlay(true)
 	await get_tree().create_timer(LEVEL_COMPLETE_MENU_DELAY).timeout
 	if complete_token != _level_complete_token:
 		return
@@ -169,6 +177,7 @@ func _on_play_next_level() -> void:
 	if _level_label != null:
 		_level_label.text = _get_level_label()
 	_hide_next_level_menu()
+	_fade_level_complete_overlay(false)
 	board_container.load_level(level_id)
 	timer_container.resume()
 	_fade_rotation_buttons(true)
@@ -201,6 +210,20 @@ func _hide_next_level_menu() -> void:
 	_menu_tween.set_trans(Tween.TRANS_CUBIC)
 	_menu_tween.tween_property(next_level_menu, "modulate:a", 0.0, 0.18)
 	_menu_tween.tween_callback(func(): next_level_menu.visible = false)
+
+func _fade_level_complete_overlay(show_overlay: bool) -> void:
+	if _level_complete_overlay_tween != null:
+		_level_complete_overlay_tween.kill()
+	var target_alpha := 1.0 if show_overlay else 0.0
+	var duration := LEVEL_COMPLETE_OVERLAY_FADE_IN_DURATION if show_overlay else LEVEL_COMPLETE_OVERLAY_FADE_OUT_DURATION
+	if show_overlay:
+		level_complete_overlay.visible = true
+	_level_complete_overlay_tween = create_tween()
+	_level_complete_overlay_tween.set_ease(Tween.EASE_OUT if show_overlay else Tween.EASE_IN)
+	_level_complete_overlay_tween.set_trans(Tween.TRANS_CUBIC)
+	_level_complete_overlay_tween.tween_property(level_complete_overlay, "modulate:a", target_alpha, duration)
+	if not show_overlay:
+		_level_complete_overlay_tween.tween_callback(func(): level_complete_overlay.visible = false)
 
 func _fade_rotation_buttons(show_buttons: bool) -> void:
 	if _rotation_buttons_tween != null:
