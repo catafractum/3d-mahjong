@@ -9,7 +9,9 @@ const ROTATION_BUTTON_FADE_DURATION := 0.22
 const LEVEL_COMPLETE_OVERLAY_FADE_IN_DURATION := 0.3
 const LEVEL_COMPLETE_OVERLAY_FADE_OUT_DURATION := 0.2
 const NEXT_LEVEL_BUTTON_HOVER_SCALE := 1.025
+const GAME_OVER_BUTTON_HOVER_SCALE := 1.05
 const NEXT_LEVEL_BG_PATH := "res://assets/images/bg_next_level.png"
+const SPLASH_SCENE := "res://scenes/splash_scene.tscn"
 const COMPLETE_LABEL_PATHS := {
 	"easy": "res://assets/images/easy_complete_label.png",
 	"medium": "res://assets/images/medium_conplete_label.png"
@@ -32,16 +34,34 @@ const COMPLETE_LABEL_PATHS := {
 @onready var next_level_complete_label: TextureRect = $GUI/Control/NextLevelMenu/Panel/CompleteLabelImage
 @onready var next_level_button: TextureButton = $GUI/Control/NextLevelMenu/Panel/PlayNextLevelBtn
 @onready var next_level_button_label: Label = $GUI/Control/NextLevelMenu/Panel/PlayNextLevelBtn/ButtonLabel
+@onready var game_over_menu: Control = $GUI/Control/GameOverMenu
+@onready var game_over_home_button: TextureButton = $GUI/Control/GameOverMenu/Panel/HomeButton
+@onready var game_over_replay_button: TextureButton = $GUI/Control/GameOverMenu/Panel/ReplayButton
+@onready var challenge_completed_menu: Control = $GUI/Control/ChallengeCompletedMenu
+@onready var challenge_completed_home_button: TextureButton = $GUI/Control/ChallengeCompletedMenu/Panel/HomeButton
+@onready var challenge_completed_play_again_button: TextureButton = $GUI/Control/ChallengeCompletedMenu/Panel/PlayAgainButton
 
 var _level_label: Label
 var _next_level_id := 0
 var _menu_tween: Tween
+var _game_over_menu_tween: Tween
+var _challenge_completed_menu_tween: Tween
 var _level_complete_overlay_tween: Tween
 var _rotation_buttons_tween: Tween
 var _next_level_button_base_scale := Vector2.ONE
 var _next_level_button_scale_tween: Tween
 var _next_level_button_hovered := false
+var _game_over_home_button_base_scale := Vector2.ONE
+var _game_over_replay_button_base_scale := Vector2.ONE
+var _game_over_home_button_scale_tween: Tween
+var _game_over_replay_button_scale_tween: Tween
+var _challenge_completed_home_button_base_scale := Vector2.ONE
+var _challenge_completed_play_again_button_base_scale := Vector2.ONE
+var _challenge_completed_home_button_scale_tween: Tween
+var _challenge_completed_play_again_button_scale_tween: Tween
 var _level_complete_token := 0
+var _is_game_over := false
+var _is_challenge_completed := false
 
 func _enter_tree() -> void:
 	level_id = GameState.selected_level_id
@@ -58,11 +78,32 @@ func _ready() -> void:
 	right_arrow_btn.pressed.connect(_on_rotate_right)
 	left_arrow_btn.pressed.connect(_on_rotate_left)
 	shuffle_btn.pressed.connect(_on_shuffle)
+	timer_container.timer_finished.connect(_on_timer_finished)
 	_next_level_button_base_scale = next_level_button.scale
 	next_level_button.pivot_offset = next_level_button.size * 0.5
 	next_level_button.pressed.connect(_on_play_next_level)
 	next_level_button.mouse_entered.connect(_on_next_level_button_hover.bind(true))
 	next_level_button.mouse_exited.connect(_on_next_level_button_hover.bind(false))
+	_game_over_home_button_base_scale = game_over_home_button.scale
+	_game_over_replay_button_base_scale = game_over_replay_button.scale
+	game_over_home_button.pivot_offset = game_over_home_button.size * 0.5
+	game_over_replay_button.pivot_offset = game_over_replay_button.size * 0.5
+	game_over_home_button.mouse_entered.connect(_on_game_over_button_hover.bind(game_over_home_button, true))
+	game_over_home_button.mouse_exited.connect(_on_game_over_button_hover.bind(game_over_home_button, false))
+	game_over_replay_button.mouse_entered.connect(_on_game_over_button_hover.bind(game_over_replay_button, true))
+	game_over_replay_button.mouse_exited.connect(_on_game_over_button_hover.bind(game_over_replay_button, false))
+	game_over_home_button.pressed.connect(_on_game_over_home)
+	game_over_replay_button.pressed.connect(_on_game_over_replay)
+	_challenge_completed_home_button_base_scale = challenge_completed_home_button.scale
+	_challenge_completed_play_again_button_base_scale = challenge_completed_play_again_button.scale
+	challenge_completed_home_button.pivot_offset = challenge_completed_home_button.size * 0.5
+	challenge_completed_play_again_button.pivot_offset = challenge_completed_play_again_button.size * 0.5
+	challenge_completed_home_button.mouse_entered.connect(_on_challenge_completed_button_hover.bind(challenge_completed_home_button, true))
+	challenge_completed_home_button.mouse_exited.connect(_on_challenge_completed_button_hover.bind(challenge_completed_home_button, false))
+	challenge_completed_play_again_button.mouse_entered.connect(_on_challenge_completed_button_hover.bind(challenge_completed_play_again_button, true))
+	challenge_completed_play_again_button.mouse_exited.connect(_on_challenge_completed_button_hover.bind(challenge_completed_play_again_button, false))
+	challenge_completed_home_button.pressed.connect(_on_challenge_completed_home)
+	challenge_completed_play_again_button.pressed.connect(_on_challenge_completed_play_again)
 	gui.home_pressed.connect(_on_home)
 	gui.reset_pressed.connect(_on_reset)
 	gui.sfx_toggled.connect(_on_sfx_toggled)
@@ -72,6 +113,10 @@ func _ready() -> void:
 	level_complete_overlay.modulate.a = 0.0
 	next_level_menu.visible = false
 	next_level_menu.modulate.a = 0.0
+	game_over_menu.visible = false
+	game_over_menu.modulate.a = 0.0
+	challenge_completed_menu.visible = false
+	challenge_completed_menu.modulate.a = 0.0
 
 func _process(_delta: float) -> void:
 	_update_next_level_button_hover()
@@ -112,14 +157,18 @@ func _on_shuffle() -> void:
 	board_container.shuffle()
 
 func _on_home() -> void:
-	get_tree().change_scene_to_file("res://scenes/splash_scene.tscn")
+	get_tree().change_scene_to_file(SPLASH_SCENE)
 
 func _on_editor() -> void:
 	get_tree().change_scene_to_file(LEVEL_EDITOR_SCENE)
 
 func _on_reset() -> void:
 	_level_complete_token += 1
+	_is_game_over = false
+	_is_challenge_completed = false
 	_hide_next_level_menu()
+	_hide_game_over_menu()
+	_hide_challenge_completed_menu()
 	_fade_level_complete_overlay(false)
 	_next_level_button_hovered = false
 	_on_next_level_button_hover(false)
@@ -135,6 +184,8 @@ func _on_soundtrack_toggled(is_on: bool) -> void:
 	AudioServer.set_bus_mute(AudioServer.get_bus_index("Music"), not is_on)
 
 func _on_level_completed() -> void:
+	if _is_game_over or _is_challenge_completed:
+		return
 	_level_complete_token += 1
 	var complete_token := _level_complete_token
 	timer_container.pause()
@@ -143,7 +194,142 @@ func _on_level_completed() -> void:
 	await get_tree().create_timer(LEVEL_COMPLETE_MENU_DELAY).timeout
 	if complete_token != _level_complete_token:
 		return
+	if _is_final_level(level_id):
+		_show_challenge_completed_menu()
+		return
 	_show_next_level_menu()
+
+func _on_timer_finished() -> void:
+	_level_complete_token += 1
+	_is_game_over = true
+	_is_challenge_completed = false
+	_hide_next_level_menu()
+	_hide_challenge_completed_menu()
+	_next_level_button_hovered = false
+	_on_next_level_button_hover(false)
+	_fade_rotation_buttons(false)
+	_fade_level_complete_overlay(true)
+	_show_game_over_menu()
+
+func _show_game_over_menu() -> void:
+	_on_game_over_button_hover(game_over_home_button, false)
+	_on_game_over_button_hover(game_over_replay_button, false)
+	game_over_menu.visible = true
+	game_over_menu.mouse_filter = Control.MOUSE_FILTER_STOP
+	if _game_over_menu_tween != null:
+		_game_over_menu_tween.kill()
+	_game_over_menu_tween = create_tween()
+	_game_over_menu_tween.set_ease(Tween.EASE_OUT)
+	_game_over_menu_tween.set_trans(Tween.TRANS_CUBIC)
+	_game_over_menu_tween.tween_property(game_over_menu, "modulate:a", 1.0, 0.22)
+
+func _hide_game_over_menu() -> void:
+	_on_game_over_button_hover(game_over_home_button, false)
+	_on_game_over_button_hover(game_over_replay_button, false)
+	game_over_menu.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if _game_over_menu_tween != null:
+		_game_over_menu_tween.kill()
+	_game_over_menu_tween = create_tween()
+	_game_over_menu_tween.set_ease(Tween.EASE_IN)
+	_game_over_menu_tween.set_trans(Tween.TRANS_CUBIC)
+	_game_over_menu_tween.tween_property(game_over_menu, "modulate:a", 0.0, 0.18)
+	_game_over_menu_tween.tween_callback(func(): game_over_menu.visible = false)
+
+func _on_game_over_home() -> void:
+	get_tree().change_scene_to_file(SPLASH_SCENE)
+
+func _on_game_over_replay() -> void:
+	_level_complete_token += 1
+	_is_game_over = false
+	_hide_game_over_menu()
+	_fade_level_complete_overlay(false)
+	_next_level_button_hovered = false
+	_on_next_level_button_hover(false)
+	board_container.rotation_degrees = BOARD_INITIAL_ROTATION_DEGREES
+	board_container.load_level(level_id)
+	timer_container.reset(GameState.TIMER_DURATION_SECONDS)
+	timer_container.resume()
+	_fade_rotation_buttons(true)
+
+func _on_game_over_button_hover(button: TextureButton, is_hovered: bool) -> void:
+	var base_scale := _game_over_home_button_base_scale
+	var tween := _game_over_home_button_scale_tween
+	if button == game_over_replay_button:
+		base_scale = _game_over_replay_button_base_scale
+		tween = _game_over_replay_button_scale_tween
+	if tween != null:
+		tween.kill()
+	var target_scale := base_scale * (GAME_OVER_BUTTON_HOVER_SCALE if is_hovered else 1.0)
+	tween = create_tween()
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_CUBIC)
+	tween.tween_property(button, "scale", target_scale, 0.08)
+	if button == game_over_replay_button:
+		_game_over_replay_button_scale_tween = tween
+	else:
+		_game_over_home_button_scale_tween = tween
+
+func _show_challenge_completed_menu() -> void:
+	_is_challenge_completed = true
+	_on_challenge_completed_button_hover(challenge_completed_home_button, false)
+	_on_challenge_completed_button_hover(challenge_completed_play_again_button, false)
+	challenge_completed_menu.visible = true
+	challenge_completed_menu.mouse_filter = Control.MOUSE_FILTER_STOP
+	if _challenge_completed_menu_tween != null:
+		_challenge_completed_menu_tween.kill()
+	_challenge_completed_menu_tween = create_tween()
+	_challenge_completed_menu_tween.set_ease(Tween.EASE_OUT)
+	_challenge_completed_menu_tween.set_trans(Tween.TRANS_CUBIC)
+	_challenge_completed_menu_tween.tween_property(challenge_completed_menu, "modulate:a", 1.0, 0.22)
+
+func _hide_challenge_completed_menu() -> void:
+	_on_challenge_completed_button_hover(challenge_completed_home_button, false)
+	_on_challenge_completed_button_hover(challenge_completed_play_again_button, false)
+	challenge_completed_menu.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if _challenge_completed_menu_tween != null:
+		_challenge_completed_menu_tween.kill()
+	_challenge_completed_menu_tween = create_tween()
+	_challenge_completed_menu_tween.set_ease(Tween.EASE_IN)
+	_challenge_completed_menu_tween.set_trans(Tween.TRANS_CUBIC)
+	_challenge_completed_menu_tween.tween_property(challenge_completed_menu, "modulate:a", 0.0, 0.18)
+	_challenge_completed_menu_tween.tween_callback(func(): challenge_completed_menu.visible = false)
+
+func _on_challenge_completed_home() -> void:
+	get_tree().change_scene_to_file(SPLASH_SCENE)
+
+func _on_challenge_completed_play_again() -> void:
+	_level_complete_token += 1
+	_is_challenge_completed = false
+	_hide_challenge_completed_menu()
+	_fade_level_complete_overlay(false)
+	GameState.selected_level_id = 0
+	GameState.has_selected_level = true
+	level_id = 0
+	if _level_label != null:
+		_level_label.text = _get_level_label()
+	board_container.rotation_degrees = BOARD_INITIAL_ROTATION_DEGREES
+	board_container.load_level(level_id)
+	timer_container.reset(GameState.TIMER_DURATION_SECONDS)
+	timer_container.resume()
+	_fade_rotation_buttons(true)
+
+func _on_challenge_completed_button_hover(button: TextureButton, is_hovered: bool) -> void:
+	var base_scale := _challenge_completed_home_button_base_scale
+	var tween := _challenge_completed_home_button_scale_tween
+	if button == challenge_completed_play_again_button:
+		base_scale = _challenge_completed_play_again_button_base_scale
+		tween = _challenge_completed_play_again_button_scale_tween
+	if tween != null:
+		tween.kill()
+	var target_scale := base_scale * (GAME_OVER_BUTTON_HOVER_SCALE if is_hovered else 1.0)
+	tween = create_tween()
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_CUBIC)
+	tween.tween_property(button, "scale", target_scale, 0.08)
+	if button == challenge_completed_play_again_button:
+		_challenge_completed_play_again_button_scale_tween = tween
+	else:
+		_challenge_completed_home_button_scale_tween = tween
 
 func _show_next_level_menu() -> void:
 	_apply_next_level_panel_texture()

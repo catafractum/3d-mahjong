@@ -2,7 +2,6 @@ extends Control
 
 signal timer_finished
 
-@export var duration_seconds: float = 15.0 * 60.0
 @export var starts_paused: bool = false
 
 @onready var minutes_label: Label = %MinutesLabel
@@ -12,11 +11,13 @@ const PAUSE_BLINK_ALPHA := 0.5
 const PAUSE_BLINK_DURATION := 0.7
 
 var remaining_seconds: float
+var duration_seconds: float
 var is_paused: bool
 var is_finished: bool
 var pause_tweens: Array[Tween] = []
 
 func _ready() -> void:
+	duration_seconds = GameState.TIMER_DURATION_SECONDS
 	remaining_seconds = duration_seconds
 	is_paused = starts_paused
 	_update_time_label()

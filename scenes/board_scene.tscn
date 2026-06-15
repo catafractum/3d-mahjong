@@ -19,6 +19,12 @@
 [ext_resource type="Texture2D" uid="uid://cyyix8x2dsplv" path="res://assets/images/buttons/btn_play_next_level.png" id="25_next_btn"]
 [ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="26_next_font"]
 [ext_resource type="Texture2D" uid="uid://coo2rbapj7107" path="res://assets/images/medium_conplete_label.png" id="27_complete_label"]
+[ext_resource type="Texture2D" uid="uid://45ppayvusria" path="res://assets/images/bg_game_over_menu.png" id="28_game_over_bg"]
+[ext_resource type="Texture2D" uid="uid://dy3kl1tofjj28" path="res://assets/images/buttons/btn_retry.png" id="29_retry_btn"]
+[ext_resource type="Texture2D" uid="uid://bvh382d7w8j63" path="res://assets/images/buttons/btn_home_game_over.png" id="30_game_over_home_btn"]
+[ext_resource type="Texture2D" uid="uid://bdehsdd8ywr3e" path="res://assets/images/bg_challenge_completed_leve.png" id="31_challenge_completed_bg"]
+[ext_resource type="Texture2D" uid="uid://qpsbrjs1pd14" path="res://assets/images/buttons/btn_home_challenge_completed_menu.png" id="32_challenge_completed_home_btn"]
+[ext_resource type="Texture2D" uid="uid://41n8u4xms12l" path="res://assets/images/buttons/btn_play_again_challenge_completed_menu.png" id="33_challenge_completed_play_again_btn"]
 
 [sub_resource type="Environment" id="Environment_8l4tr"]
 background_mode = 3
@@ -324,6 +330,122 @@ text = "PLAY MEDIUM"
 label_settings = SubResource("LabelSettings_next_button")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="GameOverMenu" type="Control" parent="GUI/Control" unique_id=122615530]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 48.0
+offset_bottom = 48.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Panel" type="TextureRect" parent="GUI/Control/GameOverMenu" unique_id=1739982223]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -274.99997
+offset_top = -258.0
+offset_right = 359.0
+offset_bottom = 356.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.85, 0.784)
+texture = ExtResource("28_game_over_bg")
+stretch_mode = 5
+
+[node name="HomeButton" type="TextureButton" parent="GUI/Control/GameOverMenu/Panel" unique_id=996277404]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -173.47061
+offset_top = -131.85712
+offset_right = 172.52939
+offset_bottom = -54.857117
+grow_horizontal = 2
+grow_vertical = 0
+texture_normal = ExtResource("30_game_over_home_btn")
+
+[node name="ReplayButton" type="TextureButton" parent="GUI/Control/GameOverMenu/Panel" unique_id=581905891]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -173.47064
+offset_top = -247.92856
+offset_right = 174.52936
+offset_bottom = -160.92856
+grow_horizontal = 2
+grow_vertical = 0
+texture_normal = ExtResource("29_retry_btn")
+
+[node name="ChallengeCompletedMenu" type="Control" parent="GUI/Control" unique_id=1349654548]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 48.0
+offset_bottom = 48.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Panel" type="TextureRect" parent="GUI/Control/ChallengeCompletedMenu" unique_id=499031045]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -272.5
+offset_top = -314.0
+offset_right = 272.5
+offset_bottom = 314.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.9, 0.9)
+texture = ExtResource("31_challenge_completed_bg")
+stretch_mode = 5
+
+[node name="PlayAgainButton" type="TextureButton" parent="GUI/Control/ChallengeCompletedMenu/Panel" unique_id=1906017657]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -178.6111
+offset_top = -194.66663
+offset_right = 177.38892
+offset_bottom = -132.66663
+grow_horizontal = 2
+grow_vertical = 0
+texture_normal = ExtResource("33_challenge_completed_play_again_btn")
+
+[node name="HomeButton" type="TextureButton" parent="GUI/Control/ChallengeCompletedMenu/Panel" unique_id=1639026118]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -178.6111
+offset_top = -115.666565
+offset_right = 177.38892
+offset_bottom = -47.666565
+grow_horizontal = 2
+grow_vertical = 0
+texture_normal = ExtResource("32_challenge_completed_home_btn")
 
 [node name="BoardManager" type="Node" parent="." unique_id=1800542772]
 script = ExtResource("11_q6jyi")

@@ -1,4 +1,2 @@
 res://scenes/board_scene.tscn
 res://scripts/game_state.gd
-res://scripts/board_scene.gd
-res://data/levels.json
