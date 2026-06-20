@@ -1,8 +1,9 @@
 [gd_scene format=3 uid="uid://ch0y113d7s06o"]
 
-[ext_resource type="Script" path="res://scripts/calendar_day_container.gd" id="1_calendar"]
+[ext_resource type="Script" uid="uid://boxs6ctghagos" path="res://scripts/calendar_day_container.gd" id="1_calendar"]
 [ext_resource type="Texture2D" uid="uid://b3bju8bn8fm1y" path="res://assets/images/splash/bg_calendar_day.png" id="2_bg"]
 [ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="3_montserrat"]
+
 [sub_resource type="LabelSettings" id="LabelSettings_month"]
 font = ExtResource("3_montserrat")
 font_size = 34
@@ -23,7 +24,6 @@ shadow_size = 4
 shadow_color = Color(0, 0, 0, 0.2)
 
 [node name="CalendarDayContainer" type="Control" unique_id=1514081801]
-custom_minimum_size = Vector2(363, 522)
 layout_mode = 3
 anchors_preset = 0
 offset_right = 363.0
@@ -38,22 +38,20 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_bg")
+expand_mode = 1
 stretch_mode = 5
 
 [node name="MonthLabel" type="Label" parent="." unique_id=155663620]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 0.5
 offset_left = -181.5
-offset_top = -181.0
+offset_top = 70.0
 offset_right = 181.5
-offset_bottom = -139.0
+offset_bottom = 112.0
 grow_horizontal = 2
-grow_vertical = 2
 text = "JUNE"
 label_settings = SubResource("LabelSettings_month")
 horizontal_alignment = 1
@@ -62,17 +60,14 @@ vertical_alignment = 1
 [node name="WeekDayLabel" type="Label" parent="." unique_id=62624797]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -175.5
-offset_top = -101.0
-offset_right = 187.5
-offset_bottom = -54.0
+offset_left = -181.5
+offset_top = 160.0
+offset_right = 181.5
+offset_bottom = 207.0
 grow_horizontal = 2
-grow_vertical = 2
 text = "WEDNESDAY"
 label_settings = SubResource("LabelSettings_weekday")
 horizontal_alignment = 1
@@ -81,18 +76,11 @@ vertical_alignment = 1
 [node name="DayNumberLabel" type="Label" parent="." unique_id=1976203884]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -209.5
-offset_top = -56.0
-offset_right = 153.5
-offset_bottom = 161.0
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 210.0
+offset_bottom = 406.0
 grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(1.16, 1.16)
 text = "10"
 label_settings = SubResource("LabelSettings_day")
 horizontal_alignment = 1

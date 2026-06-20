@@ -16,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://dwtjdlhjpxmc3" path="res://assets/images/buttons/btn_reset.png" id="22_4khhe"]
 [ext_resource type="PackedScene" uid="uid://b83gk0omj3j2b" path="res://scenes/timer_container.tscn" id="23_timer"]
 [ext_resource type="Texture2D" uid="uid://bqmaqhgjapsgm" path="res://assets/images/bg_next_level.png" id="24_next_bg"]
+[ext_resource type="Script" uid="uid://cy7x4dma0t34g" path="res://scripts/orientation_listener_toggler.gd" id="25_4khhe"]
 [ext_resource type="Texture2D" uid="uid://cyyix8x2dsplv" path="res://assets/images/buttons/btn_play_next_level.png" id="25_next_btn"]
 [ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="26_next_font"]
 [ext_resource type="Texture2D" uid="uid://coo2rbapj7107" path="res://assets/images/medium_conplete_label.png" id="27_complete_label"]
@@ -35,12 +36,12 @@ ambient_light_energy = 0.59
 
 [sub_resource type="LabelSettings" id="LabelSettings_next_title"]
 font = ExtResource("26_next_font")
-font_size = 24
+font_size = 40
 font_color = Color(0.98039216, 0.8352941, 0.3019608, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_next_button"]
 font = ExtResource("26_next_font")
-font_size = 18
+font_size = 32
 
 [node name="BoardScene" type="Node3D" unique_id=2038322144]
 script = ExtResource("1_8l4tr")
@@ -67,6 +68,7 @@ light_energy = 0.85
 layer = -1
 
 [node name="TextureRect" type="TextureRect" parent="Background" unique_id=226413781]
+custom_minimum_size = Vector2(3600, 1800)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -79,7 +81,13 @@ stretch_mode = 6
 
 [node name="GUI" type="CanvasLayer" parent="." unique_id=251925684]
 
+[node name="OrientationListenerToggler" type="Node" parent="GUI" unique_id=2143022960]
+unique_name_in_owner = true
+script = ExtResource("25_4khhe")
+metadata/_custom_type_script = "uid://cy7x4dma0t34g"
+
 [node name="Control" type="Control" parent="GUI" unique_id=133810718]
+custom_minimum_size = Vector2(900, 1800)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -101,14 +109,6 @@ color = Color(0.03, 0.02, 0.05, 0.34)
 
 [node name="TimerContainer" parent="GUI/Control" unique_id=1721438568 instance=ExtResource("23_timer")]
 layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -709.0
-offset_top = 14.0
-offset_right = -461.0
-offset_bottom = 103.0
-grow_horizontal = 2
 
 [node name="RightArrowBtn" type="TextureButton" parent="GUI/Control" unique_id=1949707549]
 layout_mode = 1
@@ -261,13 +261,12 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -234.0
-offset_top = -250.0
-offset_right = 149.0
-offset_bottom = 218.0
+offset_left = -418.75
+offset_top = -502.25
+offset_right = 418.75
+offset_bottom = 502.25
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(1.1714892, 1.1714892)
 texture = ExtResource("24_next_bg")
 stretch_mode = 5
 
@@ -278,7 +277,7 @@ anchor_right = 1.0
 offset_left = 66.25
 offset_top = 36.289917
 offset_right = -61.75
-offset_bottom = 126.28992
+offset_bottom = 186.25
 grow_horizontal = 2
 texture = ExtResource("27_complete_label")
 expand_mode = 1
@@ -286,14 +285,14 @@ stretch_mode = 5
 
 [node name="TitleLabel" type="Label" parent="GUI/Control/NextLevelMenu/Panel" unique_id=2124613664]
 layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_left = 94.75119
-offset_top = 132.31023
-offset_right = -30.24881
-offset_bottom = 163.31023
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -163.0
+offset_top = 183.25
+offset_right = 159.0
+offset_bottom = 256.71655
 grow_horizontal = 2
-scale = Vector2(0.757, 0.724)
 text = "MEDIUM UNLOCKED"
 label_settings = SubResource("LabelSettings_next_title")
 horizontal_alignment = 1
@@ -306,26 +305,22 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -123.21087
-offset_top = -96.677765
-offset_right = 119.78912
-offset_bottom = -42.677765
+offset_left = -282.5
+offset_top = -229.24994
+offset_right = 282.5
+offset_bottom = -59.24994
 grow_horizontal = 2
 grow_vertical = 0
 texture_normal = ExtResource("25_next_btn")
+stretch_mode = 5
 
 [node name="ButtonLabel" type="Label" parent="GUI/Control/NextLevelMenu/Panel/PlayNextLevelBtn" unique_id=1536159819]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -39.0
-offset_top = -8.0
-offset_right = -39.0
-offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(1.33, 1.33)
 text = "PLAY MEDIUM"
 label_settings = SubResource("LabelSettings_next_button")
 horizontal_alignment = 1
@@ -349,13 +344,12 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -274.99997
-offset_top = -258.0
-offset_right = 359.0
-offset_bottom = 356.0
+offset_left = -379.98694
+offset_top = -368.0
+offset_right = 379.98694
+offset_bottom = 368.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(0.85, 0.784)
 texture = ExtResource("28_game_over_bg")
 stretch_mode = 5
 
@@ -366,13 +360,14 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -173.47061
-offset_top = -131.85712
-offset_right = 172.52939
-offset_bottom = -54.857117
+offset_left = -240.00002
+offset_top = -161.0
+offset_right = 240.0
+offset_bottom = -49.0
 grow_horizontal = 2
 grow_vertical = 0
 texture_normal = ExtResource("30_game_over_home_btn")
+stretch_mode = 5
 
 [node name="ReplayButton" type="TextureButton" parent="GUI/Control/GameOverMenu/Panel" unique_id=581905891]
 layout_mode = 1
@@ -381,13 +376,14 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -173.47064
-offset_top = -247.92856
-offset_right = 174.52936
-offset_bottom = -160.92856
+offset_left = -240.0
+offset_top = -292.0
+offset_right = 240.0
+offset_bottom = -171.0
 grow_horizontal = 2
 grow_vertical = 0
 texture_normal = ExtResource("29_retry_btn")
+stretch_mode = 5
 
 [node name="ChallengeCompletedMenu" type="Control" parent="GUI/Control" unique_id=1349654548]
 layout_mode = 1
@@ -407,13 +403,12 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -272.5
-offset_top = -314.0
-offset_right = 272.5
-offset_bottom = 314.0
+offset_left = -395.25
+offset_top = -455.44403
+offset_right = 395.25
+offset_bottom = 455.44403
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(0.9, 0.9)
 texture = ExtResource("31_challenge_completed_bg")
 stretch_mode = 5
 
@@ -424,13 +419,14 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -178.6111
-offset_top = -194.66663
-offset_right = 177.38892
-offset_bottom = -132.66663
+offset_left = -240.0
+offset_top = -272.4441
+offset_right = 240.0
+offset_bottom = -140.44409
 grow_horizontal = 2
 grow_vertical = 0
 texture_normal = ExtResource("33_challenge_completed_play_again_btn")
+stretch_mode = 5
 
 [node name="HomeButton" type="TextureButton" parent="GUI/Control/ChallengeCompletedMenu/Panel" unique_id=1639026118]
 layout_mode = 1
@@ -439,13 +435,14 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -178.6111
-offset_top = -115.666565
-offset_right = 177.38892
-offset_bottom = -47.666565
+offset_left = -240.0
+offset_top = -138.44409
+offset_right = 240.0
+offset_bottom = -37.44409
 grow_horizontal = 2
 grow_vertical = 0
 texture_normal = ExtResource("32_challenge_completed_home_btn")
+stretch_mode = 5
 
 [node name="BoardManager" type="Node" parent="." unique_id=1800542772]
 script = ExtResource("11_q6jyi")

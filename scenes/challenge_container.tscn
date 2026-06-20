@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dmbco1arpfs6l"]
 
-[ext_resource type="Script" path="res://scripts/challenge_container.gd" id="1_challenge"]
+[ext_resource type="Script" uid="uid://jiya4051ebrh" path="res://scripts/challenge_container.gd" id="1_challenge"]
 [ext_resource type="Texture2D" uid="uid://cvvali8sdrx65" path="res://assets/images/splash/challenge_container.png" id="2_bg"]
 [ext_resource type="Texture2D" uid="uid://b0mdt7mv21vj3" path="res://assets/images/buttons/btn_play.png" id="3_play"]
 
@@ -24,11 +24,19 @@ stretch_mode = 5
 
 [node name="PlayButton" type="TextureButton" parent="." unique_id=503961459]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(276, 59)
 layout_mode = 1
-offset_left = 55.0
-offset_top = 216.0
-offset_right = 331.0
-offset_bottom = 275.0
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -140.5
+offset_top = -74.0
+offset_right = 135.5
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 0
 pivot_offset = Vector2(138, 29.5)
 texture_normal = ExtResource("3_play")
 texture_pressed = ExtResource("3_play")

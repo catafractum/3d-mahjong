@@ -1,2 +1,4 @@
 res://scenes/board_scene.tscn
-res://scripts/game_state.gd
+res://scenes/splash_scene.tscn
+res://scripts/orientation_listener_toggler.gd
+res://scripts/gui_controller.gd
