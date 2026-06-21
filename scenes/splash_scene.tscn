@@ -11,13 +11,14 @@
 
 [node name="SplashScene" type="Node2D" unique_id=221727694 node_paths=PackedStringArray("challenge_container_landscape", "challenge_container_portrait")]
 script = ExtResource("1_splash")
-challenge_container_landscape = NodePath("CanvasLayer/Control/LandscapeContent/ChallengeContainer")
-challenge_container_portrait = NodePath("CanvasLayer/Control/PortraitContent/ChallengeContainer")
+challenge_container_landscape = NodePath("CanvasLayer/LandscapeContent/SplitContainer/Left/ChallengeContainer2")
+challenge_container_portrait = NodePath("CanvasLayer/PortraitContent/ChallengeContainer")
 
 [node name="OrientationListenerToggler" type="Node" parent="." unique_id=199545655 node_paths=PackedStringArray("landscape", "portrait")]
+unique_name_in_owner = true
 script = ExtResource("8_6skqv")
-landscape = NodePath("../CanvasLayer/Control/LandscapeContent")
-portrait = NodePath("../CanvasLayer/Control/PortraitContent")
+landscape = NodePath("../CanvasLayer/LandscapeContent")
+portrait = NodePath("../CanvasLayer/PortraitContent")
 metadata/_custom_type_script = "uid://cy7x4dma0t34g"
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=661825794]
@@ -51,16 +52,24 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.03, 0.02, 0.05, 0.34)
 
-[node name="LandscapeContent" type="Control" parent="CanvasLayer/Control" unique_id=487429165]
-custom_minimum_size = Vector2(560, 900)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+[node name="LandscapeContent" type="Control" parent="CanvasLayer" unique_id=487429165]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(2400, 1800)
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -1200.0
+offset_top = -900.0
+offset_right = 1200.0
+offset_bottom = 900.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Logo" type="TextureRect" parent="CanvasLayer/Control/LandscapeContent" unique_id=923173486]
+[node name="Logo" type="TextureRect" parent="CanvasLayer/LandscapeContent" unique_id=923173486]
 custom_minimum_size = Vector2(570, 330)
 layout_mode = 1
 anchors_preset = 5
@@ -75,116 +84,144 @@ texture = ExtResource("3_lkc75")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="CalendarDayContainer" parent="CanvasLayer/Control/LandscapeContent" unique_id=553834949 instance=ExtResource("4_calendar")]
+[node name="SplitContainer" type="SplitContainer" parent="CanvasLayer/LandscapeContent" unique_id=830494012]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -542.0
-offset_top = -194.0
-offset_right = -151.0
-offset_bottom = 336.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 20
+split_offsets = PackedInt32Array(-298)
+collapsed = true
+dragging_enabled = false
+dragger_visibility = 1
+split_offset = -298
 
-[node name="ChallengeContainer" parent="CanvasLayer/Control/LandscapeContent" unique_id=1847863337 instance=ExtResource("6_challenge")]
-layout_mode = 1
-offset_left = 1675.9999
-offset_top = 735.0
-offset_right = 2067.0
-offset_bottom = 1025.0
-scale = Vector2(1.7, 1.7)
+[node name="Left" type="Control" parent="CanvasLayer/LandscapeContent/SplitContainer" unique_id=787590385]
+layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="DaysCarouselContainer" parent="CanvasLayer/Control/LandscapeContent" unique_id=1007581945 instance=ExtResource("7_days")]
+[node name="ChallengeContainer2" parent="CanvasLayer/LandscapeContent/SplitContainer/Left" unique_id=1691035202 instance=ExtResource("6_challenge")]
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -538.5
-offset_top = -468.0
-offset_right = 538.5
-offset_bottom = -195.0
-grow_horizontal = 2
-grow_vertical = 0
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -391.0
+offset_top = 86.0
+offset_right = 0.0
+offset_bottom = 336.0
+grow_horizontal = 0
+grow_vertical = 2
+scale = Vector2(2, 2)
+pivot_offset_ratio = Vector2(1, 0.5)
 
-[node name="StreakContainer" parent="CanvasLayer/Control/LandscapeContent" unique_id=1960853129 instance=ExtResource("5_streak")]
+[node name="CalendarDayContainer2" parent="CanvasLayer/LandscapeContent/SplitContainer/Left" unique_id=1514081801 instance=ExtResource("4_calendar")]
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -538.5
-offset_top = -201.0
-offset_right = 538.5
-offset_bottom = 0.0
-grow_horizontal = 2
-grow_vertical = 0
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -1167.0
+offset_top = -61.0
+offset_right = -804.0
+offset_bottom = 464.0
+grow_horizontal = 0
+grow_vertical = 2
+pivot_offset_ratio = Vector2(1, 0.5)
 
-[node name="PortraitContent" type="Control" parent="CanvasLayer/Control" unique_id=1882294153]
-visible = false
+[node name="Right" type="Control" parent="CanvasLayer/LandscapeContent/SplitContainer" unique_id=614320478]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DaysCarouselContainer2" parent="CanvasLayer/LandscapeContent/SplitContainer/Right" unique_id=1632222284 instance=ExtResource("7_days")]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 1.9999999
+offset_top = -29.0
+offset_right = 831.0
+offset_bottom = 170.0
+grow_vertical = 2
+scale = Vector2(1.4, 1.4)
+
+[node name="StreakContainer2" parent="CanvasLayer/LandscapeContent/SplitContainer/Right" unique_id=1460233615 instance=ExtResource("5_streak")]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -1.9999989
+offset_top = 268.0
+offset_right = 599.0
+offset_bottom = 375.0
+grow_vertical = 2
+scale = Vector2(1.93, 1.93)
+
+[node name="PortraitContent" type="Control" parent="CanvasLayer" unique_id=1882294153]
 custom_minimum_size = Vector2(900, 1800)
-layout_mode = 1
+layout_mode = 3
 anchors_preset = 13
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
+offset_left = -450.0
+offset_right = 450.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Logo" type="TextureRect" parent="CanvasLayer/Control/PortraitContent" unique_id=1978769339]
+[node name="Logo" type="TextureRect" parent="CanvasLayer/PortraitContent" unique_id=1978769339]
 custom_minimum_size = Vector2(480, 330)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 14.0
-offset_top = 71.0
-offset_bottom = -1195.0
+offset_left = 12.0
+offset_top = 124.0
+offset_right = -2.0
+offset_bottom = -1142.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("3_lkc75")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="CalendarDayContainer" parent="CanvasLayer/Control/PortraitContent" unique_id=1514081801 instance=ExtResource("4_calendar")]
+[node name="ChallengeContainer" parent="CanvasLayer/PortraitContent" unique_id=2009494561 instance=ExtResource("6_challenge")]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -181.0
-offset_top = -414.0
-offset_right = 182.0
-offset_bottom = 111.0
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(0.6, 0.6)
-pivot_offset_ratio = Vector2(0.5, 0.5)
-
-[node name="ChallengeContainer" parent="CanvasLayer/Control/PortraitContent" unique_id=1691035202 instance=ExtResource("6_challenge")]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -196.00002
-offset_top = 133.0
-offset_right = 195.0
-offset_bottom = 423.0
+offset_left = -246.00003
+offset_top = 119.0
+offset_right = 248.11761
+offset_bottom = 369.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(1.7, 1.7)
 pivot_offset_ratio = Vector2(0.5, 0.5)
 
-[node name="DaysCarouselContainer" parent="CanvasLayer/Control/PortraitContent" unique_id=1880610181 instance=ExtResource("7_days")]
+[node name="CalendarDayContainer" parent="CanvasLayer/PortraitContent" unique_id=72939600 instance=ExtResource("4_calendar")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -461.0
+offset_top = 9.0
+offset_right = -98.0
+offset_bottom = 534.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.6, 0.6)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+
+[node name="DaysCarouselContainer" parent="CanvasLayer/PortraitContent" unique_id=1880610181 instance=ExtResource("7_days")]
 custom_minimum_size = Vector2(829, 199)
 layout_mode = 1
 anchors_preset = 7
@@ -192,24 +229,25 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -414.5
-offset_top = -356.0
-offset_right = 414.5
-offset_bottom = -157.0
+offset_left = -414.0
+offset_top = -399.0
+offset_right = 415.0
+offset_bottom = -200.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="StreakContainer" parent="CanvasLayer/Control/PortraitContent" unique_id=1460233615 instance=ExtResource("5_streak")]
-custom_minimum_size = Vector2(836, 149)
+[node name="StreakContainer" parent="CanvasLayer/PortraitContent" unique_id=994106147 instance=ExtResource("5_streak")]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -418.0
-offset_top = -149.0
-offset_right = 418.0
-offset_bottom = 0.0
+offset_left = -300.0
+offset_top = -140.0
+offset_right = 301.0
+offset_bottom = -33.0
 grow_horizontal = 2
 grow_vertical = 0
+scale = Vector2(1.39, 1.39)
+pivot_offset_ratio = Vector2(0.5, 1)

@@ -1,4 +1,6 @@
 res://scenes/board_scene.tscn
+res://scenes/board_container.tscn
 res://scenes/splash_scene.tscn
+res://scenes/challenge_container.tscn
 res://scripts/orientation_listener_toggler.gd
-res://scripts/gui_controller.gd
+res://scripts/splash_scene.gd
