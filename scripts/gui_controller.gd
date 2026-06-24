@@ -7,7 +7,7 @@ signal soundtrack_toggled(is_on: bool)
 
 var _settings_open: bool = false
 var _sfx_on: bool = true
-var _soundtrack_on: bool = true
+var _soundtrack_on: bool = false
 
 var _sfx_slot_y: float
 var _st_slot_y: float
@@ -94,6 +94,15 @@ func _setup_button_scale_feedback(btn: TextureButton) -> void:
 	btn.mouse_exited.connect(func(): _tween_button_scale(btn, 1.0))
 	btn.button_down.connect(func(): _tween_button_scale(btn, 1.05))
 	btn.button_up.connect(func(): _tween_button_scale(btn, 1.05 if btn.is_hovered() else 1.0))
+
+
+func set_button_base_scale(btn: TextureButton, base_scale: Vector2) -> void:
+	var existing_tween: Tween = _button_scale_tweens.get(btn)
+	if existing_tween != null:
+		existing_tween.kill()
+		_button_scale_tweens.erase(btn)
+	_button_base_scales[btn] = base_scale
+	btn.scale = base_scale * (1.05 if btn.is_hovered() else 1.0)
 
 
 func _tween_button_scale(btn: TextureButton, multiplier: float) -> void:

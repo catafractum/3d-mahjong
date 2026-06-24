@@ -46,7 +46,7 @@ func on_layer_rotated(
 	axis_name: String,
 	layer_value: float,
 	angle_degrees: float,
-	spacing: int,
+	spacing: float,
 	visual_offset := Vector3.ZERO
 ) -> void:
 	var layer_index := _layer_to_grid_index(axis_name, layer_value, spacing, visual_offset)
@@ -243,7 +243,7 @@ func _update_rotation_bounds(tiles: Array[Node3D]) -> void:
 
 
 func _layer_to_grid_index(
-	axis: String, layer_value: float, spacing: int, visual_offset: Vector3
+	axis: String, layer_value: float, spacing: float, visual_offset: Vector3
 ) -> int:
 	match axis:
 		"x":

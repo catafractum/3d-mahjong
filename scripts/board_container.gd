@@ -5,6 +5,7 @@ const LevelNormalizer = preload("res://scripts/level_normalizer.gd")
 const SymbolAssigner = preload("res://scripts/solver/symbol_assigner.gd")
 const DEFAULT_GRID_SIZE := 7
 const BOARD_Y_OFFSET := -0.25
+const TILE_SPACING := 1.03
 const LEVEL_SCALE_BY_HEIGHT := {
 	6: 0.875,
 	7: 0.775
@@ -21,7 +22,7 @@ signal layer_rotated(axis_name: String, layer_value: float, angle_degrees: float
 
 @onready var camera: Camera3D = get_viewport().get_camera_3d()
 
-var spacing := 1
+var spacing := TILE_SPACING
 var _rotating := false
 const LAYER_ROTATION_DURATION := 0.35
 const TAP_MAX_DISTANCE := 16.0

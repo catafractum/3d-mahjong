@@ -6,6 +6,10 @@ const EDITOR_CONTROLS_Y := 124.0
 const BOARD_INITIAL_ROTATION_DEGREES := Vector3(0.0, -10.0, 0.0)
 const LEVEL_COMPLETE_MENU_DELAY := 0.9
 const ROTATION_BUTTON_FADE_DURATION := 0.22
+const ROTATION_BUTTON_MOBILE_ASPECT := 5.0 / 7.0
+const ROTATION_BUTTON_DESKTOP_ASPECT := 16.0 / 9.0
+const ROTATION_BUTTON_DESKTOP_SCALE := 2.25
+const ROTATION_BUTTON_BASE_SIDE_MARGIN := 25.0
 const LEVEL_COMPLETE_OVERLAY_FADE_IN_DURATION := 0.3
 const LEVEL_COMPLETE_OVERLAY_FADE_OUT_DURATION := 0.2
 const NEXT_LEVEL_BUTTON_HOVER_SCALE := 1.025
@@ -52,6 +56,7 @@ var _game_over_menu_tween: Tween
 var _challenge_completed_menu_tween: Tween
 var _level_complete_overlay_tween: Tween
 var _rotation_buttons_tween: Tween
+var _rotation_button_layouts: Dictionary = {}
 var _next_level_button_base_scale := Vector2.ONE
 var _next_level_button_scale_tween: Tween
 var _next_level_button_hovered := false
@@ -86,6 +91,7 @@ func _ready() -> void:
 	)
 	right_arrow_btn.pressed.connect(_on_rotate_right)
 	left_arrow_btn.pressed.connect(_on_rotate_left)
+	_setup_responsive_rotation_buttons()
 	shuffle_btn.pressed.connect(_on_shuffle)
 	timer_container.timer_finished.connect(_on_timer_finished)
 	_next_level_button_base_scale = next_level_button.scale
@@ -144,6 +150,57 @@ func _ready() -> void:
 	game_over_menu.modulate.a = 0.0
 	challenge_completed_menu.visible = false
 	challenge_completed_menu.modulate.a = 0.0
+
+
+func _setup_responsive_rotation_buttons() -> void:
+	for button in [left_arrow_btn, right_arrow_btn]:
+		_rotation_button_layouts[button] = {
+			"scale": button.scale,
+			"size": button.size,
+			"bottom_offset": button.offset_bottom
+		}
+	left_arrow_btn.pivot_offset = Vector2(0.0, left_arrow_btn.size.y)
+	right_arrow_btn.pivot_offset = right_arrow_btn.size
+	get_viewport().size_changed.connect(_update_rotation_button_sizes)
+	_update_rotation_button_sizes()
+
+
+func _update_rotation_button_sizes() -> void:
+	var viewport_size := get_viewport().get_visible_rect().size
+	if viewport_size.y <= 0.0:
+		return
+
+	var aspect_ratio := viewport_size.x / viewport_size.y
+	var aspect_progress := clampf(
+		inverse_lerp(
+			ROTATION_BUTTON_MOBILE_ASPECT,
+			ROTATION_BUTTON_DESKTOP_ASPECT,
+			aspect_ratio
+		),
+		0.0,
+		1.0
+	)
+	var size_multiplier := lerpf(
+		1.0, ROTATION_BUTTON_DESKTOP_SCALE, aspect_progress
+	)
+
+	for button in [left_arrow_btn, right_arrow_btn]:
+		var layout: Dictionary = _rotation_button_layouts[button]
+		var base_scale: Vector2 = layout.scale
+		var base_size: Vector2 = layout.size
+		var bottom_offset: float = layout.bottom_offset
+		var side_margin := ROTATION_BUTTON_BASE_SIDE_MARGIN * size_multiplier
+
+		gui.set_button_base_scale(button, base_scale * size_multiplier)
+		button.offset_top = bottom_offset - base_size.y
+		button.offset_bottom = bottom_offset
+
+		if button == right_arrow_btn:
+			button.offset_left = -side_margin - base_size.x
+			button.offset_right = -side_margin
+		else:
+			button.offset_left = side_margin
+			button.offset_right = button.offset_left + base_size.x
 
 
 func _process(_delta: float) -> void:
