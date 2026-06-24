@@ -7,6 +7,7 @@ const BOARD_SCENE := "res://scenes/board_scene.tscn"
 
 
 func _ready() -> void:
+	Soundmanager.play_main_music()
 	challenge_container_landscape.play_pressed.connect(_on_play_pressed)
 	challenge_container_portrait.play_pressed.connect(_on_play_pressed)
 	%OrientationListenerToggler.on_size_changed.connect(_on_size_changed)
@@ -30,6 +31,7 @@ func _on_size_changed(_is_portrait: bool) -> void:
 
 
 func _on_play_pressed() -> void:
+	Soundmanager.play_click_sfx()
 	GameState.selected_level_id = 0
 	GameState.has_selected_level = false
 	get_tree().change_scene_to_file(BOARD_SCENE)

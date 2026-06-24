@@ -116,6 +116,7 @@ func _current_soundtrack_btn() -> TextureButton:
 
 
 func _on_settings_pressed() -> void:
+	Soundmanager.play_click_sfx()
 	if _settings_open:
 		_collapse()
 	else:
