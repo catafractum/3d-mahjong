@@ -21,14 +21,16 @@ config/icon="res://icon.svg"
 [autoload]
 
 GameState="*res://scripts/game_state.gd"
+Soundmanager="*uid://b3ievutu0ro7f"
 
 [display]
 
-window/size/viewport_width=1440
-window/size/viewport_height=900
-window/size/window_width_override=2880
-window/size/window_height_override=1800
+window/size/viewport_width=900
+window/size/viewport_height=1800
+window/size/window_width_override=540
+window/size/window_height_override=1080
 window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
 
 [filesystem]
 
@@ -41,4 +43,5 @@ import/blender/enabled=false
 [rendering]
 
 rendering_device/driver.windows="d3d12"
-renderer/rendering_method="mobile"
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"

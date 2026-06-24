@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://b3ievutu0ro7f"]
+
+[ext_resource type="Script" uid="uid://br0ws7128yibx" path="res://scripts/sound_manager.gd" id="1_an66d"]
+
+[node name="Soundmanager" type="Node2D" unique_id=1287924693]
+script = ExtResource("1_an66d")
+music = "uid://dgsk1cx6lxrph"
+click_sfx = "uid://lkpkm8gcb8xu"
+move_correct_sfx = "uid://bfg3xfy7yklq8"
+move_wrong_sfx = "uid://cj2e4kyxf3iew"
+tile_click = "uid://chrkg71hb2lqf"
+popup = "uid://bk0cul4i7is70"

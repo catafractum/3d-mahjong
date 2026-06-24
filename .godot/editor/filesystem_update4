@@ -1,2 +1,8 @@
-res://scenes/board_scene.tscn
-res://scripts/game_state.gd
+res://scenes/soundmanager.tscn
+res://scripts/sound_manager.gd
+res://scenes/splash_scene.tscn
+res://scripts/splash_scene.gd
+res://scripts/board_manager.gd
+res://scripts/gui_controller.gd
+res://scripts/board_scene.gd
+res://default_bus_layout.tres

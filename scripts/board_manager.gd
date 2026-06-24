@@ -10,18 +10,15 @@ var _grid := []
 var _selected_tile = null
 var _level_completed := false
 var _rotation_bounds := {
-	"min_x": 0,
-	"max_x": GRID_MAX,
-	"min_y": 0,
-	"max_y": GRID_MAX,
-	"min_z": 0,
-	"max_z": GRID_MAX
+	"min_x": 0, "max_x": GRID_MAX, "min_y": 0, "max_y": GRID_MAX, "min_z": 0, "max_z": GRID_MAX
 }
 
 signal level_completed
 
+
 func _ready() -> void:
 	_init_grid()
+
 
 func _init_grid() -> void:
 	_grid = []
@@ -34,6 +31,7 @@ func _init_grid() -> void:
 			plane.append(row)
 		_grid.append(plane)
 
+
 func on_board_ready(tiles: Array[Node3D]) -> void:
 	_init_grid()
 	_selected_tile = null
@@ -43,7 +41,14 @@ func on_board_ready(tiles: Array[Node3D]) -> void:
 		var gp: Vector3 = tile.tile_data.grid_pos
 		_grid[int(gp.x)][int(gp.y)][int(gp.z)] = tile
 
-func on_layer_rotated(axis_name: String, layer_value: float, angle_degrees: float, spacing: int, visual_offset := Vector3.ZERO) -> void:
+
+func on_layer_rotated(
+	axis_name: String,
+	layer_value: float,
+	angle_degrees: float,
+	spacing: int,
+	visual_offset := Vector3.ZERO
+) -> void:
 	var layer_index := _layer_to_grid_index(axis_name, layer_value, spacing, visual_offset)
 	var angle := int(round(angle_degrees))
 
@@ -55,9 +60,12 @@ func on_layer_rotated(axis_name: String, layer_value: float, angle_degrees: floa
 					continue
 				var in_layer := false
 				match axis_name:
-					"x": in_layer = (x == layer_index)
-					"y": in_layer = (y == layer_index)
-					"z": in_layer = (z == layer_index)
+					"x":
+						in_layer = (x == layer_index)
+					"y":
+						in_layer = (y == layer_index)
+					"z":
+						in_layer = (z == layer_index)
 				if in_layer:
 					affected[Vector3i(x, y, z)] = _grid[x][y][z]
 
@@ -70,11 +78,13 @@ func on_layer_rotated(axis_name: String, layer_value: float, angle_degrees: floa
 		_grid[new_pos.x][new_pos.y][new_pos.z] = tile
 		tile.tile_data.grid_pos = Vector3(new_pos.x, new_pos.y, new_pos.z)
 
+
 func on_tile_selected(tile: Node3D, hit_normal := Vector3.ZERO) -> void:
 	if tile == null or tile.get("tile_data") == null:
 		return
 	var tile_pos := _tile_grid_pos(tile)
 	if not _is_tile_free(tile_pos):
+		Soundmanager.play_move_wrong_sfx()
 		tile.shake(hit_normal)
 		if _selected_tile != null:
 			_selected_tile.deselect()
@@ -83,6 +93,7 @@ func on_tile_selected(tile: Node3D, hit_normal := Vector3.ZERO) -> void:
 
 	if _selected_tile == null:
 		_selected_tile = tile
+		Soundmanager.play_tile_click_sfx()
 		tile.select()
 		return
 
@@ -95,6 +106,7 @@ func on_tile_selected(tile: Node3D, hit_normal := Vector3.ZERO) -> void:
 	if _selected_tile.tile_data.icon_type == tile.tile_data.icon_type and _is_tile_free(p1):
 		_grid[p1.x][p1.y][p1.z] = null
 		_grid[tile_pos.x][tile_pos.y][tile_pos.z] = null
+		Soundmanager.play_move_correct_sfx()
 		_selected_tile.remove_tile(true)
 		tile.remove_tile(true)
 		_selected_tile = null
@@ -104,7 +116,9 @@ func on_tile_selected(tile: Node3D, hit_normal := Vector3.ZERO) -> void:
 	else:
 		_selected_tile.deselect()
 		_selected_tile = tile
+		Soundmanager.play_tile_click_sfx()
 		tile.select()
+
 
 func _tile_grid_pos(tile: Node3D) -> Vector3i:
 	return Vector3i(
@@ -113,11 +127,14 @@ func _tile_grid_pos(tile: Node3D) -> Vector3i:
 		int(tile.tile_data.grid_pos.z)
 	)
 
+
 func is_current_board_solvable() -> bool:
 	return MahjongSolver.is_solvable(_make_icon_state(), GRID_SIZE)
 
+
 func has_available_moves() -> bool:
 	return MahjongSolver.has_any_move(_make_icon_state(), GRID_SIZE)
+
 
 func _make_icon_state() -> Dictionary:
 	var icon_by_pos := {}
@@ -129,8 +146,10 @@ func _make_icon_state() -> Dictionary:
 					icon_by_pos[Vector3i(x, y, z)] = int(tile.tile_data.icon_type)
 	return icon_by_pos
 
+
 func _is_tile_free(pos: Vector3i) -> bool:
 	return TileRules.is_tile_free(pos, _make_occupancy(), GRID_SIZE)
+
 
 func _make_occupancy() -> Dictionary:
 	var occupancy := {}
@@ -140,6 +159,7 @@ func _make_occupancy() -> Dictionary:
 				if _grid[x][y][z] != null:
 					occupancy[Vector3i(x, y, z)] = true
 	return occupancy
+
 
 func _transform_pos(pos: Vector3i, axis: String, angle: int) -> Vector3i:
 	var x := pos.x
@@ -153,28 +173,38 @@ func _transform_pos(pos: Vector3i, axis: String, angle: int) -> Vector3i:
 			var min_z := int(_rotation_bounds.min_z)
 			var max_z := int(_rotation_bounds.max_z)
 			match angle:
-				90:        return Vector3i(x, min_y + (max_z - z), min_z + (y - min_y))
-				-90, 270:  return Vector3i(x, min_y + (z - min_z), min_z + (max_y - y))
-				180, -180: return Vector3i(x, min_y + (max_y - y), min_z + (max_z - z))
+				90:
+					return Vector3i(x, min_y + (max_z - z), min_z + (y - min_y))
+				-90, 270:
+					return Vector3i(x, min_y + (z - min_z), min_z + (max_y - y))
+				180, -180:
+					return Vector3i(x, min_y + (max_y - y), min_z + (max_z - z))
 		"y":
 			var min_x := int(_rotation_bounds.min_x)
 			var max_x := int(_rotation_bounds.max_x)
 			var min_z := int(_rotation_bounds.min_z)
 			var max_z := int(_rotation_bounds.max_z)
 			match angle:
-				90:        return Vector3i(min_x + (z - min_z), y, min_z + (max_x - x))
-				-90, 270:  return Vector3i(min_x + (max_z - z), y, min_z + (x - min_x))
-				180, -180: return Vector3i(min_x + (max_x - x), y, min_z + (max_z - z))
+				90:
+					return Vector3i(min_x + (z - min_z), y, min_z + (max_x - x))
+				-90, 270:
+					return Vector3i(min_x + (max_z - z), y, min_z + (x - min_x))
+				180, -180:
+					return Vector3i(min_x + (max_x - x), y, min_z + (max_z - z))
 		"z":
 			var min_x := int(_rotation_bounds.min_x)
 			var max_x := int(_rotation_bounds.max_x)
 			var min_y := int(_rotation_bounds.min_y)
 			var max_y := int(_rotation_bounds.max_y)
 			match angle:
-				90:        return Vector3i(min_x + (max_y - y), min_y + (x - min_x), z)
-				-90, 270:  return Vector3i(min_x + (y - min_y), min_y + (max_x - x), z)
-				180, -180: return Vector3i(min_x + (max_x - x), min_y + (max_y - y), z)
+				90:
+					return Vector3i(min_x + (max_y - y), min_y + (x - min_x), z)
+				-90, 270:
+					return Vector3i(min_x + (y - min_y), min_y + (max_x - x), z)
+				180, -180:
+					return Vector3i(min_x + (max_x - x), min_y + (max_y - y), z)
 	return pos
+
 
 func _update_rotation_bounds(tiles: Array[Node3D]) -> void:
 	if tiles.is_empty():
@@ -211,9 +241,15 @@ func _update_rotation_bounds(tiles: Array[Node3D]) -> void:
 		"max_z": centered_max
 	}
 
-func _layer_to_grid_index(axis: String, layer_value: float, spacing: int, visual_offset: Vector3) -> int:
+
+func _layer_to_grid_index(
+	axis: String, layer_value: float, spacing: int, visual_offset: Vector3
+) -> int:
 	match axis:
-		"x": return int(round(layer_value / spacing + GRID_CENTER_OFFSET - visual_offset.x))
-		"y": return int(round(layer_value / spacing - visual_offset.y))
-		"z": return int(round(layer_value / spacing + GRID_CENTER_OFFSET - visual_offset.z))
+		"x":
+			return int(round(layer_value / spacing + GRID_CENTER_OFFSET - visual_offset.x))
+		"y":
+			return int(round(layer_value / spacing - visual_offset.y))
+		"z":
+			return int(round(layer_value / spacing + GRID_CENTER_OFFSET - visual_offset.z))
 	return 0

@@ -1,34 +1,202 @@
 [gd_scene format=3 uid="uid://dmbco1arpfs6l"]
 
-[ext_resource type="Script" path="res://scripts/challenge_container.gd" id="1_challenge"]
-[ext_resource type="Texture2D" uid="uid://cvvali8sdrx65" path="res://assets/images/splash/challenge_container.png" id="2_bg"]
+[ext_resource type="Script" uid="uid://jiya4051ebrh" path="res://scripts/challenge_container.gd" id="1_challenge"]
 [ext_resource type="Texture2D" uid="uid://b0mdt7mv21vj3" path="res://assets/images/buttons/btn_play.png" id="3_play"]
+[ext_resource type="Texture2D" uid="uid://dvg3fb4pya5s" path="res://assets/images/splash/challenge_bg.png" id="4_an0m7"]
+[ext_resource type="Texture2D" uid="uid://bme411pvplbfk" path="res://assets/images/splash/title-edge.png" id="4_wipby"]
+[ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="5_dmkuy"]
+[ext_resource type="Texture2D" uid="uid://c416j1cv6240u" path="res://assets/images/splash/arrow.png" id="6_ikmwe"]
+[ext_resource type="Texture2D" uid="uid://w4a3dl72375u" path="res://assets/images/splash/timer_icon.png" id="7_wipby"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ikmwe"]
+font = ExtResource("5_dmkuy")
+font_color = Color(1, 0.8352941, 0.40392157, 1)
+shadow_color = Color(0, 0, 0, 0.4392157)
+
+[sub_resource type="LabelSettings" id="LabelSettings_wipby"]
+font = ExtResource("5_dmkuy")
+font_size = 20
+font_color = Color(1, 0.8352941, 0.40392157, 1)
+shadow_color = Color(0, 0, 0, 0.4392157)
+
+[sub_resource type="LabelSettings" id="LabelSettings_c7l5d"]
+font = ExtResource("5_dmkuy")
+font_size = 20
+font_color = Color(1, 0.64705884, 0.003921569, 1)
+shadow_color = Color(0, 0, 0, 0.4392157)
+
+[sub_resource type="LabelSettings" id="LabelSettings_3vp8t"]
+font = ExtResource("5_dmkuy")
+font_size = 20
+font_color = Color(1, 0.2901961, 0.3764706, 1)
+shadow_color = Color(0, 0, 0, 0.4392157)
+
+[sub_resource type="LabelSettings" id="LabelSettings_x8rjx"]
+font = ExtResource("5_dmkuy")
+
+[sub_resource type="LabelSettings" id="LabelSettings_w4l2v"]
+font = ExtResource("5_dmkuy")
+font_color = Color(1, 1, 0, 1)
 
 [node name="ChallengeContainer" type="Control" unique_id=1691035202]
-custom_minimum_size = Vector2(391, 290)
+custom_minimum_size = Vector2(391, 250)
 layout_mode = 3
 anchors_preset = 0
 offset_right = 391.0
-offset_bottom = 290.0
+offset_bottom = 250.0
 script = ExtResource("1_challenge")
 
-[node name="Background" type="TextureRect" parent="." unique_id=61849978]
+[node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=721640940]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_bg")
+texture = ExtResource("4_an0m7")
+patch_margin_left = 30
+patch_margin_top = 30
+patch_margin_right = 30
+patch_margin_bottom = 30
+
+[node name="Control" type="Control" parent="NinePatchRect" unique_id=337771163]
+custom_minimum_size = Vector2(390, 250)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -390.0
+offset_bottom = 250.0
+grow_horizontal = 0
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="NinePatchRect/Control" unique_id=1030963432]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -121.0
+offset_top = 18.0
+offset_right = 122.0
+offset_bottom = 58.0
+grow_horizontal = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="TextureRect2" type="TextureRect" parent="NinePatchRect/Control/HBoxContainer3" unique_id=847948654]
+custom_minimum_size = Vector2(60, 20)
+layout_mode = 2
+texture = ExtResource("4_wipby")
+expand_mode = 1
+stretch_mode = 5
+flip_h = true
+
+[node name="Title" type="Label" parent="NinePatchRect/Control/HBoxContainer3" unique_id=1601523036]
+layout_mode = 2
+text = "TODAY'S CHALLENGE"
+label_settings = SubResource("LabelSettings_ikmwe")
+
+[node name="TextureRect" type="TextureRect" parent="NinePatchRect/Control/HBoxContainer3" unique_id=542270727]
+custom_minimum_size = Vector2(60, 20)
+layout_mode = 2
+texture = ExtResource("4_wipby")
+expand_mode = 1
 stretch_mode = 5
 
-[node name="PlayButton" type="TextureButton" parent="." unique_id=503961459]
-unique_name_in_owner = true
+[node name="HBoxContainer" type="HBoxContainer" parent="NinePatchRect/Control" unique_id=1341465677]
 layout_mode = 1
-offset_left = 55.0
-offset_top = 216.0
-offset_right = 331.0
-offset_bottom = 275.0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -130.5
+offset_top = 60.0
+offset_right = 130.5
+offset_bottom = 100.0
+grow_horizontal = 2
+
+[node name="Easy" type="Label" parent="NinePatchRect/Control/HBoxContainer" unique_id=1938554299]
+layout_mode = 2
+text = "Easy"
+label_settings = SubResource("LabelSettings_wipby")
+
+[node name="TextureRect" type="TextureRect" parent="NinePatchRect/Control/HBoxContainer" unique_id=1347148251]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("6_ikmwe")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Medium" type="Label" parent="NinePatchRect/Control/HBoxContainer" unique_id=1115105728]
+layout_mode = 2
+text = "Medium"
+label_settings = SubResource("LabelSettings_c7l5d")
+
+[node name="TextureRect2" type="TextureRect" parent="NinePatchRect/Control/HBoxContainer" unique_id=1019241745]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("6_ikmwe")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Hard" type="Label" parent="NinePatchRect/Control/HBoxContainer" unique_id=525394460]
+layout_mode = 2
+text = "Hard"
+label_settings = SubResource("LabelSettings_3vp8t")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="NinePatchRect/Control" unique_id=896947969]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -133.5
+offset_top = 108.0
+offset_right = 134.5
+offset_bottom = 148.0
+grow_horizontal = 2
+
+[node name="TextureRect" type="TextureRect" parent="NinePatchRect/Control/HBoxContainer2" unique_id=1781416351]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+texture = ExtResource("7_wipby")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="NinePatchRect/Control/HBoxContainer2" unique_id=980663568]
+layout_mode = 2
+text = "Complete all 3 boards in"
+label_settings = SubResource("LabelSettings_x8rjx")
+
+[node name="Time" type="Label" parent="NinePatchRect/Control/HBoxContainer2" unique_id=1851833154]
+layout_mode = 2
+text = "15:00"
+label_settings = SubResource("LabelSettings_w4l2v")
+
+[node name="HSeparator" type="HSeparator" parent="NinePatchRect/Control" unique_id=1366562176]
+self_modulate = Color(1, 1, 1, 0.39215687)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -144.0
+offset_top = 153.0
+offset_right = 145.0
+offset_bottom = 157.0
+grow_horizontal = 2
+
+[node name="PlayButton" type="TextureButton" parent="NinePatchRect/Control" unique_id=503961459]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(276, 59)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -138.0
+offset_top = -76.0
+offset_right = 138.0
+offset_bottom = -17.0
+grow_horizontal = 2
+grow_vertical = 0
 pivot_offset = Vector2(138, 29.5)
 texture_normal = ExtResource("3_play")
 texture_pressed = ExtResource("3_play")
