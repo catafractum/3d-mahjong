@@ -10,16 +10,19 @@ const ROTATION_BUTTON_MOBILE_ASPECT := 5.0 / 7.0
 const ROTATION_BUTTON_DESKTOP_ASPECT := 16.0 / 9.0
 const ROTATION_BUTTON_DESKTOP_SCALE := 2.25
 const ROTATION_BUTTON_BASE_SIDE_MARGIN := 25.0
+const TIMER_PORTRAIT_SCALE := 1.5
+const TIMER_DESKTOP_SCALE := 2.5
 const LEVEL_COMPLETE_OVERLAY_FADE_IN_DURATION := 0.3
 const LEVEL_COMPLETE_OVERLAY_FADE_OUT_DURATION := 0.2
 const NEXT_LEVEL_BUTTON_HOVER_SCALE := 1.025
 const GAME_OVER_BUTTON_HOVER_SCALE := 1.05
-const NEXT_LEVEL_BG_PATH := "res://assets/images/bg_next_level.png"
-const SPLASH_SCENE := "res://scenes/splash_scene.tscn"
-const COMPLETE_LABEL_PATHS := {
-	"easy": "res://assets/images/easy_complete_label.png",
-	"medium": "res://assets/images/medium_conplete_label.png"
+const NEXT_LEVEL_BG_PATHS := {
+	"easy": "res://assets/images/bg_next_level_easy.png",
+	"medium": "res://assets/images/bg_next_level_medium.png",
 }
+const BTN_PLAY_HARD_PATH := "res://assets/images/buttons/btn_play_hard.png"
+const NEXT_LEVEL_BUTTON_HARD_DOWN_OFFSET := 70.0
+const SPLASH_SCENE := "res://scenes/splash_scene.tscn"
 
 @export var level_id := 20
 
@@ -34,12 +37,8 @@ const COMPLETE_LABEL_PATHS := {
 @onready var level_complete_overlay: ColorRect = $GUI/Control/LevelCompleteOverlay
 @onready var next_level_menu: Control = $GUI/Control/NextLevelMenu
 @onready var next_level_panel: TextureRect = $GUI/Control/NextLevelMenu/Panel
-@onready var next_level_title: Label = $GUI/Control/NextLevelMenu/Panel/TitleLabel
-@onready
-var next_level_complete_label: TextureRect = $GUI/Control/NextLevelMenu/Panel/CompleteLabelImage
 @onready var next_level_button: TextureButton = $GUI/Control/NextLevelMenu/Panel/PlayNextLevelBtn
-@onready
-var next_level_button_label: Label = $GUI/Control/NextLevelMenu/Panel/PlayNextLevelBtn/ButtonLabel
+@onready var next_level_button_label: Label = $GUI/Control/NextLevelMenu/Panel/PlayNextLevelBtn/ButtonLabel
 @onready var game_over_menu: Control = $GUI/Control/GameOverMenu
 @onready var game_over_home_button: TextureButton = $GUI/Control/GameOverMenu/Panel/HomeButton
 @onready var game_over_replay_button: TextureButton = $GUI/Control/GameOverMenu/Panel/ReplayButton
@@ -57,9 +56,13 @@ var _challenge_completed_menu_tween: Tween
 var _level_complete_overlay_tween: Tween
 var _rotation_buttons_tween: Tween
 var _rotation_button_layouts: Dictionary = {}
+var _timer_layout: Dictionary = {}
 var _next_level_button_base_scale := Vector2.ONE
 var _next_level_button_scale_tween: Tween
 var _next_level_button_hovered := false
+var _next_level_button_default_texture: Texture2D
+var _next_level_button_default_offset_top := 0.0
+var _next_level_button_default_offset_bottom := 0.0
 var _game_over_home_button_base_scale := Vector2.ONE
 var _game_over_replay_button_base_scale := Vector2.ONE
 var _game_over_home_button_scale_tween: Tween
@@ -94,8 +97,12 @@ func _ready() -> void:
 	_setup_responsive_rotation_buttons()
 	shuffle_btn.pressed.connect(_on_shuffle)
 	timer_container.timer_finished.connect(_on_timer_finished)
+	_setup_responsive_timer()
 	_next_level_button_base_scale = next_level_button.scale
 	next_level_button.pivot_offset = next_level_button.size * 0.5
+	_next_level_button_default_texture = next_level_button.texture_normal
+	_next_level_button_default_offset_top = next_level_button.offset_top
+	_next_level_button_default_offset_bottom = next_level_button.offset_bottom
 	next_level_button.pressed.connect(_on_play_next_level)
 	next_level_button.mouse_entered.connect(_on_next_level_button_hover.bind(true))
 	next_level_button.mouse_exited.connect(_on_next_level_button_hover.bind(false))
@@ -141,7 +148,6 @@ func _ready() -> void:
 	gui.reset_pressed.connect(_on_reset)
 	gui.sfx_toggled.connect(_on_sfx_toggled)
 	gui.soundtrack_toggled.connect(_on_soundtrack_toggled)
-	_apply_next_level_panel_texture()
 	level_complete_overlay.visible = false
 	level_complete_overlay.modulate.a = 0.0
 	next_level_menu.visible = false
@@ -201,6 +207,31 @@ func _update_rotation_button_sizes() -> void:
 		else:
 			button.offset_left = side_margin
 			button.offset_right = button.offset_left + base_size.x
+
+
+func _setup_responsive_timer() -> void:
+	_timer_layout = {"scale": timer_container.scale}
+	timer_container.pivot_offset = Vector2.ZERO
+	get_viewport().size_changed.connect(_update_timer_size)
+	_update_timer_size()
+
+
+func _update_timer_size() -> void:
+	var viewport_size := get_viewport().get_visible_rect().size
+	if viewport_size.y <= 0.0:
+		return
+	var aspect_ratio := viewport_size.x / viewport_size.y
+	var aspect_progress := clampf(
+		inverse_lerp(
+			ROTATION_BUTTON_MOBILE_ASPECT,
+			ROTATION_BUTTON_DESKTOP_ASPECT,
+			aspect_ratio
+		),
+		0.0,
+		1.0
+	)
+	var scale_multiplier := lerpf(TIMER_PORTRAIT_SCALE, TIMER_DESKTOP_SCALE, aspect_progress)
+	timer_container.scale = _timer_layout.scale * scale_multiplier
 
 
 func _process(_delta: float) -> void:
@@ -459,12 +490,20 @@ func _on_challenge_completed_button_hover(button: TextureButton, is_hovered: boo
 func _show_next_level_menu() -> void:
 	Soundmanager.play_popup_sfx()
 
-	_apply_next_level_panel_texture()
 	_next_level_id = _get_next_level_id(level_id)
 	var current_difficulty := _difficulty_for_level_id(level_id)
 	var unlocked_difficulty := _difficulty_for_level_id(_next_level_id)
-	next_level_title.text = "%s UNLOCKED" % unlocked_difficulty.to_upper()
-	_set_complete_label_image(current_difficulty)
+	_apply_next_level_panel_texture(current_difficulty)
+	if unlocked_difficulty == "hard":
+		next_level_button.texture_normal = load(BTN_PLAY_HARD_PATH)
+		next_level_button_label.add_theme_color_override("font_color", Color.WHITE)
+		next_level_button.offset_top = _next_level_button_default_offset_top + NEXT_LEVEL_BUTTON_HARD_DOWN_OFFSET
+		next_level_button.offset_bottom = _next_level_button_default_offset_bottom + NEXT_LEVEL_BUTTON_HARD_DOWN_OFFSET
+	else:
+		next_level_button.texture_normal = _next_level_button_default_texture
+		next_level_button_label.remove_theme_color_override("font_color")
+		next_level_button.offset_top = _next_level_button_default_offset_top
+		next_level_button.offset_bottom = _next_level_button_default_offset_bottom
 	next_level_button.visible = not _is_final_level(level_id)
 	next_level_button.disabled = _is_final_level(level_id)
 	_next_level_button_hovered = false
@@ -599,21 +638,9 @@ func _is_final_level(current_level_id: int) -> bool:
 	return difficulty_index >= DIFFICULTIES.size() - 1
 
 
-func _set_complete_label_image(difficulty: String) -> void:
-	var label_path: String = COMPLETE_LABEL_PATHS.get(difficulty, "")
-	if label_path != "":
-		if ResourceLoader.exists(label_path):
-			next_level_complete_label.texture = load(label_path)
-			next_level_complete_label.visible = true
-		else:
-			next_level_complete_label.visible = false
-			push_warning("BoardScene: missing complete label image %s" % label_path)
+func _apply_next_level_panel_texture(difficulty: String) -> void:
+	var path: String = NEXT_LEVEL_BG_PATHS.get(difficulty, "")
+	if path != "" and ResourceLoader.exists(path):
+		next_level_panel.texture = load(path)
 	else:
-		next_level_complete_label.visible = false
-
-
-func _apply_next_level_panel_texture() -> void:
-	if ResourceLoader.exists(NEXT_LEVEL_BG_PATH):
-		next_level_panel.texture = load(NEXT_LEVEL_BG_PATH)
-	else:
-		push_warning("BoardScene: missing next level background image %s" % NEXT_LEVEL_BG_PATH)
+		push_warning("BoardScene: missing next level background for difficulty '%s'" % difficulty)

@@ -15,15 +15,13 @@
 [ext_resource type="Script" uid="uid://bs4da1eyefnkb" path="res://scripts/gui_controller.gd" id="21_guictl"]
 [ext_resource type="Texture2D" uid="uid://dwtjdlhjpxmc3" path="res://assets/images/buttons/btn_reset.png" id="22_4khhe"]
 [ext_resource type="PackedScene" uid="uid://b83gk0omj3j2b" path="res://scenes/timer_container.tscn" id="23_timer"]
-[ext_resource type="Texture2D" uid="uid://bqmaqhgjapsgm" path="res://assets/images/bg_next_level.png" id="24_next_bg"]
 [ext_resource type="Script" uid="uid://cy7x4dma0t34g" path="res://scripts/orientation_listener_toggler.gd" id="25_4khhe"]
 [ext_resource type="Texture2D" uid="uid://cyyix8x2dsplv" path="res://assets/images/buttons/btn_play_next_level.png" id="25_next_btn"]
 [ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="26_next_font"]
-[ext_resource type="Texture2D" uid="uid://coo2rbapj7107" path="res://assets/images/medium_conplete_label.png" id="27_complete_label"]
 [ext_resource type="Texture2D" uid="uid://45ppayvusria" path="res://assets/images/bg_game_over_menu.png" id="28_game_over_bg"]
 [ext_resource type="Texture2D" uid="uid://dy3kl1tofjj28" path="res://assets/images/buttons/btn_retry.png" id="29_retry_btn"]
 [ext_resource type="Texture2D" uid="uid://bvh382d7w8j63" path="res://assets/images/buttons/btn_home_game_over.png" id="30_game_over_home_btn"]
-[ext_resource type="Texture2D" uid="uid://bdehsdd8ywr3e" path="res://assets/images/bg_challenge_completed_leve.png" id="31_challenge_completed_bg"]
+[ext_resource type="Texture2D" uid="uid://bdehsdd8ywr3e" path="res://assets/images/bg_challenge_completed_level.png" id="31_challenge_completed_bg"]
 [ext_resource type="Texture2D" uid="uid://qpsbrjs1pd14" path="res://assets/images/buttons/btn_home_challenge_completed_menu.png" id="32_challenge_completed_home_btn"]
 [ext_resource type="Texture2D" uid="uid://41n8u4xms12l" path="res://assets/images/buttons/btn_play_again_challenge_completed_menu.png" id="33_challenge_completed_play_again_btn"]
 
@@ -34,14 +32,9 @@ ambient_light_source = 2
 ambient_light_color = Color(1, 1, 1, 1)
 ambient_light_energy = 0.59
 
-[sub_resource type="LabelSettings" id="LabelSettings_next_title"]
-font = ExtResource("26_next_font")
-font_size = 40
-font_color = Color(0.98039216, 0.8352941, 0.3019608, 1)
-
 [sub_resource type="LabelSettings" id="LabelSettings_next_button"]
 font = ExtResource("26_next_font")
-font_size = 32
+font_size = 56
 
 [node name="BoardScene" type="Node3D" unique_id=2038322144]
 script = ExtResource("1_8l4tr")
@@ -267,36 +260,7 @@ offset_right = 418.75
 offset_bottom = 502.25
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("24_next_bg")
 stretch_mode = 5
-
-[node name="CompleteLabelImage" type="TextureRect" parent="GUI/Control/NextLevelMenu/Panel" unique_id=752851214]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_left = 66.25
-offset_top = 36.289917
-offset_right = -61.75
-offset_bottom = 186.25
-grow_horizontal = 2
-texture = ExtResource("27_complete_label")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="TitleLabel" type="Label" parent="GUI/Control/NextLevelMenu/Panel" unique_id=2124613664]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -163.0
-offset_top = 183.25
-offset_right = 159.0
-offset_bottom = 256.71655
-grow_horizontal = 2
-text = "MEDIUM UNLOCKED"
-label_settings = SubResource("LabelSettings_next_title")
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="PlayNextLevelBtn" type="TextureButton" parent="GUI/Control/NextLevelMenu/Panel" unique_id=957112430]
 layout_mode = 1

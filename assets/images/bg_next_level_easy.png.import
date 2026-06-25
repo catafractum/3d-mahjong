@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://coo2rbapj7107"
-path="res://.godot/imported/medium_conplete_label.png-326234444b22ff8eb8c211664a974287.ctex"
+uid="uid://c1vt6ybw21ec8"
+path="res://.godot/imported/bg_next_level_easy.png-6e5290d5ba4d395bb1f7df79c32a89c5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/medium_conplete_label.png"
-dest_files=["res://.godot/imported/medium_conplete_label.png-326234444b22ff8eb8c211664a974287.ctex"]
+source_file="res://assets/images/bg_next_level_easy.png"
+dest_files=["res://.godot/imported/bg_next_level_easy.png-6e5290d5ba4d395bb1f7df79c32a89c5.ctex"]
 
 [params]
 

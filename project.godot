@@ -22,7 +22,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 GameState="*res://scripts/game_state.gd"
-Soundmanager="*uid://b3ievutu0ro7f"
+Soundmanager="*res://scenes/soundmanager.tscn"
 ByteBrewWeb="*res://scripts/bytebrew_web.gd"
 
 [display]
