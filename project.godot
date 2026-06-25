@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="3D Mahjong"
+config/version="1.0.0"
 run/main_scene="uid://brugxgm251okg"
 config/features=PackedStringArray("4.6", "Mobile")
 boot_splash/bg_color=Color(0.02745098, 0.105882354, 0.08627451, 1)
@@ -22,6 +23,7 @@ config/icon="res://icon.svg"
 
 GameState="*res://scripts/game_state.gd"
 Soundmanager="*uid://b3ievutu0ro7f"
+ByteBrewWeb="*res://scripts/bytebrew_web.gd"
 
 [display]
 
