@@ -266,6 +266,15 @@ func _get_level_label() -> String:
 	return "%02d  %s  id %d" % [order, DIFFICULTIES[difficulty_index], level_id]
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	if not event is InputEventKey or not event.pressed or event.echo:
+		return
+	if event.keycode == KEY_RIGHT:
+		_on_rotate_right()
+	elif event.keycode == KEY_LEFT:
+		_on_rotate_left()
+
+
 func _on_rotate_right() -> void:
 	Soundmanager.play_click_sfx()
 	board_container.rotate_board(true)
