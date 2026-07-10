@@ -1,8 +1,11 @@
-res://scenes/soundmanager.tscn
-res://scripts/sound_manager.gd
 res://scenes/splash_scene.tscn
-res://scripts/splash_scene.gd
+res://scripts/board_container.gd
 res://scripts/board_manager.gd
-res://scripts/gui_controller.gd
 res://scripts/board_scene.gd
-res://default_bus_layout.tres
+res://scripts/game_state.gd
+res://scripts/gui_controller.gd
+res://scripts/splash_scene.gd
+res://shaders/tile_outline.gdshader
+res://scenes/soundmanager.tscn
+res://scenes/challenge_container.tscn
+res://scenes/board_scene.tscn

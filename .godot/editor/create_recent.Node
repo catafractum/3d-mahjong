@@ -1,6 +1,6 @@
+TextureRect
 AudioStreamPlayer2D
 ColorRect
-TextureRect
 HBoxContainer
 AspectRatioContainer
 VBoxContainer
@@ -12,4 +12,3 @@ NinePatchRect
 CanvasLayer
 OrientationListenerToggler
 CheckButton
-Camera2D

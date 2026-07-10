@@ -15,7 +15,9 @@
 [ext_resource type="Script" uid="uid://bs4da1eyefnkb" path="res://scripts/gui_controller.gd" id="21_guictl"]
 [ext_resource type="Texture2D" uid="uid://dwtjdlhjpxmc3" path="res://assets/images/buttons/btn_reset.png" id="22_4khhe"]
 [ext_resource type="PackedScene" uid="uid://b83gk0omj3j2b" path="res://scenes/timer_container.tscn" id="23_timer"]
-[ext_resource type="Script" uid="uid://cy7x4dma0t34g" path="res://scripts/orientation_listener_toggler.gd" id="25_4khhe"]
+[ext_resource type="Texture2D" uid="uid://d1gwfduejp5i5" path="res://assets/images/rounded_rect_bg.png" id="24_4khhe"]
+[ext_resource type="Texture2D" uid="uid://c7eq85aj1hver" path="res://assets/images/icons_tiles/icon_10.png" id="24_q4par"]
+[ext_resource type="Script" path="res://scripts/orientation_listener_toggler.gd" id="25_4khhe"]
 [ext_resource type="Texture2D" uid="uid://cyyix8x2dsplv" path="res://assets/images/buttons/btn_play_next_level.png" id="25_next_btn"]
 [ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="26_next_font"]
 [ext_resource type="Texture2D" uid="uid://45ppayvusria" path="res://assets/images/bg_game_over_menu.png" id="28_game_over_bg"]
@@ -77,7 +79,6 @@ stretch_mode = 6
 [node name="OrientationListenerToggler" type="Node" parent="GUI" unique_id=2143022960]
 unique_name_in_owner = true
 script = ExtResource("25_4khhe")
-metadata/_custom_type_script = "uid://cy7x4dma0t34g"
 
 [node name="Control" type="Control" parent="GUI" unique_id=133810718]
 custom_minimum_size = Vector2(900, 1800)
@@ -406,6 +407,35 @@ offset_bottom = -37.44409
 grow_horizontal = 2
 grow_vertical = 0
 texture_normal = ExtResource("32_challenge_completed_home_btn")
+stretch_mode = 5
+
+[node name="NextTile" type="TextureRect" parent="GUI/Control" unique_id=1167160095]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 0
+offset_left = 19.0
+offset_top = 106.0
+offset_right = 119.0
+offset_bottom = 206.0
+texture = ExtResource("24_4khhe")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Icon" type="TextureRect" parent="GUI/Control/NextTile" unique_id=793520026]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -40.0
+offset_right = 40.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("24_q4par")
+expand_mode = 1
 stretch_mode = 5
 
 [node name="BoardManager" type="Node" parent="." unique_id=1800542772]
