@@ -35,6 +35,8 @@ const SPLASH_SCENE := "res://scenes/splash_scene.tscn"
 @onready var left_arrow_btn: TextureButton = $GUI/Control/LeftArrowBtn
 @onready var shuffle_btn: TextureButton = $GUI/Control/ShuffleBtn
 @onready var level_complete_overlay: ColorRect = $GUI/Control/LevelCompleteOverlay
+@onready var selected_tile_preview: TextureRect = $GUI/Control/SelectedTile
+@onready var selected_tile_icon: TextureRect = $GUI/Control/SelectedTile/Icon
 @onready var next_level_menu: Control = $GUI/Control/NextLevelMenu
 @onready var next_level_panel: TextureRect = $GUI/Control/NextLevelMenu/Panel
 @onready var next_level_button: TextureButton = $GUI/Control/NextLevelMenu/Panel/PlayNextLevelBtn
@@ -84,6 +86,7 @@ func _ready() -> void:
 	_build_editor_controls()
 	board_container.tile_selected.connect(board_manager.on_tile_selected)
 	board_container.board_ready.connect(board_manager.on_board_ready)
+	board_manager.selected_tile_changed.connect(_on_selected_tile_changed)
 	board_manager.on_board_ready(board_container.get_tiles())
 	board_manager.level_completed.connect(_on_level_completed)
 	board_container.layer_rotated.connect(
@@ -156,6 +159,16 @@ func _ready() -> void:
 	game_over_menu.modulate.a = 0.0
 	challenge_completed_menu.visible = false
 	challenge_completed_menu.modulate.a = 0.0
+
+func _on_selected_tile_changed(tile: Node3D) -> void:
+	if tile == null or not is_instance_valid(tile) or not tile.has_method("get_icon_texture"):
+		selected_tile_icon.texture = null
+		selected_tile_preview.visible = false
+		return
+
+	var icon_texture := tile.call("get_icon_texture") as Texture2D
+	selected_tile_icon.texture = icon_texture
+	selected_tile_preview.visible = icon_texture != null
 
 
 func _setup_responsive_rotation_buttons() -> void:

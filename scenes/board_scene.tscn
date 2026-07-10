@@ -409,18 +409,18 @@ grow_vertical = 0
 texture_normal = ExtResource("32_challenge_completed_home_btn")
 stretch_mode = 5
 
-[node name="NextTile" type="TextureRect" parent="GUI/Control" unique_id=1167160095]
+[node name="SelectedTile" type="TextureRect" parent="GUI/Control" unique_id=1167160095]
 custom_minimum_size = Vector2(100, 100)
-layout_mode = 0
-offset_left = 19.0
-offset_top = 106.0
-offset_right = 119.0
-offset_bottom = 206.0
+layout_mode = 1
+offset_left = 24.0
+offset_top = 140.0
+offset_right = 124.0
+offset_bottom = 240.0
 texture = ExtResource("24_4khhe")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Icon" type="TextureRect" parent="GUI/Control/NextTile" unique_id=793520026]
+[node name="Icon" type="TextureRect" parent="GUI/Control/SelectedTile" unique_id=793520026]
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 1
 anchors_preset = 8

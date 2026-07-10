@@ -58,6 +58,9 @@ func set_tile_data(data: Resource, icon_type: int) -> void:
 	_selected_icon_texture = _load_selected_icon_texture(icon_type)
 	_apply_icon_texture(_normal_icon_texture)
 
+func get_icon_texture() -> Texture2D:
+	return _normal_icon_texture
+
 func select() -> void:
 	_is_selected = true
 	if _hover_tween != null:

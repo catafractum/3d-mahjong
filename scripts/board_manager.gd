@@ -14,6 +14,7 @@ var _rotation_bounds := {
 }
 
 signal level_completed
+signal selected_tile_changed(tile: Node3D)
 
 
 func _ready() -> void:
@@ -36,6 +37,7 @@ func on_board_ready(tiles: Array[Node3D]) -> void:
 	_init_grid()
 	_selected_tile = null
 	_level_completed = false
+	selected_tile_changed.emit(null)
 	_update_rotation_bounds(tiles)
 	for tile in tiles:
 		var gp: Vector3 = tile.tile_data.grid_pos
@@ -89,10 +91,12 @@ func on_tile_selected(tile: Node3D, hit_normal := Vector3.ZERO) -> void:
 		if _selected_tile != null:
 			_selected_tile.deselect()
 			_selected_tile = null
+			selected_tile_changed.emit(null)
 		return
 
 	if _selected_tile == null:
 		_selected_tile = tile
+		selected_tile_changed.emit(_selected_tile)
 		Soundmanager.play_tile_click_sfx()
 		tile.select()
 		return
@@ -100,6 +104,7 @@ func on_tile_selected(tile: Node3D, hit_normal := Vector3.ZERO) -> void:
 	if _selected_tile == tile:
 		tile.deselect()
 		_selected_tile = null
+		selected_tile_changed.emit(null)
 		return
 
 	var p1 := _tile_grid_pos(_selected_tile)
@@ -110,12 +115,14 @@ func on_tile_selected(tile: Node3D, hit_normal := Vector3.ZERO) -> void:
 		_selected_tile.remove_tile(true)
 		tile.remove_tile(true)
 		_selected_tile = null
+		selected_tile_changed.emit(null)
 		if not _level_completed and _make_icon_state().is_empty():
 			_level_completed = true
 			level_completed.emit()
 	else:
 		_selected_tile.deselect()
 		_selected_tile = tile
+		selected_tile_changed.emit(_selected_tile)
 		Soundmanager.play_tile_click_sfx()
 		tile.select()
 

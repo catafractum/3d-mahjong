@@ -9,3 +9,4 @@ res://shaders/tile_outline.gdshader
 res://scenes/soundmanager.tscn
 res://scenes/challenge_container.tscn
 res://scenes/board_scene.tscn
+res://scripts/mahjong_tile.gd
