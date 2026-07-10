@@ -5,6 +5,8 @@ signal reset_pressed
 signal sfx_toggled(is_on: bool)
 signal soundtrack_toggled(is_on: bool)
 
+const MENU_BOTTOM_MARGIN := 16.0
+
 var _settings_open: bool = false
 var _sfx_on: bool = true
 var _soundtrack_on: bool = false
@@ -14,7 +16,16 @@ var _st_slot_y: float
 var _reset_slot_y: float
 var _home_slot_y: float
 var _hidden_y: float
+var _base_sfx_slot_y: float
+var _base_st_slot_y: float
+var _base_reset_slot_y: float
+var _base_home_slot_y: float
+var _base_hidden_y: float
+var _base_shuffle_settings_gap: float
+var _responsive_requested_scale_multiplier := 1.0
+var _responsive_scale_multiplier := 1.0
 var _button_base_scales: Dictionary = {}
+var _button_original_scales: Dictionary = {}
 var _button_scale_tweens: Dictionary = {}
 
 @onready var settings_btn: TextureButton = $SettingsBtn
@@ -24,12 +35,14 @@ var _button_scale_tweens: Dictionary = {}
 @onready var soundtrack_off_btn: TextureButton = $AudioSoundtrackBtn_off
 @onready var reset_btn: TextureButton = $ResetBtn
 @onready var home_btn: TextureButton = $HomeBtn
+@onready var shuffle_btn: TextureButton = $ShuffleBtn
 
 
 func _ready() -> void:
 	%OrientationListenerToggler.on_size_changed.connect(_on_size_changed)
 
 	_hidden_y = settings_btn.position.y
+	_base_hidden_y = _hidden_y
 	for btn in _all_buttons():
 		_setup_button_scale_feedback(btn)
 
@@ -38,6 +51,11 @@ func _ready() -> void:
 	_st_slot_y = soundtrack_on_btn.position.y
 	_reset_slot_y = reset_btn.position.y
 	_home_slot_y = home_btn.position.y
+	_base_sfx_slot_y = _sfx_slot_y
+	_base_st_slot_y = _st_slot_y
+	_base_reset_slot_y = _reset_slot_y
+	_base_home_slot_y = _home_slot_y
+	_base_shuffle_settings_gap = settings_btn.position.x - (shuffle_btn.position.x + shuffle_btn.size.x)
 
 	# Forzar X del settings, z_index por debajo de settings, y ocultar
 	settings_btn.z_index = 1
@@ -57,16 +75,28 @@ func _ready() -> void:
 
 
 func _on_size_changed(_is_portrait: bool) -> void:
-	pass
+	set_responsive_scale_multiplier(_responsive_requested_scale_multiplier)
 
 
 func _align_x(btn: TextureButton) -> void:
-	var settings_center_x := settings_btn.position.x + _visual_width(settings_btn) * 0.5
-	btn.position.x = settings_center_x - _visual_width(btn) * 0.5
+	btn.position.x = settings_btn.position.x + settings_btn.size.x - btn.size.x
 
 
 func _all_deployable() -> Array[TextureButton]:
 	return [sfx_on_btn, sfx_off_btn, soundtrack_on_btn, soundtrack_off_btn, reset_btn, home_btn]
+
+
+func _settings_buttons() -> Array[TextureButton]:
+	return [
+		settings_btn,
+		shuffle_btn,
+		sfx_on_btn,
+		sfx_off_btn,
+		soundtrack_on_btn,
+		soundtrack_off_btn,
+		reset_btn,
+		home_btn
+	]
 
 
 func _all_buttons() -> Array[TextureButton]:
@@ -88,12 +118,23 @@ func _visual_width(btn: TextureButton) -> float:
 
 
 func _setup_button_scale_feedback(btn: TextureButton) -> void:
+	_button_original_scales[btn] = btn.scale
 	_button_base_scales[btn] = btn.scale
-	btn.pivot_offset = btn.size * 0.5
+	btn.pivot_offset = Vector2(btn.size.x, 0.0)
 	btn.mouse_entered.connect(func(): _tween_button_scale(btn, 1.05))
 	btn.mouse_exited.connect(func(): _tween_button_scale(btn, 1.0))
 	btn.button_down.connect(func(): _tween_button_scale(btn, 1.05))
 	btn.button_up.connect(func(): _tween_button_scale(btn, 1.05 if btn.is_hovered() else 1.0))
+
+
+func set_responsive_scale_multiplier(multiplier: float) -> void:
+	_responsive_requested_scale_multiplier = maxf(multiplier, 0.01)
+	_responsive_scale_multiplier = _settings_scale_that_fits(_responsive_requested_scale_multiplier)
+	for btn in _settings_buttons():
+		var original_scale: Vector2 = _button_original_scales.get(btn, btn.scale)
+		set_button_base_scale(btn, original_scale * _responsive_scale_multiplier)
+	_update_responsive_slots()
+	_apply_responsive_positions()
 
 
 func set_button_base_scale(btn: TextureButton, base_scale: Vector2) -> void:
@@ -103,6 +144,64 @@ func set_button_base_scale(btn: TextureButton, base_scale: Vector2) -> void:
 		_button_scale_tweens.erase(btn)
 	_button_base_scales[btn] = base_scale
 	btn.scale = base_scale * (1.05 if btn.is_hovered() else 1.0)
+
+
+func _update_responsive_slots() -> void:
+	_hidden_y = _base_hidden_y
+	_sfx_slot_y = _scaled_slot_y(_base_sfx_slot_y)
+	_st_slot_y = _scaled_slot_y(_base_st_slot_y)
+	_reset_slot_y = _scaled_slot_y(_base_reset_slot_y)
+	_home_slot_y = _scaled_slot_y(_base_home_slot_y)
+
+
+func _scaled_slot_y(base_slot_y: float) -> float:
+	return _base_hidden_y + ((base_slot_y - _base_hidden_y) * _responsive_scale_multiplier)
+
+
+func _settings_scale_that_fits(requested_multiplier: float) -> float:
+	var viewport_height := get_viewport_rect().size.y
+	if viewport_height <= 0.0:
+		return requested_multiplier
+
+	var original_home_scale: Vector2 = _button_original_scales.get(home_btn, home_btn.scale)
+	var scaled_home_bottom_offset := (
+		(_base_home_slot_y - _base_hidden_y)
+		+ (home_btn.size.y * original_home_scale.y)
+	)
+	if scaled_home_bottom_offset <= 0.0:
+		return requested_multiplier
+
+	var available_height := viewport_height - MENU_BOTTOM_MARGIN - _base_hidden_y
+	return minf(requested_multiplier, maxf(available_height / scaled_home_bottom_offset, 0.01))
+
+
+func _apply_responsive_positions() -> void:
+	_align_shuffle()
+	for btn in _all_deployable():
+		_align_x(btn)
+
+	if not _settings_open:
+		for btn in _all_deployable():
+			btn.position.y = _hidden_y
+		return
+
+	_current_sfx_btn().position.y = _sfx_slot_y
+	_current_soundtrack_btn().position.y = _st_slot_y
+	reset_btn.position.y = _reset_slot_y
+	home_btn.position.y = _home_slot_y
+	for btn in _all_deployable():
+		if not btn.visible:
+			btn.position.y = _hidden_y
+
+
+func _align_shuffle() -> void:
+	var settings_scale: Vector2 = _base_scale(settings_btn)
+	var settings_visual_left := (
+		settings_btn.position.x + settings_btn.size.x - (settings_btn.size.x * settings_scale.x)
+	)
+	var shuffle_gap := _base_shuffle_settings_gap * _responsive_scale_multiplier
+	var shuffle_right := settings_visual_left - shuffle_gap
+	shuffle_btn.position.x = shuffle_right - shuffle_btn.size.x
 
 
 func _tween_button_scale(btn: TextureButton, multiplier: float) -> void:

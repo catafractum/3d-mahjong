@@ -12,6 +12,8 @@ const ROTATION_BUTTON_DESKTOP_SCALE := 2.25
 const ROTATION_BUTTON_BASE_SIDE_MARGIN := 25.0
 const TIMER_PORTRAIT_SCALE := 1.5
 const TIMER_DESKTOP_SCALE := 2.5
+const RESPONSIVE_UI_PORTRAIT_SCALE := 1.0
+const RESPONSIVE_UI_DESKTOP_SCALE := 2.25
 const LEVEL_COMPLETE_OVERLAY_FADE_IN_DURATION := 0.3
 const LEVEL_COMPLETE_OVERLAY_FADE_OUT_DURATION := 0.2
 const NEXT_LEVEL_BUTTON_HOVER_SCALE := 1.025
@@ -59,6 +61,7 @@ var _level_complete_overlay_tween: Tween
 var _rotation_buttons_tween: Tween
 var _rotation_button_layouts: Dictionary = {}
 var _timer_layout: Dictionary = {}
+var _selected_tile_layout: Dictionary = {}
 var _next_level_button_base_scale := Vector2.ONE
 var _next_level_button_scale_tween: Tween
 var _next_level_button_hovered := false
@@ -101,6 +104,8 @@ func _ready() -> void:
 	shuffle_btn.pressed.connect(_on_shuffle)
 	timer_container.timer_finished.connect(_on_timer_finished)
 	_setup_responsive_timer()
+	_setup_responsive_settings_buttons()
+	_setup_responsive_selected_tile()
 	_next_level_button_base_scale = next_level_button.scale
 	next_level_button.pivot_offset = next_level_button.size * 0.5
 	_next_level_button_default_texture = next_level_button.texture_normal
@@ -185,22 +190,9 @@ func _setup_responsive_rotation_buttons() -> void:
 
 
 func _update_rotation_button_sizes() -> void:
-	var viewport_size := get_viewport().get_visible_rect().size
-	if viewport_size.y <= 0.0:
-		return
-
-	var aspect_ratio := viewport_size.x / viewport_size.y
-	var aspect_progress := clampf(
-		inverse_lerp(
-			ROTATION_BUTTON_MOBILE_ASPECT,
-			ROTATION_BUTTON_DESKTOP_ASPECT,
-			aspect_ratio
-		),
-		0.0,
-		1.0
-	)
-	var size_multiplier := lerpf(
-		1.0, ROTATION_BUTTON_DESKTOP_SCALE, aspect_progress
+	var size_multiplier := _responsive_scale_multiplier(
+		RESPONSIVE_UI_PORTRAIT_SCALE,
+		ROTATION_BUTTON_DESKTOP_SCALE
 	)
 
 	for button in [left_arrow_btn, right_arrow_btn]:
@@ -230,9 +222,47 @@ func _setup_responsive_timer() -> void:
 
 
 func _update_timer_size() -> void:
+	var scale_multiplier := _responsive_scale_multiplier(TIMER_PORTRAIT_SCALE, TIMER_DESKTOP_SCALE)
+	timer_container.scale = _timer_layout.scale * scale_multiplier
+
+
+func _setup_responsive_settings_buttons() -> void:
+	get_viewport().size_changed.connect(_update_settings_button_sizes)
+	_update_settings_button_sizes()
+
+
+func _update_settings_button_sizes() -> void:
+	if not gui.has_method("set_responsive_scale_multiplier"):
+		return
+	gui.call(
+		"set_responsive_scale_multiplier",
+		_responsive_scale_multiplier(RESPONSIVE_UI_PORTRAIT_SCALE, RESPONSIVE_UI_DESKTOP_SCALE)
+	)
+
+
+func _setup_responsive_selected_tile() -> void:
+	_selected_tile_layout = {
+		"position": selected_tile_preview.position,
+		"scale": selected_tile_preview.scale
+	}
+	selected_tile_preview.pivot_offset = Vector2.ZERO
+	get_viewport().size_changed.connect(_update_selected_tile_size)
+	_update_selected_tile_size()
+
+
+func _update_selected_tile_size() -> void:
+	var scale_multiplier := _responsive_scale_multiplier(
+		RESPONSIVE_UI_PORTRAIT_SCALE,
+		RESPONSIVE_UI_DESKTOP_SCALE
+	)
+	selected_tile_preview.position = _selected_tile_layout.position * scale_multiplier
+	selected_tile_preview.scale = _selected_tile_layout.scale * scale_multiplier
+
+
+func _responsive_scale_multiplier(portrait_scale: float, desktop_scale: float) -> float:
 	var viewport_size := get_viewport().get_visible_rect().size
 	if viewport_size.y <= 0.0:
-		return
+		return portrait_scale
 	var aspect_ratio := viewport_size.x / viewport_size.y
 	var aspect_progress := clampf(
 		inverse_lerp(
@@ -243,8 +273,7 @@ func _update_timer_size() -> void:
 		0.0,
 		1.0
 	)
-	var scale_multiplier := lerpf(TIMER_PORTRAIT_SCALE, TIMER_DESKTOP_SCALE, aspect_progress)
-	timer_container.scale = _timer_layout.scale * scale_multiplier
+	return lerpf(portrait_scale, desktop_scale, aspect_progress)
 
 
 func _process(_delta: float) -> void:
