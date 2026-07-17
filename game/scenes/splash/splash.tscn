@@ -1,0 +1,116 @@
+[gd_scene format=3 uid="uid://c8lexjylyx41t"]
+
+[ext_resource type="Script" uid="uid://dpawpb2gs63r8" path="res://game/components/window_resize_listener_component.gd" id="1_resize"]
+[ext_resource type="Texture2D" uid="uid://cll8xwwdv46we" path="res://assets/images/background.jpg" id="2_4shk6"]
+[ext_resource type="Texture2D" uid="uid://dy4dtrdnge65v" path="res://assets/images/splash/game_logo.png" id="3_8dd55"]
+[ext_resource type="PackedScene" uid="uid://ife5h8wg7pi8" path="res://prefabs/splash_calendar_day/splash_calendar_day.tscn" id="4_tmpah"]
+
+[node name="Splash" type="Node2D" unique_id=100442976]
+
+[node name="Components" type="Node" parent="." unique_id=211836836]
+
+[node name="WindowResizeListenerComponent" type="Node" parent="Components" unique_id=767328126 node_paths=PackedStringArray("landscape", "portrait")]
+script = ExtResource("1_resize")
+landscape = NodePath("../../UI/LandscapeUI")
+portrait = NodePath("../../UI/PortraitUI")
+owner_node_path = NodePath("../..")
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1927576681]
+
+[node name="Bg" type="Control" parent="UI" unique_id=267593060]
+custom_minimum_size = Vector2(3600, 1800)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1350.0
+offset_right = 1350.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="TextureRect" parent="UI/Bg" unique_id=230821400]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_4shk6")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Overlay" type="ColorRect" parent="UI/Bg" unique_id=1855733602]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.03, 0.02, 0.05, 0.34)
+
+[node name="LandscapeUI" type="Control" parent="UI" unique_id=1319850694]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Logo" type="TextureRect" parent="UI/LandscapeUI" unique_id=426404393]
+custom_minimum_size = Vector2(570, 330)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -446.0
+offset_top = 66.0
+offset_right = 445.27246
+offset_bottom = 670.0
+grow_horizontal = 2
+texture = ExtResource("3_8dd55")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Section" type="Control" parent="UI/LandscapeUI" unique_id=1176360987]
+custom_minimum_size = Vector2(2200, 660)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -1100.0
+offset_top = -131.0
+offset_right = 1100.0
+offset_bottom = 529.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0)
+
+[node name="SplashCalendarDay" parent="UI/LandscapeUI/Section" unique_id=847538879 instance=ExtResource("4_tmpah")]
+layout_mode = 0
+
+[node name="PortraitUI" type="Control" parent="UI" unique_id=1897949588]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Logo" type="TextureRect" parent="UI/PortraitUI" unique_id=1442729808]
+custom_minimum_size = Vector2(480, 330)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 124.0
+offset_right = -2.0
+offset_bottom = -1142.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_8dd55")
+expand_mode = 1
+stretch_mode = 5

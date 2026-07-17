@@ -1,0 +1,93 @@
+[gd_scene format=3 uid="uid://ife5h8wg7pi8"]
+
+[ext_resource type="Script" uid="uid://dfcef5e7gm848" path="res://prefabs/splash_calendar_day/splash_calendar_day_component.gd" id="1_71y7m"]
+[ext_resource type="Texture2D" uid="uid://b3bju8bn8fm1y" path="res://assets/images/splash/bg_calendar_day.png" id="1_bcw1g"]
+[ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="2_71y7m"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_8vxn3"]
+font = ExtResource("2_71y7m")
+font_size = 34
+font_color = Color(1, 0.772549, 0.427451, 1)
+shadow_color = Color(0, 0, 0, 1)
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="LabelSettings" id="LabelSettings_826eu"]
+font = ExtResource("2_71y7m")
+font_size = 38
+font_color = Color(0.184314, 0.0745098, 0.309804, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_bpgdn"]
+font = ExtResource("2_71y7m")
+font_size = 160
+font_color = Color(0.184314, 0.0745098, 0.309804, 1)
+shadow_size = 4
+shadow_color = Color(0, 0, 0, 0.2)
+
+[node name="SplashCalendarDay" type="Control" unique_id=847538879]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 363.0
+offset_bottom = 522.0
+
+[node name="Components" type="Node" parent="." unique_id=765690613]
+
+[node name="SplashCalendarDayComponent" type="Node" parent="Components" unique_id=1007876638 node_paths=PackedStringArray("month_label", "weekday_label", "day_number_label")]
+script = ExtResource("1_71y7m")
+owner_node_path = NodePath("../..")
+month_label = NodePath("../../MonthLabel")
+weekday_label = NodePath("../../WeekDayLabel")
+day_number_label = NodePath("../../DayNumberLabel")
+metadata/_custom_type_script = "uid://dfcef5e7gm848"
+
+[node name="Background" type="TextureRect" parent="." unique_id=42110077]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_bcw1g")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="MonthLabel" type="Label" parent="." unique_id=161791589]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -181.5
+offset_top = 70.0
+offset_right = 181.5
+offset_bottom = 112.0
+grow_horizontal = 2
+text = "JUNE"
+label_settings = SubResource("LabelSettings_8vxn3")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WeekDayLabel" type="Label" parent="." unique_id=1615732693]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -181.5
+offset_top = 160.0
+offset_right = 181.5
+offset_bottom = 207.0
+grow_horizontal = 2
+text = "WEDNESDAY"
+label_settings = SubResource("LabelSettings_826eu")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DayNumberLabel" type="Label" parent="." unique_id=318978295]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 210.0
+offset_bottom = 406.0
+grow_horizontal = 2
+text = "10"
+label_settings = SubResource("LabelSettings_bpgdn")
+horizontal_alignment = 1
+vertical_alignment = 1

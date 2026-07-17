@@ -22,7 +22,12 @@ func save_game() -> void:
 	for save_component in _save_components:
 		save_component.update_save_data_before_save()
 	var json_string = JSON.stringify(_data.to_dict())
+	storage_provider.on_saved.connect(_on_saved)
 	storage_provider.save_as_string(json_string)
+
+
+func _on_saved():
+	storage_provider.on_saved.disconnect(_on_saved)
 	saved.emit()
 
 

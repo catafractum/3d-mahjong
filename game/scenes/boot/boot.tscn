@@ -1,8 +1,11 @@
 [gd_scene format=3 uid="uid://c313i447xrval"]
 
 [ext_resource type="Script" uid="uid://b1jdk0ci2r673" path="res://core/components/scene_switcher_component.gd" id="1_1qikl"]
+[ext_resource type="Script" uid="uid://c453y1el2n546" path="res://game/scenes/boot/boot.gd" id="3_boot"]
 
 [node name="Boot" type="Node2D" unique_id=834666498]
+script = ExtResource("3_boot")
+splash_scene_path = "uid://brugxgm251okg"
 
 [node name="Components" type="Node" parent="." unique_id=1084655071]
 

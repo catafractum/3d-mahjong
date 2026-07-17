@@ -1,5 +1,8 @@
-Node2D
+Control
+SplashCalendarDayComponent
 Node
+CanvasLayer
+Node2D
 SceneSwitcherComponent
 TextureRect
 AudioStreamPlayer2D
@@ -7,9 +10,5 @@ ColorRect
 HBoxContainer
 AspectRatioContainer
 VBoxContainer
-Control
 SplitContainer
 HSeparator
-Label
-NinePatchRect
-CanvasLayer

@@ -1,5 +1,8 @@
-res://scenes/board_scene.tscn
-res://game/events/game_event_manager.gd
-res://game/models/savedata_dto.gd
-res://game/storage/portal_storage_provider.gd
 res://game/scenes/boot/boot.tscn
+res://game/scenes/boot/boot.gd
+res://game/storage/save_load_manager.gd
+res://game/scenes/splash/splash.tscn
+res://game/components/window_resize_listener_component.gd
+res://scenes/splash_scene.tscn
+res://prefabs/splash_calendar_day/splash_calendar_day.tscn
+res://prefabs/splash_calendar_day/splash_calendar_day_component.gd
