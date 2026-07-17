@@ -1,12 +1,5 @@
-res://scenes/splash_scene.tscn
-res://scripts/board_container.gd
-res://scripts/board_manager.gd
-res://scripts/board_scene.gd
-res://scripts/game_state.gd
-res://scripts/gui_controller.gd
-res://scripts/splash_scene.gd
-res://shaders/tile_outline.gdshader
-res://scenes/soundmanager.tscn
-res://scenes/challenge_container.tscn
 res://scenes/board_scene.tscn
-res://scripts/mahjong_tile.gd
+res://game/events/game_event_manager.gd
+res://game/models/savedata_dto.gd
+res://game/storage/portal_storage_provider.gd
+res://game/scenes/boot/boot.tscn

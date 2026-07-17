@@ -1,3 +1,6 @@
+Node2D
+Node
+SceneSwitcherComponent
 TextureRect
 AudioStreamPlayer2D
 ColorRect
@@ -10,5 +13,3 @@ HSeparator
 Label
 NinePatchRect
 CanvasLayer
-OrientationListenerToggler
-CheckButton
