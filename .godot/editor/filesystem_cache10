@@ -131,8 +131,9 @@ savedata_dto.gd::GDScript::1264440402844454692::1784306313::0::1::::SavedataDTO<
 ::res://game/scenes/boot/::1784359193
 boot.gd::GDScript::6871993472684851817::1784308007::0::1::::<>Node2D<><>0<>0<><>::
 boot.tscn::PackedScene::6793518742467207191::1784359193::0::1::::<><><>0<>0<><>::uid://b1jdk0ci2r673::::res://core/components/scene_switcher_component.gd<>uid://c453y1el2n546::::res://game/scenes/boot/boot.gd
-::res://game/scenes/splash/::1784361649
-splash.tscn::PackedScene::7112065814285064211::1784377779::0::1::::<><><>0<>0<><>::uid://dpawpb2gs63r8::::res://game/components/window_resize_listener_component.gd<>uid://cll8xwwdv46we::::res://assets/images/background.jpg<>uid://dy4dtrdnge65v::::res://assets/images/splash/game_logo.png<>uid://ife5h8wg7pi8::::res://prefabs/splash_calendar_day/splash_calendar_day.tscn<>uid://d2j1ruu616fo3::::res://prefabs/splash_challenge_container/splash_challenge_container.tscn<>uid://bxsh7ctu63ghw::::res://prefabs/splash_days_carousel/splash_days_carousel.tscn<>res://prefabs/splash_streak/splash_streak.tscn
+::res://game/scenes/splash/::1784380508
+splash.tscn::PackedScene::7112065814285064211::1784380508::0::1::::<><><>0<>0<><>::uid://dpawpb2gs63r8::::res://game/components/window_resize_listener_component.gd<>uid://cll8xwwdv46we::::res://assets/images/background.jpg<>uid://dy4dtrdnge65v::::res://assets/images/splash/game_logo.png<>uid://ife5h8wg7pi8::::res://prefabs/splash_calendar_day/splash_calendar_day.tscn<>uid://d2j1ruu616fo3::::res://prefabs/splash_challenge_container/splash_challenge_container.tscn<>uid://bxsh7ctu63ghw::::res://prefabs/splash_days_carousel/splash_days_carousel.tscn<>res://prefabs/splash_streak/splash_streak.tscn<>res://game/scenes/splash/splash_sound_component.gd
+splash_sound_component.gd::GDScript::8072690841245459927::1784380507::0::1::::SplashSoundComponent<>BaseComponent<><>0<>0<><>::
 ::res://game/storage/::1784306387
 local_storage_provider.gd::GDScript::374877878326018630::1783007376::0::1::::LocalStorageProvider<>StorageProvider<><>0<>0<><>::
 portal_storage_provider.gd::GDScript::7527339464702115783::1784306471::0::1::::PortalStorageProvider<>StorageProvider<><>0<>0<><>::
@@ -143,7 +144,7 @@ splash_calendar_day.tscn::PackedScene::572129499313640141::1784309924::0::1::::<
 splash_calendar_day_component.gd::GDScript::7514588405060359359::1784309924::0::1::::SplashCalendarDayComponent<>BaseComponent<><>0<>0<><>::
 ::res://prefabs/splash_challenge_container/::1784362220
 splash_challenge_container.tscn::PackedScene::9074550312208585604::1784362220::0::1::::<><><>0<>0<><>::uid://66b10r8ht5so::::res://prefabs/splash_challenge_container/splash_challenge_container_component.gd<>uid://b0mdt7mv21vj3::::res://assets/images/buttons/btn_play.png<>uid://dvg3fb4pya5s::::res://assets/images/splash/challenge_bg.png<>uid://bme411pvplbfk::::res://assets/images/splash/title-edge.png<>uid://lus8dvysyfip::::res://assets/fonts/Montserrat-SemiBold.ttf<>uid://c416j1cv6240u::::res://assets/images/splash/arrow.png<>uid://w4a3dl72375u::::res://assets/images/splash/timer_icon.png
-splash_challenge_container_component.gd::GDScript::2239958351644084818::1784359119::0::1::::SplashChallengeContainerComponent<>BaseComponent<><>0<>0<><>::
+splash_challenge_container_component.gd::GDScript::2239958351644084818::1784380508::0::1::::SplashChallengeContainerComponent<>BaseComponent<><>0<>0<><>::
 ::res://prefabs/splash_days_carousel/::1784362179
 splash_days_carousel.tscn::PackedScene::4038405186644470572::1784362179::0::1::::<><><>0<>0<><>::uid://bgi5hjcbfsqtj::::res://prefabs/splash_days_carousel/splash_days_carousel_component.gd<>uid://c3i0xy0pm7dge::::res://assets/images/splash/bg_days_carousel.png<>uid://bp0u883p8xife::::res://assets/images/splash/badge_empty.png<>uid://lus8dvysyfip::::res://assets/fonts/Montserrat-SemiBold.ttf<>uid://cikkwftd686n3::::res://assets/images/tick_icon.png
 splash_days_carousel_component.gd::GDScript::2825903253746705615::1784362120::0::1::::SplashDaysCarouselComponent<>BaseComponent<><>0<>0<><>::

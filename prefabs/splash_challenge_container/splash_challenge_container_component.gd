@@ -12,6 +12,7 @@ func _ready() -> void:
 
 
 func _on_play_button_pressed() -> void:
+	Soundmanager.play_click_sfx()
 	SceneSwitcherComponent.of_as(self).switch_scene(game_scene_path)
 
 

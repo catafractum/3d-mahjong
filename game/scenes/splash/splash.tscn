@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://d2j1ruu616fo3" path="res://prefabs/splash_challenge_container/splash_challenge_container.tscn" id="5_challenge"]
 [ext_resource type="PackedScene" uid="uid://bxsh7ctu63ghw" path="res://prefabs/splash_days_carousel/splash_days_carousel.tscn" id="6_carousel"]
 [ext_resource type="PackedScene" path="res://prefabs/splash_streak/splash_streak.tscn" id="7_streak"]
+[ext_resource type="Script" uid="uid://dnaqbk04qydfb" path="res://game/scenes/splash/splash_sound_component.gd" id="8_sound"]
 
 [node name="Splash" type="Node2D" unique_id=100442976]
 
@@ -16,6 +17,10 @@
 script = ExtResource("1_resize")
 landscape = NodePath("../../UI/LandscapeUI")
 portrait = NodePath("../../UI/PortraitUI")
+owner_node_path = NodePath("../..")
+
+[node name="SplashSoundComponent" type="Node" parent="Components" unique_id=348874464]
+script = ExtResource("8_sound")
 owner_node_path = NodePath("../..")
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1927576681]
