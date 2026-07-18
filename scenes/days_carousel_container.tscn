@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://lyyag4hd1h6g"]
+[gd_scene format=3 uid="uid://vsq8biqls43d"]
 
 [ext_resource type="Script" uid="uid://d0i0vscfic4je" path="res://scripts/days_carousel_container.gd" id="1_days"]
 [ext_resource type="Texture2D" uid="uid://c3i0xy0pm7dge" path="res://assets/images/splash/bg_days_carousel.png" id="2_bg"]

@@ -3,3 +3,6 @@ res://scenes/splash_scene.tscn
 res://prefabs/splash_challenge_container/splash_challenge_container.tscn
 res://prefabs/splash_challenge_container/splash_challenge_container_component.gd
 res://game/scenes/boot/boot.tscn
+res://scenes/days_carousel_container.tscn
+res://prefabs/splash_days_carousel/splash_days_carousel_component.gd
+res://prefabs/splash_days_carousel/splash_days_carousel.tscn

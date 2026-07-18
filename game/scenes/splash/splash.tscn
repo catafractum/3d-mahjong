@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://dy4dtrdnge65v" path="res://assets/images/splash/game_logo.png" id="3_8dd55"]
 [ext_resource type="PackedScene" uid="uid://ife5h8wg7pi8" path="res://prefabs/splash_calendar_day/splash_calendar_day.tscn" id="4_tmpah"]
 [ext_resource type="PackedScene" uid="uid://d2j1ruu616fo3" path="res://prefabs/splash_challenge_container/splash_challenge_container.tscn" id="5_challenge"]
+[ext_resource type="PackedScene" uid="uid://bxsh7ctu63ghw" path="res://prefabs/splash_days_carousel/splash_days_carousel.tscn" id="6_carousel"]
 
 [node name="Splash" type="Node2D" unique_id=100442976]
 
@@ -50,7 +51,6 @@ grow_vertical = 2
 color = Color(0.03, 0.02, 0.05, 0.34)
 
 [node name="LandscapeUI" type="Control" parent="UI" unique_id=1319850694]
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -99,6 +99,14 @@ offset_top = 21.0
 offset_right = 832.0
 offset_bottom = 271.0
 scale = Vector2(2, 2)
+
+[node name="SplashDaysCarousel" parent="UI/LandscapeUI/Section" unique_id=987524499 instance=ExtResource("6_carousel")]
+layout_mode = 0
+offset_left = 1300.0
+offset_top = 37.000015
+offset_right = 1896.0
+offset_bottom = 180.00002
+scale = Vector2(1.4, 1.4)
 
 [node name="PortraitUI" type="Control" parent="UI" unique_id=1897949588]
 layout_mode = 3
@@ -154,5 +162,21 @@ offset_bottom = 605.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.6, 0.6)
+
+[node name="SplashDaysCarousel" parent="UI/PortraitUI" unique_id=1411838154 instance=ExtResource("6_carousel")]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -298.0
+offset_top = -383.0
+offset_right = 298.0
+offset_bottom = -240.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1.4, 1.4)
+pivot_offset_ratio = Vector2(0.5, 1)
 
 [editable path="UI/PortraitUI/SplashChallengeContainer"]
