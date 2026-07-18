@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://ch0y113d7s06o" path="res://scenes/calendar_day_container.tscn" id="4_calendar"]
 [ext_resource type="PackedScene" uid="uid://vgobuowp8go1" path="res://scenes/streak_container.tscn" id="5_streak"]
 [ext_resource type="PackedScene" uid="uid://dmbco1arpfs6l" path="res://scenes/challenge_container.tscn" id="6_challenge"]
-[ext_resource type="PackedScene" path="res://scenes/days_carousel_container.tscn" id="7_days"]
+[ext_resource type="PackedScene" uid="uid://vsq8biqls43d" path="res://scenes/days_carousel_container.tscn" id="7_days"]
 [ext_resource type="Script" path="res://scripts/orientation_listener_toggler.gd" id="8_6skqv"]
 
 [node name="SplashScene" type="Node2D" unique_id=221727694 node_paths=PackedStringArray("challenge_container_landscape", "challenge_container_portrait")]
