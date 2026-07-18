@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://cll8xwwdv46we" path="res://assets/images/background.jpg" id="2_4shk6"]
 [ext_resource type="Texture2D" uid="uid://dy4dtrdnge65v" path="res://assets/images/splash/game_logo.png" id="3_8dd55"]
 [ext_resource type="PackedScene" uid="uid://ife5h8wg7pi8" path="res://prefabs/splash_calendar_day/splash_calendar_day.tscn" id="4_tmpah"]
+[ext_resource type="PackedScene" uid="uid://d2j1ruu616fo3" path="res://prefabs/splash_challenge_container/splash_challenge_container.tscn" id="5_challenge"]
 
 [node name="Splash" type="Node2D" unique_id=100442976]
 
@@ -49,6 +50,7 @@ grow_vertical = 2
 color = Color(0.03, 0.02, 0.05, 0.34)
 
 [node name="LandscapeUI" type="Control" parent="UI" unique_id=1319850694]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -90,8 +92,15 @@ pivot_offset_ratio = Vector2(0.5, 0)
 [node name="SplashCalendarDay" parent="UI/LandscapeUI/Section" unique_id=847538879 instance=ExtResource("4_tmpah")]
 layout_mode = 0
 
+[node name="SplashChallengeContainer" parent="UI/LandscapeUI/Section" unique_id=731102767 instance=ExtResource("5_challenge")]
+layout_mode = 0
+offset_left = 441.0
+offset_top = 21.0
+offset_right = 832.0
+offset_bottom = 271.0
+scale = Vector2(2, 2)
+
 [node name="PortraitUI" type="Control" parent="UI" unique_id=1897949588]
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -114,3 +123,36 @@ grow_vertical = 2
 texture = ExtResource("3_8dd55")
 expand_mode = 1
 stretch_mode = 5
+
+[node name="SplashChallengeContainer" parent="UI/PortraitUI" unique_id=1097770764 instance=ExtResource("5_challenge")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = 119.0
+offset_right = 250.0
+offset_bottom = 369.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.7, 1.7)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+
+[node name="SplashCalendarDay" parent="UI/PortraitUI" unique_id=65817169 instance=ExtResource("4_tmpah")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -394.0
+offset_top = 83.0
+offset_right = -31.0
+offset_bottom = 605.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.6, 0.6)
+
+[editable path="UI/PortraitUI/SplashChallengeContainer"]

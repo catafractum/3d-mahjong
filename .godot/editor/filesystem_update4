@@ -1,8 +1,5 @@
-res://game/scenes/boot/boot.tscn
-res://game/scenes/boot/boot.gd
-res://game/storage/save_load_manager.gd
 res://game/scenes/splash/splash.tscn
-res://game/components/window_resize_listener_component.gd
 res://scenes/splash_scene.tscn
-res://prefabs/splash_calendar_day/splash_calendar_day.tscn
-res://prefabs/splash_calendar_day/splash_calendar_day_component.gd
+res://prefabs/splash_challenge_container/splash_challenge_container.tscn
+res://prefabs/splash_challenge_container/splash_challenge_container_component.gd
+res://game/scenes/boot/boot.tscn

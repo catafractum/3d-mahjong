@@ -5,7 +5,7 @@
 
 [node name="Boot" type="Node2D" unique_id=834666498]
 script = ExtResource("3_boot")
-splash_scene_path = "uid://brugxgm251okg"
+splash_scene_path = "uid://c8lexjylyx41t"
 
 [node name="Components" type="Node" parent="." unique_id=1084655071]
 

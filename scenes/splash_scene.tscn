@@ -161,7 +161,6 @@ grow_vertical = 2
 scale = Vector2(1.93, 1.93)
 
 [node name="PortraitContent" type="Control" parent="CanvasLayer" unique_id=1882294153]
-visible = false
 custom_minimum_size = Vector2(900, 1800)
 layout_mode = 3
 anchors_preset = 13
