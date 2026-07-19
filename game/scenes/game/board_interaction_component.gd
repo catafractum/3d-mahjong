@@ -9,7 +9,6 @@ signal shuffle_completed
 signal shuffle_failed
 
 @export var camera: Camera3D
-@export var game_ui: GameUIComponent
 @export var ray_length := 1000.0
 @export var maximum_tap_distance := 16.0
 
@@ -19,6 +18,7 @@ var _grid_size := 7
 var _completed := false
 var _press_position := Vector2.ZERO
 var _tracking_pointer := false
+var _session: GameSession
 
 
 func _ready() -> void:
@@ -28,7 +28,9 @@ func _ready() -> void:
 		return
 	builder.board_built.connect(_on_board_built.bind(builder))
 	builder.board_cleared.connect(_clear_state)
-	game_ui.shuffle_requested.connect(shuffle)
+	var session_component := CurrentGameSessionComponent.of_as(self)
+	if session_component != null:
+		_session = session_component.session
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -130,6 +132,8 @@ func _set_selected_tile(tile: Node3D) -> void:
 		return
 	var previous := _selected_tile
 	_selected_tile = tile
+	if _session != null:
+		_session.selected_tile = tile
 	selection_changed.emit(previous, _selected_tile)
 	if is_instance_valid(previous):
 		MahjongTileVisualComponent.of_as(previous).deselect()
@@ -141,6 +145,8 @@ func _set_selected_tile(tile: Node3D) -> void:
 func _clear_state() -> void:
 	var previous := _selected_tile
 	_selected_tile = null
+	if _session != null:
+		_session.selected_tile = null
 	_grid.clear()
 	_completed = false
 	if previous != null:

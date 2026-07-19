@@ -27,6 +27,7 @@ var _tween: Tween
 
 
 func _ready() -> void:
+	set_toggle_states(_is_bus_enabled("SFX"), _is_bus_enabled("Music"))
 	settings_button.pressed.connect(_toggle)
 	(sfx_on_button as BaseButton).pressed.connect(_set_sfx.bind(false))
 	(sfx_off_button as BaseButton).pressed.connect(_set_sfx.bind(true))
@@ -73,12 +74,14 @@ func _collapse() -> void:
 
 func _set_sfx(enabled: bool) -> void:
 	_sfx_enabled = enabled
+	_set_bus_enabled("SFX", enabled)
 	_refresh_toggle_buttons()
 	sfx_toggled.emit(enabled)
 
 
 func _set_music(enabled: bool) -> void:
 	_music_enabled = enabled
+	_set_bus_enabled("Music", enabled)
 	_refresh_toggle_buttons()
 	music_toggled.emit(enabled)
 
@@ -113,6 +116,17 @@ func _hide_deployable_buttons() -> void:
 func _kill_tween() -> void:
 	if _tween != null:
 		_tween.kill()
+
+
+func _set_bus_enabled(bus_name: StringName, is_enabled: bool) -> void:
+	var bus := AudioServer.get_bus_index(bus_name)
+	if bus >= 0:
+		AudioServer.set_bus_mute(bus, not is_enabled)
+
+
+func _is_bus_enabled(bus_name: StringName) -> bool:
+	var bus := AudioServer.get_bus_index(bus_name)
+	return bus < 0 or not AudioServer.is_bus_mute(bus)
 
 
 func _request_reset() -> void:

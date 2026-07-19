@@ -3,8 +3,6 @@ extends BaseComponent
 
 signal timer_finished
 
-@export var game_ui: GameUIComponent
-
 var session: GameSession
 var paused := true
 var finished := false
@@ -20,7 +18,6 @@ func _initialize() -> void:
 		return
 	session = session_component.session
 	paused = false
-	_refresh_display()
 
 
 func _process(delta: float) -> void:
@@ -30,7 +27,6 @@ func _process(delta: float) -> void:
 		session.elapsed_seconds + delta,
 		session.time_limit_seconds
 	)
-	_refresh_display()
 	if session.elapsed_seconds >= session.time_limit_seconds:
 		finished = true
 		paused = true
@@ -52,14 +48,6 @@ func reset() -> void:
 	session.elapsed_seconds = 0.0
 	finished = false
 	paused = false
-	_refresh_display()
-
-
-func _refresh_display() -> void:
-	game_ui.set_remaining_seconds(maxf(
-		session.time_limit_seconds - session.elapsed_seconds,
-		0.0
-	))
 
 
 static func of_as(node: Node) -> GameTimerComponent:

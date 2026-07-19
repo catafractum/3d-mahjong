@@ -12,11 +12,9 @@
 [ext_resource type="Script" uid="uid://6nnyol3rxp81" path="res://game/components/board/tile_rules_component.gd" id="13_rules"]
 [ext_resource type="Script" uid="uid://cf8ko6d6rofqv" path="res://game/components/board/mahjong_solver_component.gd" id="14_solver"]
 [ext_resource type="Script" uid="uid://bvoiotg157h1d" path="res://game/scenes/game/game_timer_component.gd" id="16_timer"]
-[ext_resource type="Script" uid="uid://bhphxnew6ahxj" path="res://game/scenes/game/game_ui_binding_component.gd" id="17_ui_binding"]
 [ext_resource type="Script" uid="uid://b4vb57slqgc00" path="res://game/scenes/game/board_rotation_component.gd" id="18_rotation"]
 [ext_resource type="Script" uid="uid://k3dswj7hoapr" path="res://game/scenes/game/game_flow_component.gd" id="20_flow"]
 [ext_resource type="PackedScene" path="res://prefabs/game_settings_menu/game_settings_menu.tscn" id="21_settings_menu"]
-[ext_resource type="Script" uid="uid://c6gn5nvp0fr2w" path="res://game/scenes/game/audio_settings_component.gd" id="23_audio_settings"]
 
 [sub_resource type="Environment" id="Environment_game"]
 background_mode = 3
@@ -39,10 +37,9 @@ board = NodePath("../../Board")
 tile_scene = ExtResource("8_tile")
 owner_node_path = NodePath("../..")
 
-[node name="BoardInteractionComponent" type="Node" parent="Components" unique_id=1512249790 node_paths=PackedStringArray("camera", "game_ui")]
+[node name="BoardInteractionComponent" type="Node" parent="Components" unique_id=1512249790 node_paths=PackedStringArray("camera")]
 script = ExtResource("9_interaction")
 camera = NodePath("../../Camera3D")
-game_ui = NodePath("../../GameUI/Components/GameUIComponent")
 owner_node_path = NodePath("../..")
 
 [node name="TileRulesComponent" type="Node" parent="Components" unique_id=577509781]
@@ -53,35 +50,22 @@ owner_node_path = NodePath("../..")
 script = ExtResource("14_solver")
 owner_node_path = NodePath("../..")
 
-[node name="GameTimerComponent" type="Node" parent="Components" unique_id=1838793639 node_paths=PackedStringArray("game_ui")]
+[node name="GameTimerComponent" type="Node" parent="Components" unique_id=1838793639]
 script = ExtResource("16_timer")
-game_ui = NodePath("../../GameUI/Components/GameUIComponent")
 owner_node_path = NodePath("../..")
 
-[node name="GameUIBindingComponent" type="Node" parent="Components" unique_id=648346072 node_paths=PackedStringArray("game_ui")]
-script = ExtResource("17_ui_binding")
-game_ui = NodePath("../../GameUI/Components/GameUIComponent")
-owner_node_path = NodePath("../..")
-
-[node name="BoardRotationComponent" type="Node" parent="Components" unique_id=983857444 node_paths=PackedStringArray("board", "game_ui")]
+[node name="BoardRotationComponent" type="Node" parent="Components" unique_id=983857444 node_paths=PackedStringArray("board")]
 script = ExtResource("18_rotation")
 board = NodePath("../../Board")
-game_ui = NodePath("../../GameUI/Components/GameUIComponent")
 owner_node_path = NodePath("../..")
 
-[node name="GameFlowComponent" type="Node" parent="Components" unique_id=1108705688 node_paths=PackedStringArray("game_ui", "settings_menu", "next_level_menu", "game_over_menu", "challenge_complete_menu")]
+[node name="GameFlowComponent" type="Node" parent="Components" unique_id=1108705688 node_paths=PackedStringArray("settings_menu_node", "next_level_menu_node", "game_over_menu_node", "challenge_complete_menu_node")]
 script = ExtResource("20_flow")
 splash_scene_path = "uid://c8lexjylyx41t"
-game_ui = NodePath("../../GameUI/Components/GameUIComponent")
-settings_menu = NodePath("../../GameSettingsMenu/Components/GameSettingsMenuComponent")
-next_level_menu = NodePath("../../NextLevelMenu/Components/NextLevelMenuComponent")
-game_over_menu = NodePath("../../GameOverMenu/Components/GameOverMenuComponent")
-challenge_complete_menu = NodePath("../../ChallengeCompleteMenu/Components/ChallengeCompleteMenuComponent")
-owner_node_path = NodePath("../..")
-
-[node name="AudioSettingsComponent" type="Node" parent="Components" unique_id=836164273 node_paths=PackedStringArray("settings_menu")]
-script = ExtResource("23_audio_settings")
-settings_menu = NodePath("../../GameSettingsMenu/Components/GameSettingsMenuComponent")
+settings_menu_node = NodePath("../../GameSettingsMenu")
+next_level_menu_node = NodePath("../../NextLevelMenu")
+game_over_menu_node = NodePath("../../GameOverMenu")
+challenge_complete_menu_node = NodePath("../../ChallengeCompleteMenu")
 owner_node_path = NodePath("../..")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1559911230]

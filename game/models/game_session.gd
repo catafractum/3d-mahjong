@@ -19,6 +19,7 @@ var current_level_index: int = 0
 var time_limit_seconds: float = 0.0
 var elapsed_seconds: float = 0.0
 var status: Status = Status.READY
+var selected_tile: Node3D
 
 
 func _init(
@@ -52,3 +53,8 @@ func reset() -> void:
 	current_level_index = 0
 	elapsed_seconds = 0.0
 	status = Status.READY
+	selected_tile = null
+
+
+func get_remaining_seconds() -> float:
+	return maxf(time_limit_seconds - elapsed_seconds, 0.0)

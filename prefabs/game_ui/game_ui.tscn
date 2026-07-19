@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://cayvpkr5ygu3j" path="res://assets/images/bg_timer.png" id="6_timer_bg"]
 [ext_resource type="Texture2D" uid="uid://d1gwfduejp5i5" path="res://assets/images/rounded_rect_bg.png" id="7_selected_bg"]
 [ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="8_font"]
-[ext_resource type="Script" path="res://core/components/button_helper_component.gd" id="9_button_helper"]
+[ext_resource type="Script" uid="uid://0g13lmkx4usr" path="res://core/components/button_helper_component.gd" id="9_button_helper"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_timer"]
 font = ExtResource("8_font")
@@ -100,8 +100,14 @@ offset_right = 229.0
 offset_bottom = -5.0
 grow_vertical = 0
 scale = Vector2(0.95, 0.95)
+pivot_offset_ratio = Vector2(0.5, 0.5)
 texture_normal = ExtResource("2_arrow")
 flip_h = true
+
+[node name="ButtonHelperComponent" type="Node" parent="HUD/RotateLeftButton" unique_id=1373311554]
+script = ExtResource("9_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")
 
 [node name="RotateRightButton" type="TextureButton" parent="HUD" unique_id=980993178]
 layout_mode = 1
@@ -117,7 +123,13 @@ offset_bottom = -5.0
 grow_horizontal = 0
 grow_vertical = 0
 scale = Vector2(0.95, 0.95)
+pivot_offset_ratio = Vector2(0.5, 0.5)
 texture_normal = ExtResource("2_arrow")
+
+[node name="ButtonHelperComponent" type="Node" parent="HUD/RotateRightButton" unique_id=884829011]
+script = ExtResource("9_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")
 
 [node name="ShuffleButton" type="TextureButton" parent="HUD" unique_id=829106106]
 layout_mode = 1
@@ -130,7 +142,13 @@ offset_right = -138.0
 offset_bottom = 131.0
 grow_horizontal = 0
 scale = Vector2(0.9287576, 0.8625481)
+pivot_offset_ratio = Vector2(0.5, 0.5)
 texture_normal = ExtResource("3_shuffle")
+
+[node name="ButtonHelperComponent" type="Node" parent="HUD/ShuffleButton" unique_id=1140720011]
+script = ExtResource("9_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")
 
 [node name="SelectedTile" type="TextureRect" parent="HUD" unique_id=1593279549]
 custom_minimum_size = Vector2(100, 100)
@@ -159,18 +177,3 @@ grow_horizontal = 2
 grow_vertical = 2
 expand_mode = 1
 stretch_mode = 5
-
-[node name="ButtonHelperComponent" type="Node" parent="HUD/RotateLeftButton"]
-script = ExtResource("9_button_helper")
-click_sfx_path = "res://assets/sounds/click.mp3"
-owner_node_path = NodePath("..")
-
-[node name="ButtonHelperComponent" type="Node" parent="HUD/RotateRightButton"]
-script = ExtResource("9_button_helper")
-click_sfx_path = "res://assets/sounds/click.mp3"
-owner_node_path = NodePath("..")
-
-[node name="ButtonHelperComponent" type="Node" parent="HUD/ShuffleButton"]
-script = ExtResource("9_button_helper")
-click_sfx_path = "res://assets/sounds/click.mp3"
-owner_node_path = NodePath("..")

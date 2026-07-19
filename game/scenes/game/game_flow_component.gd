@@ -2,15 +2,18 @@ class_name GameFlowComponent
 extends BaseComponent
 
 @export_file("*.tscn") var splash_scene_path: String
-@export var game_ui: GameUIComponent
-@export var settings_menu: GameSettingsMenuComponent
-@export var next_level_menu: NextLevelMenuComponent
-@export var game_over_menu: GameOverMenuComponent
-@export var challenge_complete_menu: ChallengeCompleteMenuComponent
+@export var settings_menu_node: CanvasLayer
+@export var next_level_menu_node: CanvasLayer
+@export var game_over_menu_node: CanvasLayer
+@export var challenge_complete_menu_node: CanvasLayer
 
 var session: GameSession
 var builder: BoardBuilderComponent
 var timer: GameTimerComponent
+var settings_menu: GameSettingsMenuComponent
+var next_level_menu: NextLevelMenuComponent
+var game_over_menu: GameOverMenuComponent
+var challenge_complete_menu: ChallengeCompleteMenuComponent
 
 
 func _ready() -> void:
@@ -21,7 +24,14 @@ func _initialize() -> void:
 	var session_component := CurrentGameSessionComponent.of_as(self)
 	builder = BoardBuilderComponent.of_as(self)
 	timer = GameTimerComponent.of_as(self)
-	if session_component == null or session_component.session == null or builder == null or timer == null:
+	settings_menu = GameSettingsMenuComponent.of_as(settings_menu_node)
+	next_level_menu = NextLevelMenuComponent.of_as(next_level_menu_node)
+	game_over_menu = GameOverMenuComponent.of_as(game_over_menu_node)
+	challenge_complete_menu = ChallengeCompleteMenuComponent.of_as(challenge_complete_menu_node)
+	if session_component == null or session_component.session == null \
+		or builder == null or timer == null or settings_menu == null \
+		or next_level_menu == null or game_over_menu == null or challenge_complete_menu == null:
+		push_error("GameFlowComponent: Required game or menu components were not found.")
 		return
 	session = session_component.session
 	var interaction := BoardInteractionComponent.of_as(self)
