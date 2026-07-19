@@ -10,8 +10,16 @@ signal replay_requested
 
 
 func _ready() -> void:
-	home_button.pressed.connect(home_requested.emit)
-	replay_button.pressed.connect(replay_requested.emit)
+	home_button.pressed.connect(_request_home)
+	replay_button.pressed.connect(_request_replay)
+
+
+func _request_home() -> void:
+	home_requested.emit()
+
+
+func _request_replay() -> void:
+	replay_requested.emit()
 
 
 func show_menu() -> void:

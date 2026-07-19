@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://b8lj6d7m2wpts" path="res://assets/images/buttons/btn_soundtrack_off.png" id="6_music_off"]
 [ext_resource type="Texture2D" uid="uid://dwtjdlhjpxmc3" path="res://assets/images/buttons/btn_reset.png" id="7_reset"]
 [ext_resource type="Texture2D" uid="uid://ds2yg3ca5aqln" path="res://assets/images/buttons/btn_home.png" id="8_home"]
+[ext_resource type="Script" path="res://core/components/button_helper_component.gd" id="9_button_helper"]
 
 [node name="GameSettingsMenu" type="CanvasLayer"]
 
@@ -122,3 +123,38 @@ offset_bottom = 391.0
 grow_horizontal = 0
 scale = Vector2(0.84, 0.81)
 texture_normal = ExtResource("8_home")
+
+[node name="ButtonHelperComponent" type="Node" parent="Controls/SettingsButton"]
+script = ExtResource("9_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")
+
+[node name="ButtonHelperComponent" type="Node" parent="Controls/SfxOnButton"]
+script = ExtResource("9_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")
+
+[node name="ButtonHelperComponent" type="Node" parent="Controls/SfxOffButton"]
+script = ExtResource("9_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")
+
+[node name="ButtonHelperComponent" type="Node" parent="Controls/MusicOnButton"]
+script = ExtResource("9_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")
+
+[node name="ButtonHelperComponent" type="Node" parent="Controls/MusicOffButton"]
+script = ExtResource("9_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")
+
+[node name="ButtonHelperComponent" type="Node" parent="Controls/ResetButton"]
+script = ExtResource("9_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")
+
+[node name="ButtonHelperComponent" type="Node" parent="Controls/HomeButton"]
+script = ExtResource("9_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")

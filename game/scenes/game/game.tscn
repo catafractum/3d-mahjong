@@ -8,20 +8,14 @@
 [ext_resource type="PackedScene" path="res://prefabs/challenge_complete_menu/challenge_complete_menu.tscn" id="6_challenge_menu"]
 [ext_resource type="Script" uid="uid://c8e2yv3bla643" path="res://game/scenes/game/board_builder_component.gd" id="7_board_builder"]
 [ext_resource type="PackedScene" uid="uid://blgsgj24xjt4t" path="res://prefabs/mahjong_tile/mahjong_tile.tscn" id="8_tile"]
-[ext_resource type="Script" uid="uid://1hfslrs2wcdx" path="res://game/scenes/game/board_input_component.gd" id="9_board_input"]
-[ext_resource type="Script" uid="uid://b72ecn273ngan" path="res://game/scenes/game/tile_matching_component.gd" id="10_matching"]
-[ext_resource type="Script" uid="uid://cchckeycdqchj" path="res://game/scenes/game/tile_visual_feedback_component.gd" id="11_visual_feedback"]
-[ext_resource type="Script" uid="uid://bl54csjd2vwjw" path="res://game/components/board/level_normalizer_component.gd" id="12_normalizer"]
+[ext_resource type="Script" uid="uid://bgcpmg25b1bl4" path="res://game/scenes/game/board_interaction_component.gd" id="9_interaction"]
 [ext_resource type="Script" uid="uid://6nnyol3rxp81" path="res://game/components/board/tile_rules_component.gd" id="13_rules"]
 [ext_resource type="Script" uid="uid://cf8ko6d6rofqv" path="res://game/components/board/mahjong_solver_component.gd" id="14_solver"]
-[ext_resource type="Script" uid="uid://bugqcwm7j2rb" path="res://game/components/board/symbol_assigner_component.gd" id="15_symbols"]
 [ext_resource type="Script" uid="uid://bvoiotg157h1d" path="res://game/scenes/game/game_timer_component.gd" id="16_timer"]
-[ext_resource type="Script" path="res://game/scenes/game/game_ui_binding_component.gd" id="17_ui_binding"]
-[ext_resource type="Script" path="res://game/scenes/game/board_rotation_component.gd" id="18_rotation"]
-[ext_resource type="Script" uid="uid://lj7boi6a1fqs" path="res://game/scenes/game/game_sound_component.gd" id="19_sound"]
+[ext_resource type="Script" uid="uid://bhphxnew6ahxj" path="res://game/scenes/game/game_ui_binding_component.gd" id="17_ui_binding"]
+[ext_resource type="Script" uid="uid://b4vb57slqgc00" path="res://game/scenes/game/board_rotation_component.gd" id="18_rotation"]
 [ext_resource type="Script" uid="uid://k3dswj7hoapr" path="res://game/scenes/game/game_flow_component.gd" id="20_flow"]
 [ext_resource type="PackedScene" path="res://prefabs/game_settings_menu/game_settings_menu.tscn" id="21_settings_menu"]
-[ext_resource type="Script" uid="uid://ctpc732todxc1" path="res://game/scenes/game/board_shuffle_component.gd" id="22_shuffle"]
 [ext_resource type="Script" uid="uid://c6gn5nvp0fr2w" path="res://game/scenes/game/audio_settings_component.gd" id="23_audio_settings"]
 
 [sub_resource type="Environment" id="Environment_game"]
@@ -45,21 +39,10 @@ board = NodePath("../../Board")
 tile_scene = ExtResource("8_tile")
 owner_node_path = NodePath("../..")
 
-[node name="BoardInputComponent" type="Node" parent="Components" unique_id=582908388 node_paths=PackedStringArray("camera")]
-script = ExtResource("9_board_input")
+[node name="BoardInteractionComponent" type="Node" parent="Components" unique_id=1512249790 node_paths=PackedStringArray("camera", "game_ui")]
+script = ExtResource("9_interaction")
 camera = NodePath("../../Camera3D")
-owner_node_path = NodePath("../..")
-
-[node name="TileMatchingComponent" type="Node" parent="Components" unique_id=85114876]
-script = ExtResource("10_matching")
-owner_node_path = NodePath("../..")
-
-[node name="TileVisualFeedbackComponent" type="Node" parent="Components" unique_id=1605856516]
-script = ExtResource("11_visual_feedback")
-owner_node_path = NodePath("../..")
-
-[node name="LevelNormalizerComponent" type="Node" parent="Components" unique_id=902513499]
-script = ExtResource("12_normalizer")
+game_ui = NodePath("../../GameUI/Components/GameUIComponent")
 owner_node_path = NodePath("../..")
 
 [node name="TileRulesComponent" type="Node" parent="Components" unique_id=577509781]
@@ -68,10 +51,6 @@ owner_node_path = NodePath("../..")
 
 [node name="MahjongSolverComponent" type="Node" parent="Components" unique_id=1559194266]
 script = ExtResource("14_solver")
-owner_node_path = NodePath("../..")
-
-[node name="SymbolAssignerComponent" type="Node" parent="Components" unique_id=1260542558]
-script = ExtResource("15_symbols")
 owner_node_path = NodePath("../..")
 
 [node name="GameTimerComponent" type="Node" parent="Components" unique_id=1838793639 node_paths=PackedStringArray("game_ui")]
@@ -88,20 +67,6 @@ owner_node_path = NodePath("../..")
 script = ExtResource("18_rotation")
 board = NodePath("../../Board")
 game_ui = NodePath("../../GameUI/Components/GameUIComponent")
-owner_node_path = NodePath("../..")
-
-[node name="BoardShuffleComponent" type="Node" parent="Components" unique_id=1142385888 node_paths=PackedStringArray("game_ui")]
-script = ExtResource("22_shuffle")
-game_ui = NodePath("../../GameUI/Components/GameUIComponent")
-owner_node_path = NodePath("../..")
-
-[node name="GameSoundComponent" type="Node" parent="Components" unique_id=2128361 node_paths=PackedStringArray("game_ui", "settings_menu", "next_level_menu", "game_over_menu", "challenge_complete_menu")]
-script = ExtResource("19_sound")
-game_ui = NodePath("../../GameUI/Components/GameUIComponent")
-settings_menu = NodePath("../../GameSettingsMenu/Components/GameSettingsMenuComponent")
-next_level_menu = NodePath("../../NextLevelMenu/Components/NextLevelMenuComponent")
-game_over_menu = NodePath("../../GameOverMenu/Components/GameOverMenuComponent")
-challenge_complete_menu = NodePath("../../ChallengeCompleteMenu/Components/ChallengeCompleteMenuComponent")
 owner_node_path = NodePath("../..")
 
 [node name="GameFlowComponent" type="Node" parent="Components" unique_id=1108705688 node_paths=PackedStringArray("game_ui", "settings_menu", "next_level_menu", "game_over_menu", "challenge_complete_menu")]

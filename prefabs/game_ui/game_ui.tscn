@@ -1,11 +1,12 @@
 [gd_scene format=3 uid="uid://b6f4n7dbwus5w"]
 
-[ext_resource type="Script" path="res://prefabs/game_ui/game_ui_component.gd" id="1_component"]
+[ext_resource type="Script" uid="uid://ccrrui1ba8a7n" path="res://prefabs/game_ui/game_ui_component.gd" id="1_component"]
 [ext_resource type="Texture2D" uid="uid://c44ota7ymi83j" path="res://assets/images/buttons/btn_arrow.png" id="2_arrow"]
 [ext_resource type="Texture2D" uid="uid://b82ismf5gaamr" path="res://assets/images/buttons/btn_shuffle.png" id="3_shuffle"]
 [ext_resource type="Texture2D" uid="uid://cayvpkr5ygu3j" path="res://assets/images/bg_timer.png" id="6_timer_bg"]
 [ext_resource type="Texture2D" uid="uid://d1gwfduejp5i5" path="res://assets/images/rounded_rect_bg.png" id="7_selected_bg"]
 [ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="8_font"]
+[ext_resource type="Script" path="res://core/components/button_helper_component.gd" id="9_button_helper"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_timer"]
 font = ExtResource("8_font")
@@ -158,3 +159,18 @@ grow_horizontal = 2
 grow_vertical = 2
 expand_mode = 1
 stretch_mode = 5
+
+[node name="ButtonHelperComponent" type="Node" parent="HUD/RotateLeftButton"]
+script = ExtResource("9_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")
+
+[node name="ButtonHelperComponent" type="Node" parent="HUD/RotateRightButton"]
+script = ExtResource("9_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")
+
+[node name="ButtonHelperComponent" type="Node" parent="HUD/ShuffleButton"]
+script = ExtResource("9_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")

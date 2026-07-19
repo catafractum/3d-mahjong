@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://45ppayvusria" path="res://assets/images/bg_game_over_menu.png" id="2_background"]
 [ext_resource type="Texture2D" uid="uid://dy3kl1tofjj28" path="res://assets/images/buttons/btn_retry.png" id="3_retry"]
 [ext_resource type="Texture2D" uid="uid://bvh382d7w8j63" path="res://assets/images/buttons/btn_home_game_over.png" id="4_home"]
+[ext_resource type="Script" path="res://core/components/button_helper_component.gd" id="5_button_helper"]
 
 [node name="GameOverMenu" type="CanvasLayer" unique_id=1616919954]
 
@@ -81,3 +82,13 @@ grow_horizontal = 2
 grow_vertical = 0
 texture_normal = ExtResource("4_home")
 stretch_mode = 5
+
+[node name="ButtonHelperComponent" type="Node" parent="Menu/Panel/ReplayButton"]
+script = ExtResource("5_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")
+
+[node name="ButtonHelperComponent" type="Node" parent="Menu/Panel/HomeButton"]
+script = ExtResource("5_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")

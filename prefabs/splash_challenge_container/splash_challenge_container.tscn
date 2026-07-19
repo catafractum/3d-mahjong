@@ -7,6 +7,7 @@
 [ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="5_font"]
 [ext_resource type="Texture2D" uid="uid://c416j1cv6240u" path="res://assets/images/splash/arrow.png" id="6_arrow"]
 [ext_resource type="Texture2D" uid="uid://w4a3dl72375u" path="res://assets/images/splash/timer_icon.png" id="7_timer"]
+[ext_resource type="Script" uid="uid://0g13lmkx4usr" path="res://core/components/button_helper_component.gd" id="8_button_helper"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font = ExtResource("5_font")
@@ -209,3 +210,8 @@ texture_pressed = ExtResource("2_play")
 texture_hover = ExtResource("2_play")
 ignore_texture_size = true
 stretch_mode = 0
+
+[node name="ButtonHelperComponent" type="Node" parent="Background/Content/PlayButton" unique_id=1494249928]
+script = ExtResource("8_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")

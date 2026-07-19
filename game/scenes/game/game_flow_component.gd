@@ -24,8 +24,8 @@ func _initialize() -> void:
 	if session_component == null or session_component.session == null or builder == null or timer == null:
 		return
 	session = session_component.session
-	var matching := TileMatchingComponent.of_as(self)
-	matching.level_completed.connect(_on_level_completed)
+	var interaction := BoardInteractionComponent.of_as(self)
+	interaction.level_completed.connect(_on_level_completed)
 	timer.timer_finished.connect(_on_timer_finished)
 	settings_menu.reset_requested.connect(_reset_current_level)
 	settings_menu.home_requested.connect(_go_home)
@@ -38,7 +38,7 @@ func _initialize() -> void:
 
 func _on_level_completed() -> void:
 	timer.pause()
-	GameSoundComponent.of_as(self).play_popup()
+	Soundmanager.play_popup_sfx()
 	if session.has_next_level():
 		var next_level := session.levels[session.current_level_index + 1]
 		next_level_menu.show_menu(str(next_level.get("difficulty", "next")))
@@ -49,7 +49,7 @@ func _on_level_completed() -> void:
 
 func _on_timer_finished() -> void:
 	session.status = GameSession.Status.FAILED
-	GameSoundComponent.of_as(self).play_popup()
+	Soundmanager.play_popup_sfx()
 	game_over_menu.show_menu()
 
 

@@ -9,7 +9,11 @@ signal play_requested
 
 
 func _ready() -> void:
-	play_button.pressed.connect(play_requested.emit)
+	play_button.pressed.connect(_request_play)
+
+
+func _request_play() -> void:
+	play_requested.emit()
 
 
 func show_menu(next_difficulty: String) -> void:

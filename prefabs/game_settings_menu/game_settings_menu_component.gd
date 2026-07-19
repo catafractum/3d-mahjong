@@ -32,8 +32,8 @@ func _ready() -> void:
 	(sfx_off_button as BaseButton).pressed.connect(_set_sfx.bind(true))
 	(music_on_button as BaseButton).pressed.connect(_set_music.bind(false))
 	(music_off_button as BaseButton).pressed.connect(_set_music.bind(true))
-	reset_button.pressed.connect(reset_requested.emit)
-	home_button.pressed.connect(home_requested.emit)
+	reset_button.pressed.connect(_request_reset)
+	home_button.pressed.connect(_request_home)
 	_hide_deployable_buttons()
 
 
@@ -113,6 +113,14 @@ func _hide_deployable_buttons() -> void:
 func _kill_tween() -> void:
 	if _tween != null:
 		_tween.kill()
+
+
+func _request_reset() -> void:
+	reset_requested.emit()
+
+
+func _request_home() -> void:
+	home_requested.emit()
 
 
 static func of_as(node: Node) -> GameSettingsMenuComponent:

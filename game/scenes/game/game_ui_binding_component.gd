@@ -5,10 +5,10 @@ extends BaseComponent
 
 
 func _ready() -> void:
-	var matching := TileMatchingComponent.of_as(self)
-	if matching == null:
+	var interaction := BoardInteractionComponent.of_as(self)
+	if interaction == null:
 		return
-	matching.selection_changed.connect(_on_selection_changed)
+	interaction.selection_changed.connect(_on_selection_changed)
 
 
 func _on_selection_changed(_previous: Node3D, selected: Node3D) -> void:

@@ -7,22 +7,11 @@ extends BaseComponent
 
 func _ready() -> void:
 	play_button.pressed.connect(_on_play_button_pressed)
-	play_button.mouse_entered.connect(_on_play_button_mouse_entered)
-	play_button.mouse_exited.connect(_on_play_button_mouse_exited)
 
 
 func _on_play_button_pressed() -> void:
-	Soundmanager.play_click_sfx()
 	GameDB.current_session = GameDB.create_challenge_session()
 	if GameDB.current_session == null:
 		push_error("SplashChallengeContainerComponent: Could not create challenge session.")
 		return
 	SceneSwitcherComponent.of_as(self).switch_scene(game_scene_path)
-
-
-func _on_play_button_mouse_entered() -> void:
-	play_button.scale = Vector2.ONE * 1.025
-
-
-func _on_play_button_mouse_exited() -> void:
-	play_button.scale = Vector2.ONE

@@ -23,6 +23,7 @@ config/icon="res://icon.svg"
 
 GameDB="*res://game/gamedb/gamedb.tscn"
 GameState="*res://scripts/game_state.gd"
+SoundManager="*res://core/sound_manager/sound_manager.gd"
 Soundmanager="*res://scenes/soundmanager.tscn"
 ByteBrewWeb="*res://scripts/bytebrew_web.gd"
 SaveLoadManager="*uid://biaucwe1ge88s"
