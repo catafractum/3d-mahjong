@@ -19,6 +19,7 @@ script = ExtResource("1_component")
 menu = NodePath("../../Menu")
 play_button = NodePath("../../Menu/Panel/PlayButton")
 button_label = NodePath("../../Menu/Panel/PlayButton/Label")
+popup_sfx_path = "res://assets/sounds/popup.mp3"
 owner_node_path = NodePath("../..")
 
 [node name="Menu" type="Control" parent="." unique_id=1963629387]

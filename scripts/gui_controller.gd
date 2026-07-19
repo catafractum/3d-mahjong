@@ -7,6 +7,8 @@ signal soundtrack_toggled(is_on: bool)
 
 const MENU_BOTTOM_MARGIN := 16.0
 
+@export_file("*.mp3", "*.wav", "*.ogg") var click_sfx_path: String
+
 var _settings_open: bool = false
 var _sfx_on: bool = true
 var _soundtrack_on: bool = false
@@ -224,7 +226,7 @@ func _current_soundtrack_btn() -> TextureButton:
 
 
 func _on_settings_pressed() -> void:
-	Soundmanager.play_click_sfx()
+	SoundManager.play_sfx(click_sfx_path)
 	if _settings_open:
 		_collapse()
 	else:

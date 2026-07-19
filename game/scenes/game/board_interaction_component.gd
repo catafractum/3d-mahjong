@@ -11,6 +11,9 @@ signal shuffle_failed
 @export var camera: Camera3D
 @export var ray_length := 1000.0
 @export var maximum_tap_distance := 16.0
+@export_file("*.mp3", "*.wav", "*.ogg") var correct_sfx_path: String
+@export_file("*.mp3", "*.wav", "*.ogg") var wrong_sfx_path: String
+@export_file("*.mp3", "*.wav", "*.ogg") var tile_click_sfx_path: String
 
 var _grid: Dictionary = {}
 var _selected_tile: Node3D
@@ -99,7 +102,7 @@ func _on_tile_pressed(tile: Node3D, hit_normal: Vector3) -> void:
 		blocked_tile_pressed.emit(tile, hit_normal)
 		_set_selected_tile(null)
 		MahjongTileVisualComponent.of_as(tile).shake(hit_normal)
-		Soundmanager.play_move_wrong_sfx()
+		SoundManager.play_sfx(wrong_sfx_path)
 		return
 
 	if _selected_tile == null:
@@ -119,7 +122,7 @@ func _on_tile_pressed(tile: Node3D, hit_normal: Vector3) -> void:
 		match_succeeded.emit(first_tile, tile)
 		MahjongTileVisualComponent.of_as(first_tile).remove()
 		MahjongTileVisualComponent.of_as(tile).remove()
-		Soundmanager.play_move_correct_sfx()
+		SoundManager.play_sfx(correct_sfx_path)
 		if not _completed and _grid.is_empty():
 			_completed = true
 			level_completed.emit()
@@ -139,7 +142,7 @@ func _set_selected_tile(tile: Node3D) -> void:
 		MahjongTileVisualComponent.of_as(previous).deselect()
 	if is_instance_valid(_selected_tile):
 		MahjongTileVisualComponent.of_as(_selected_tile).select()
-		Soundmanager.play_tile_click_sfx()
+		SoundManager.play_sfx(tile_click_sfx_path)
 
 
 func _clear_state() -> void:

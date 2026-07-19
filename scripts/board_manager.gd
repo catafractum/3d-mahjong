@@ -6,6 +6,10 @@ const GRID_SIZE := 7
 const GRID_MAX := GRID_SIZE - 1
 const GRID_CENTER_OFFSET := float(GRID_MAX) * 0.5
 
+@export_file("*.mp3", "*.wav", "*.ogg") var correct_sfx_path: String
+@export_file("*.mp3", "*.wav", "*.ogg") var wrong_sfx_path: String
+@export_file("*.mp3", "*.wav", "*.ogg") var tile_click_sfx_path: String
+
 var _grid := []
 var _selected_tile = null
 var _level_completed := false
@@ -86,7 +90,7 @@ func on_tile_selected(tile: Node3D, hit_normal := Vector3.ZERO) -> void:
 		return
 	var tile_pos := _tile_grid_pos(tile)
 	if not _is_tile_free(tile_pos):
-		Soundmanager.play_move_wrong_sfx()
+		SoundManager.play_sfx(wrong_sfx_path)
 		tile.shake(hit_normal)
 		if _selected_tile != null:
 			_selected_tile.deselect()
@@ -97,7 +101,7 @@ func on_tile_selected(tile: Node3D, hit_normal := Vector3.ZERO) -> void:
 	if _selected_tile == null:
 		_selected_tile = tile
 		selected_tile_changed.emit(_selected_tile)
-		Soundmanager.play_tile_click_sfx()
+		SoundManager.play_sfx(tile_click_sfx_path)
 		tile.select()
 		return
 
@@ -111,7 +115,7 @@ func on_tile_selected(tile: Node3D, hit_normal := Vector3.ZERO) -> void:
 	if _selected_tile.tile_data.icon_type == tile.tile_data.icon_type and _is_tile_free(p1):
 		_grid[p1.x][p1.y][p1.z] = null
 		_grid[tile_pos.x][tile_pos.y][tile_pos.z] = null
-		Soundmanager.play_move_correct_sfx()
+		SoundManager.play_sfx(correct_sfx_path)
 		_selected_tile.remove_tile(true)
 		tile.remove_tile(true)
 		_selected_tile = null
@@ -123,7 +127,7 @@ func on_tile_selected(tile: Node3D, hit_normal := Vector3.ZERO) -> void:
 		_selected_tile.deselect()
 		_selected_tile = tile
 		selected_tile_changed.emit(_selected_tile)
-		Soundmanager.play_tile_click_sfx()
+		SoundManager.play_sfx(tile_click_sfx_path)
 		tile.select()
 
 

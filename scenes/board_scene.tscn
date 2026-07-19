@@ -40,6 +40,8 @@ font_size = 56
 
 [node name="BoardScene" type="Node3D" unique_id=2038322144]
 script = ExtResource("1_8l4tr")
+click_sfx_path = "res://assets/sounds/click.mp3"
+popup_sfx_path = "res://assets/sounds/popup.mp3"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1263549009]
 environment = SubResource("Environment_8l4tr")
@@ -90,6 +92,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("21_guictl")
+click_sfx_path = "res://assets/sounds/click.mp3"
 
 [node name="LevelCompleteOverlay" type="ColorRect" parent="GUI/Control" unique_id=1795946306]
 layout_mode = 1
@@ -440,3 +443,6 @@ stretch_mode = 5
 
 [node name="BoardManager" type="Node" parent="." unique_id=1800542772]
 script = ExtResource("11_q6jyi")
+correct_sfx_path = "res://assets/sounds/correct.mp3"
+wrong_sfx_path = "res://assets/sounds/wrong.mp3"
+tile_click_sfx_path = "res://assets/sounds/tile_click.mp3"

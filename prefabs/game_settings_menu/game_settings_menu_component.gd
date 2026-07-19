@@ -14,6 +14,7 @@ signal music_toggled(is_enabled: bool)
 @export var music_off_button: Control
 @export var reset_button: BaseButton
 @export var home_button: BaseButton
+@export_file("*.tscn") var splash_scene_path: String
 @export var hidden_y := 16.0
 @export var sfx_y := 119.0
 @export var music_y := 185.0
@@ -130,10 +131,18 @@ func _is_bus_enabled(bus_name: StringName) -> bool:
 
 
 func _request_reset() -> void:
+	var session_component := CurrentGameSessionComponent.of_as(self)
+	var builder := BoardBuilderComponent.of_as(self)
+	var timer := GameTimerComponent.of_as(self)
+	if session_component != null and session_component.session != null and builder != null and timer != null:
+		builder.build_level(session_component.session.get_current_level())
+		timer.resume()
 	reset_requested.emit()
 
 
 func _request_home() -> void:
+	GameDB.current_session = null
+	SceneSwitcherComponent.of_as(self).switch_scene(splash_scene_path)
 	home_requested.emit()
 
 

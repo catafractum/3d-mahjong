@@ -21,6 +21,7 @@ owner_node_path = NodePath("../..")
 
 [node name="SplashSoundComponent" type="Node" parent="Components" unique_id=348874464]
 script = ExtResource("8_sound")
+music_path = "res://assets/sounds/music.mp3"
 owner_node_path = NodePath("../..")
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1927576681]

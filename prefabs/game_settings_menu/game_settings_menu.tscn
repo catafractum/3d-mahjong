@@ -23,6 +23,7 @@ music_on_button = NodePath("../../Controls/MusicOnButton")
 music_off_button = NodePath("../../Controls/MusicOffButton")
 reset_button = NodePath("../../Controls/ResetButton")
 home_button = NodePath("../../Controls/HomeButton")
+splash_scene_path = "uid://c8lexjylyx41t"
 owner_node_path = NodePath("../..")
 
 [node name="Controls" type="Control" parent="." unique_id=2017589721]

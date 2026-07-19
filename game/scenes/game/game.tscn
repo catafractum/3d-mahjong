@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://b6f4n7dbwus5w" path="res://prefabs/game_ui/game_ui.tscn" id="3_game_ui"]
 [ext_resource type="PackedScene" uid="uid://dwqu0wqid64jx" path="res://prefabs/next_level_menu/next_level_menu.tscn" id="4_next_menu"]
 [ext_resource type="PackedScene" uid="uid://dp3nkngs7ius3" path="res://prefabs/game_over_menu/game_over_menu.tscn" id="5_game_over_menu"]
-[ext_resource type="PackedScene" path="res://prefabs/challenge_complete_menu/challenge_complete_menu.tscn" id="6_challenge_menu"]
+[ext_resource type="PackedScene" uid="uid://dw33pljsvxs0b" path="res://prefabs/challenge_complete_menu/challenge_complete_menu.tscn" id="6_challenge_menu"]
 [ext_resource type="Script" uid="uid://c8e2yv3bla643" path="res://game/scenes/game/board_builder_component.gd" id="7_board_builder"]
 [ext_resource type="PackedScene" uid="uid://blgsgj24xjt4t" path="res://prefabs/mahjong_tile/mahjong_tile.tscn" id="8_tile"]
 [ext_resource type="Script" uid="uid://bgcpmg25b1bl4" path="res://game/scenes/game/board_interaction_component.gd" id="9_interaction"]
@@ -13,8 +13,7 @@
 [ext_resource type="Script" uid="uid://cf8ko6d6rofqv" path="res://game/components/board/mahjong_solver_component.gd" id="14_solver"]
 [ext_resource type="Script" uid="uid://bvoiotg157h1d" path="res://game/scenes/game/game_timer_component.gd" id="16_timer"]
 [ext_resource type="Script" uid="uid://b4vb57slqgc00" path="res://game/scenes/game/board_rotation_component.gd" id="18_rotation"]
-[ext_resource type="Script" uid="uid://k3dswj7hoapr" path="res://game/scenes/game/game_flow_component.gd" id="20_flow"]
-[ext_resource type="PackedScene" path="res://prefabs/game_settings_menu/game_settings_menu.tscn" id="21_settings_menu"]
+[ext_resource type="PackedScene" uid="uid://gf2mwoapytuo" path="res://prefabs/game_settings_menu/game_settings_menu.tscn" id="21_settings_menu"]
 
 [sub_resource type="Environment" id="Environment_game"]
 background_mode = 3
@@ -40,6 +39,9 @@ owner_node_path = NodePath("../..")
 [node name="BoardInteractionComponent" type="Node" parent="Components" unique_id=1512249790 node_paths=PackedStringArray("camera")]
 script = ExtResource("9_interaction")
 camera = NodePath("../../Camera3D")
+correct_sfx_path = "res://assets/sounds/correct.mp3"
+wrong_sfx_path = "res://assets/sounds/wrong.mp3"
+tile_click_sfx_path = "res://assets/sounds/tile_click.mp3"
 owner_node_path = NodePath("../..")
 
 [node name="TileRulesComponent" type="Node" parent="Components" unique_id=577509781]
@@ -57,15 +59,6 @@ owner_node_path = NodePath("../..")
 [node name="BoardRotationComponent" type="Node" parent="Components" unique_id=983857444 node_paths=PackedStringArray("board")]
 script = ExtResource("18_rotation")
 board = NodePath("../../Board")
-owner_node_path = NodePath("../..")
-
-[node name="GameFlowComponent" type="Node" parent="Components" unique_id=1108705688 node_paths=PackedStringArray("settings_menu_node", "next_level_menu_node", "game_over_menu_node", "challenge_complete_menu_node")]
-script = ExtResource("20_flow")
-splash_scene_path = "uid://c8lexjylyx41t"
-settings_menu_node = NodePath("../../GameSettingsMenu")
-next_level_menu_node = NodePath("../../NextLevelMenu")
-game_over_menu_node = NodePath("../../GameOverMenu")
-challenge_complete_menu_node = NodePath("../../ChallengeCompleteMenu")
 owner_node_path = NodePath("../..")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1559911230]

@@ -27,6 +27,8 @@ const NEXT_LEVEL_BUTTON_HARD_DOWN_OFFSET := 70.0
 const SPLASH_SCENE := "res://scenes/splash_scene.tscn"
 
 @export var level_id := 20
+@export_file("*.mp3", "*.wav", "*.ogg") var click_sfx_path: String
+@export_file("*.mp3", "*.wav", "*.ogg") var popup_sfx_path: String
 
 @onready var camera: Camera3D = $Camera3D
 @onready var board_container: Node3D = $BoardContainer
@@ -318,22 +320,22 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _on_rotate_right() -> void:
-	Soundmanager.play_click_sfx()
+	SoundManager.play_sfx(click_sfx_path)
 	board_container.rotate_board(true)
 
 
 func _on_rotate_left() -> void:
-	Soundmanager.play_click_sfx()
+	SoundManager.play_sfx(click_sfx_path)
 	board_container.rotate_board(false)
 
 
 func _on_shuffle() -> void:
-	Soundmanager.play_click_sfx()
+	SoundManager.play_sfx(click_sfx_path)
 	board_container.shuffle()
 
 
 func _on_home() -> void:
-	Soundmanager.play_click_sfx()
+	SoundManager.play_sfx(click_sfx_path)
 	get_tree().change_scene_to_file(SPLASH_SCENE)
 
 
@@ -342,7 +344,7 @@ func _on_editor() -> void:
 
 
 func _on_reset() -> void:
-	Soundmanager.play_click_sfx()
+	SoundManager.play_sfx(click_sfx_path)
 	_level_complete_token += 1
 	_is_game_over = false
 	_is_challenge_completed = false
@@ -397,7 +399,7 @@ func _on_timer_finished() -> void:
 
 
 func _show_game_over_menu() -> void:
-	Soundmanager.play_popup_sfx()
+	SoundManager.play_sfx(popup_sfx_path)
 
 	_on_game_over_button_hover(game_over_home_button, false)
 	_on_game_over_button_hover(game_over_replay_button, false)
@@ -425,12 +427,12 @@ func _hide_game_over_menu() -> void:
 
 
 func _on_game_over_home() -> void:
-	Soundmanager.play_click_sfx()
+	SoundManager.play_sfx(click_sfx_path)
 	get_tree().change_scene_to_file(SPLASH_SCENE)
 
 
 func _on_game_over_replay() -> void:
-	Soundmanager.play_click_sfx()
+	SoundManager.play_sfx(click_sfx_path)
 	_level_complete_token += 1
 	_is_game_over = false
 	_hide_game_over_menu()
@@ -464,7 +466,7 @@ func _on_game_over_button_hover(button: TextureButton, is_hovered: bool) -> void
 
 
 func _show_challenge_completed_menu() -> void:
-	Soundmanager.play_popup_sfx()
+	SoundManager.play_sfx(popup_sfx_path)
 
 	_is_challenge_completed = true
 	_on_challenge_completed_button_hover(challenge_completed_home_button, false)
@@ -497,12 +499,12 @@ func _hide_challenge_completed_menu() -> void:
 
 
 func _on_challenge_completed_home() -> void:
-	Soundmanager.play_click_sfx()
+	SoundManager.play_sfx(click_sfx_path)
 	get_tree().change_scene_to_file(SPLASH_SCENE)
 
 
 func _on_challenge_completed_play_again() -> void:
-	Soundmanager.play_click_sfx()
+	SoundManager.play_sfx(click_sfx_path)
 	_level_complete_token += 1
 	_is_challenge_completed = false
 	_hide_challenge_completed_menu()
@@ -539,7 +541,7 @@ func _on_challenge_completed_button_hover(button: TextureButton, is_hovered: boo
 
 
 func _show_next_level_menu() -> void:
-	Soundmanager.play_popup_sfx()
+	SoundManager.play_sfx(popup_sfx_path)
 
 	_next_level_id = _get_next_level_id(level_id)
 	var current_difficulty := _difficulty_for_level_id(level_id)
@@ -572,7 +574,7 @@ func _show_next_level_menu() -> void:
 
 
 func _on_play_next_level() -> void:
-	Soundmanager.play_click_sfx()
+	SoundManager.play_sfx(click_sfx_path)
 	if _is_final_level(level_id):
 		return
 	_level_complete_token += 1

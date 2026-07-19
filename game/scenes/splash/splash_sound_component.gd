@@ -1,6 +1,8 @@
 class_name SplashSoundComponent
 extends BaseComponent
 
+@export_file("*.mp3", "*.wav", "*.ogg") var music_path: String
+
 
 func _ready() -> void:
-	Soundmanager.play_main_music()
+	SoundManager.play_music(music_path)

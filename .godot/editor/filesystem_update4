@@ -17,3 +17,8 @@ res://game/scenes/game/game_timer_component.gd
 res://prefabs/game_ui/game_ui_component.gd
 res://game/scenes/game/game_flow_component.gd
 res://game/scenes/game/audio_settings_component.gd
+res://game/scenes/splash/splash_sound_component.gd
+res://scripts/board_manager.gd
+res://scripts/gui_controller.gd
+res://scripts/splash_scene.gd
+res://scripts/board_scene.gd

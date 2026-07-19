@@ -13,6 +13,8 @@
 script = ExtResource("1_splash")
 challenge_container_landscape = NodePath("CanvasLayer/LandscapeContent/SplitContainer/Left/ChallengeContainer2")
 challenge_container_portrait = NodePath("CanvasLayer/PortraitContent/ChallengeContainer")
+music_path = "res://assets/sounds/music.mp3"
+click_sfx_path = "res://assets/sounds/click.mp3"
 
 [node name="OrientationListenerToggler" type="Node" parent="." unique_id=199545655 node_paths=PackedStringArray("landscape", "portrait")]
 unique_name_in_owner = true
