@@ -49,7 +49,7 @@ offset_bottom = 250.0
 
 [node name="SplashChallengeContainerComponent" type="Node" parent="Components" unique_id=988472689 node_paths=PackedStringArray("play_button")]
 script = ExtResource("1_component")
-game_scene_path = "uid://cvn7p2vhfjjrj"
+game_scene_path = "uid://jlwf1qqvvmq7"
 play_button = NodePath("../../Background/Content/PlayButton")
 owner_node_path = NodePath("../..")
 

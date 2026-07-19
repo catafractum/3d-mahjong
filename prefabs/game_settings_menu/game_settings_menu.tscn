@@ -1,0 +1,124 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://prefabs/game_settings_menu/game_settings_menu_component.gd" id="1_component"]
+[ext_resource type="Texture2D" uid="uid://ic10ws4jssj3" path="res://assets/images/buttons/btn_settings.png" id="2_settings"]
+[ext_resource type="Texture2D" uid="uid://dyq0ggulxd6fl" path="res://assets/images/buttons/btn_sfx_on.png" id="3_sfx_on"]
+[ext_resource type="Texture2D" uid="uid://b6gdcvp0d0055" path="res://assets/images/buttons/btn_sfx_off.png" id="4_sfx_off"]
+[ext_resource type="Texture2D" uid="uid://cqghs8u3d41s1" path="res://assets/images/buttons/btn_soundtrack_on.png" id="5_music_on"]
+[ext_resource type="Texture2D" uid="uid://b8lj6d7m2wpts" path="res://assets/images/buttons/btn_soundtrack_off.png" id="6_music_off"]
+[ext_resource type="Texture2D" uid="uid://dwtjdlhjpxmc3" path="res://assets/images/buttons/btn_reset.png" id="7_reset"]
+[ext_resource type="Texture2D" uid="uid://ds2yg3ca5aqln" path="res://assets/images/buttons/btn_home.png" id="8_home"]
+
+[node name="GameSettingsMenu" type="CanvasLayer"]
+
+[node name="Components" type="Node" parent="."]
+
+[node name="GameSettingsMenuComponent" type="Node" parent="Components" node_paths=PackedStringArray("settings_button", "sfx_on_button", "sfx_off_button", "music_on_button", "music_off_button", "reset_button", "home_button")]
+script = ExtResource("1_component")
+owner_node_path = NodePath("../..")
+settings_button = NodePath("../../Controls/SettingsButton")
+sfx_on_button = NodePath("../../Controls/SfxOnButton")
+sfx_off_button = NodePath("../../Controls/SfxOffButton")
+music_on_button = NodePath("../../Controls/MusicOnButton")
+music_off_button = NodePath("../../Controls/MusicOffButton")
+reset_button = NodePath("../../Controls/ResetButton")
+home_button = NodePath("../../Controls/HomeButton")
+
+[node name="Controls" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="SettingsButton" type="TextureButton" parent="Controls"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -124.0
+offset_top = 16.0
+offset_bottom = 131.0
+grow_horizontal = 0
+scale = Vector2(0.9148177, 0.87402207)
+texture_normal = ExtResource("2_settings")
+
+[node name="SfxOnButton" type="TextureButton" parent="Controls"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -115.0
+offset_top = 119.0
+offset_right = -3.0
+offset_bottom = 190.0
+grow_horizontal = 0
+scale = Vector2(0.81, 0.81)
+texture_normal = ExtResource("3_sfx_on")
+
+[node name="SfxOffButton" type="TextureButton" parent="Controls"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -115.0
+offset_top = 119.0
+offset_right = -3.0
+offset_bottom = 190.0
+grow_horizontal = 0
+scale = Vector2(0.81, 0.81)
+texture_normal = ExtResource("4_sfx_off")
+
+[node name="MusicOnButton" type="TextureButton" parent="Controls"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -114.0
+offset_top = 185.0
+offset_right = -2.0
+offset_bottom = 256.0
+grow_horizontal = 0
+scale = Vector2(0.81, 0.81)
+texture_normal = ExtResource("5_music_on")
+
+[node name="MusicOffButton" type="TextureButton" parent="Controls"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -114.0
+offset_top = 185.0
+offset_right = -2.0
+offset_bottom = 256.0
+grow_horizontal = 0
+scale = Vector2(0.81, 0.81)
+texture_normal = ExtResource("6_music_off")
+
+[node name="ResetButton" type="TextureButton" parent="Controls"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -113.0
+offset_top = 252.0
+offset_right = -1.0
+offset_bottom = 323.0
+grow_horizontal = 0
+scale = Vector2(0.808, 0.81)
+texture_normal = ExtResource("7_reset")
+
+[node name="HomeButton" type="TextureButton" parent="Controls"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -114.0
+offset_top = 320.0
+offset_right = -2.0
+offset_bottom = 391.0
+grow_horizontal = 0
+scale = Vector2(0.84, 0.81)
+texture_normal = ExtResource("8_home")
