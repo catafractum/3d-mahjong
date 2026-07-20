@@ -25,6 +25,7 @@ GameDB="*res://game/gamedb/gamedb.tscn"
 SoundManager="*res://core/sound_manager/sound_manager.gd"
 ByteBrewWeb="*res://game/bytebrew/bytebrew_web.gd"
 SaveLoadManager="*uid://biaucwe1ge88s"
+DailyChallengeService="*res://game/daily_challenge/daily_challenge_service.gd"
 
 [display]
 

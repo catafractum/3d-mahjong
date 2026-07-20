@@ -11,8 +11,8 @@ func _ready() -> void:
 
 
 func get_current_streak() -> int:
-	return 3
+	return DailyChallengeService.get_current_streak()
 
 
 func get_best_streak() -> int:
-	return 7
+	return DailyChallengeService.get_best_streak()

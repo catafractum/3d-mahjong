@@ -20,16 +20,19 @@ var time_limit_seconds: float = 0.0
 var elapsed_seconds: float = 0.0
 var status: Status = Status.READY
 var selected_tile: Node3D
+var challenge_date_key := ""
 
 
 func _init(
 	session_levels: Array[Dictionary] = [],
 	session_mode: Mode = Mode.STANDARD,
-	session_time_limit_seconds: float = 0.0
+	session_time_limit_seconds: float = 0.0,
+	session_challenge_date_key := ""
 ) -> void:
 	levels = session_levels.duplicate(true)
 	mode = session_mode
 	time_limit_seconds = maxf(session_time_limit_seconds, 0.0)
+	challenge_date_key = session_challenge_date_key
 
 
 func get_current_level() -> Dictionary:

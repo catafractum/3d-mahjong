@@ -1,1 +1,5 @@
 res://game/scenes/level_editor/level_editor.tscn
+res://game/models/game_session.gd
+res://game/models/savedata_dto.gd
+res://game/gamedb/gamedb.gd
+res://game/scenes/splash/splash.tscn

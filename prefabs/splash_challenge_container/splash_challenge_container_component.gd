@@ -10,7 +10,9 @@ func _ready() -> void:
 
 
 func _on_play_button_pressed() -> void:
-	GameDB.current_session = GameDB.create_challenge_session()
+	GameDB.current_session = GameDB.create_challenge_session(
+		DailyChallengeService.get_today_key()
+	)
 	if GameDB.current_session == null:
 		push_error("SplashChallengeContainerComponent: Could not create challenge session.")
 		return

@@ -38,5 +38,7 @@ func _ready() -> void:
 			completion_ticks[index].visible = is_challenge_completed(date)
 
 
-func is_challenge_completed(_date: Dictionary) -> bool:
-	return true
+func is_challenge_completed(date: Dictionary) -> bool:
+	return DailyChallengeService.is_completed(
+		DailyChallengeService.date_key_from_dict(date)
+	)
