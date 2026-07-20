@@ -13,6 +13,7 @@ extends BaseComponent
 var _base_position := Vector3.ZERO
 var _tween: Tween
 var _body_meshes: Array[MeshInstance3D] = []
+var _editor_dimmed := false
 
 
 func _ready() -> void:
@@ -27,8 +28,21 @@ func select() -> void:
 
 
 func deselect() -> void:
-	_set_icon_color(Color.WHITE)
+	_set_icon_color(Color(0.28, 0.28, 0.28) if _editor_dimmed else Color.WHITE)
 	_set_body_selected(false)
+
+
+func set_editor_dimmed(is_dimmed: bool) -> void:
+	_editor_dimmed = is_dimmed
+	var color := Color(0.28, 0.28, 0.28) if is_dimmed else Color.WHITE
+	_set_icon_color(color)
+	for mesh in _body_meshes:
+		if mesh.mesh == null:
+			continue
+		for surface in mesh.mesh.get_surface_count():
+			var material := mesh.get_surface_override_material(surface) as StandardMaterial3D
+			if material != null:
+				material.albedo_color = Color("49443c") if is_dimmed else Color("f3e8d2")
 
 
 func remove() -> void:
