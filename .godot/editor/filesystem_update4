@@ -1,4 +1,1 @@
 res://game/scenes/level_editor/level_editor.tscn
-res://game/scenes/level_editor/level_editor_component.gd
-res://prefabs/mahjong_tile/mahjong_tile_visual_component.gd
-res://data/levels.json

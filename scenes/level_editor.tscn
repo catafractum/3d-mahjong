@@ -1,7 +1,7 @@
-[gd_scene format=3 uid="uid://d1ahgxvsteus4"]
+[gd_scene format=3 uid="uid://dyqrjkx5bg47b"]
 
-[ext_resource type="Script" uid="uid://mhekxuby6vjc" path="res://scripts/level_editor.gd" id="1_editor"]
-[ext_resource type="PackedScene" uid="uid://d3xjwwjp5260l" path="res://scenes/MahjongTile.tscn" id="2_tile"]
+[ext_resource type="Script" path="res://scripts/level_editor.gd" id="1_editor"]
+[ext_resource type="PackedScene" path="res://scenes/MahjongTile.tscn" id="2_tile"]
 
 [sub_resource type="Environment" id="Environment_editor"]
 background_mode = 3

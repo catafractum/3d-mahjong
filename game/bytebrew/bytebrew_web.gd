@@ -1,5 +1,6 @@
 extends Node
 
+const ENABLED := true
 const APP_ID := "1hqa5PVfe"
 const SDK_KEY := "SE8lb9mrJwcsVy2GjRLYyF9rNGlYQ+T2BUKXj56fJ6JKLHhIFxkVyYuQ1QsPYgh/"
 const SDK_URL := "https://cdn.jsdelivr.net/npm/bytebrew-web-sdk@1.0.1/dist/ByteBrewSDK.js"
@@ -7,7 +8,7 @@ const SDK_INTEGRITY := "sha384-di734uHuHhxMSSv5hH6Skh1j3soOHcqbySslpMRQjCuuJemSd
 
 
 func _ready() -> void:
-	if not GameState.USE_BYTEBREW or not OS.has_feature("web"):
+	if not ENABLED or not OS.has_feature("web"):
 		return
 
 	var app_version := str(ProjectSettings.get_setting("application/config/version", "1.0.0"))
