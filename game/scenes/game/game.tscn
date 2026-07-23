@@ -66,8 +66,8 @@ owner_node_path = NodePath("../..")
 script = ExtResource("19_camera_framing")
 camera = NodePath("../../Camera3D")
 board = NodePath("../../Board")
-shuffle_zoom_multiplier = 2.0
-shuffle_zoom_duration = 1.0
+shuffle_zoom_multiplier = 1.7
+shuffle_zoom_duration = 2.0
 settle_duration = 1.0
 owner_node_path = NodePath("../..")
 

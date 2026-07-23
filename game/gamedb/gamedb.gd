@@ -1,10 +1,15 @@
 extends Node
 
-@export_file("*.json") var levels_path := "res://data/levels_dev.json"
+@export var use_development_levels := true
+@export_file("*.json") var original_levels_path: String
+@export_file("*.json") var development_levels_path: String
 @export var challenge_difficulties: Array[String] = ["easy", "medium", "hard"]
 @export_range(0.0, 3600.0, 1.0, "or_greater") var challenge_time_limit_seconds := 900.0
 
 var current_session: GameSession = null
+var levels_path: String:
+	get:
+		return development_levels_path if use_development_levels else original_levels_path
 
 
 func create_challenge_session(date_key := "") -> GameSession:

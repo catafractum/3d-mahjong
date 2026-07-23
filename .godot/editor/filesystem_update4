@@ -14,3 +14,5 @@ res://tmp_portrait_shuffle_test.gd
 res://tmp_rotation_consistency_test.gd
 res://game/scenes/game/board_camera_framing_component.gd
 res://game/scenes/game/game.tscn
+res://game/gamedb/gamedb.tscn
+res://game/gamedb/gamedb.gd
