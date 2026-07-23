@@ -6,7 +6,6 @@ signal blocked_tile_pressed(tile: Node3D, hit_normal: Vector3)
 signal match_succeeded(first_tile: Node3D, second_tile: Node3D)
 signal level_completed
 signal shuffle_completed
-signal shuffle_failed
 
 @export var camera: Camera3D
 @export var ray_length := 1000.0
@@ -172,15 +171,14 @@ func begin_shuffle() -> void:
 	_set_selected_tile(null)
 
 
-func finish_shuffle(emit_completion := true) -> void:
+func finish_shuffle() -> void:
 	_grid.clear()
 	var builder := BoardBuilderComponent.of_as(self)
 	if builder != null:
 		for tile in builder.get_tiles():
 			_grid[_tile_position(tile)] = tile
 	_input_locked = false
-	if emit_completion:
-		shuffle_completed.emit()
+	shuffle_completed.emit()
 
 
 func _update_hovered_tile() -> void:
@@ -202,36 +200,6 @@ func _set_hovered_tile(tile: Node3D) -> void:
 	_hovered_tile = tile
 	if is_instance_valid(_hovered_tile):
 		MahjongTileVisualComponent.of_as(_hovered_tile).set_hovered(true)
-
-
-func shuffle() -> void:
-	var builder := BoardBuilderComponent.of_as(self)
-	var solver := MahjongSolverComponent.of_as(self)
-	var session_component := CurrentGameSessionComponent.of_as(self)
-	if builder == null or solver == null:
-		shuffle_failed.emit()
-		return
-
-	var coordinates: Array[Vector3i] = []
-	for coordinate in _grid:
-		coordinates.append(Vector3i(coordinate))
-	if coordinates.is_empty():
-		shuffle_failed.emit()
-		return
-
-	var difficulty := "easy"
-	if session_component != null and session_component.session != null:
-		difficulty = str(session_component.session.get_current_level().get("difficulty", "easy"))
-	var assignment := builder.assign_solvable_icons(coordinates, builder.grid_size, builder.icon_type_count, difficulty)
-	if assignment.size() != coordinates.size() or not solver.is_solvable(assignment, builder.grid_size):
-		shuffle_failed.emit()
-		return
-
-	_set_selected_tile(null)
-	for coordinate in _grid:
-		var component := MahjongTileComponent.of_as(_grid[coordinate])
-		component.set_icon_type(int(assignment[coordinate]))
-	shuffle_completed.emit()
 
 
 func _make_occupancy() -> Dictionary:

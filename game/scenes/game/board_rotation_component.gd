@@ -40,8 +40,7 @@ func shuffle() -> void:
 		if axis == "y":
 			angle = [90, 180, -90].pick_random()
 		await _rotate_layer(builder, axis, layers.pick_random(), angle)
-	interaction.finish_shuffle(false)
-	interaction.shuffle()
+	interaction.finish_shuffle()
 	_rotating = false
 
 
