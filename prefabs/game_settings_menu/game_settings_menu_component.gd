@@ -1,11 +1,16 @@
 class_name GameSettingsMenuComponent
 extends BaseComponent
 
+const MOBILE_ASPECT := 5.0 / 7.0
+const DESKTOP_ASPECT := 16.0 / 9.0
+const DESKTOP_SCALE := 2.25
+
 signal reset_requested
 signal home_requested
 signal settings_pressed
 signal sfx_toggled(is_enabled: bool)
 signal music_toggled(is_enabled: bool)
+signal responsive_layout_changed
 
 @export var settings_button: BaseButton
 @export var sfx_on_button: Control
@@ -25,6 +30,9 @@ var _open := false
 var _sfx_enabled := true
 var _music_enabled := true
 var _tween: Tween
+var _base_scales: Dictionary = {}
+var _base_positions_y: Dictionary = {}
+var _current_responsive_multiplier := 1.0
 
 
 func _ready() -> void:
@@ -37,6 +45,63 @@ func _ready() -> void:
 	reset_button.pressed.connect(_request_reset)
 	home_button.pressed.connect(_request_home)
 	_hide_deployable_buttons()
+	_setup_responsive_ui.call_deferred()
+
+
+func _setup_responsive_ui() -> void:
+	for control in _all_controls():
+		_base_scales[control] = control.scale
+		_base_positions_y[control] = control.position.y
+		# These controls are right-anchored. Scaling from the top-right keeps their
+		# right edge and top position fixed instead of pushing them off-screen.
+		control.pivot_offset_ratio = Vector2(1.0, 0.0)
+	if not get_viewport().size_changed.is_connected(_update_responsive_ui):
+		get_viewport().size_changed.connect(_update_responsive_ui)
+	_update_responsive_ui()
+
+
+func _update_responsive_ui() -> void:
+	if _base_scales.is_empty():
+		return
+	var viewport_size := get_viewport().get_visible_rect().size
+	var aspect := viewport_size.x / maxf(viewport_size.y, 1.0)
+	var progress := clampf(inverse_lerp(MOBILE_ASPECT, DESKTOP_ASPECT, aspect), 0.0, 1.0)
+	var multiplier := lerpf(1.0, DESKTOP_SCALE, progress)
+	_current_responsive_multiplier = multiplier
+	for control in _all_controls():
+		var scale := Vector2(_base_scales[control]) * multiplier
+		var helper := ButtonHelperComponent.of_as(control)
+		if helper != null:
+			helper.set_base_scale(scale)
+		else:
+			control.scale = scale
+	hidden_y = float(_base_positions_y[settings_button])
+	sfx_y = hidden_y + (float(_base_positions_y[sfx_on_button]) - hidden_y) * multiplier
+	music_y = hidden_y + (float(_base_positions_y[music_on_button]) - hidden_y) * multiplier
+	reset_y = hidden_y + (float(_base_positions_y[reset_button]) - hidden_y) * multiplier
+	home_y = hidden_y + (float(_base_positions_y[home_button]) - hidden_y) * multiplier
+	if not _open:
+		_hide_deployable_buttons()
+	responsive_layout_changed.emit()
+
+
+func get_settings_base_scale() -> Vector2:
+	return (
+		Vector2(_base_scales.get(settings_button, settings_button.scale))
+		* _current_responsive_multiplier
+	)
+
+
+func _all_controls() -> Array[Control]:
+	return [
+		settings_button,
+		sfx_on_button,
+		sfx_off_button,
+		music_on_button,
+		music_off_button,
+		reset_button,
+		home_button,
+	]
 
 
 func _toggle() -> void:

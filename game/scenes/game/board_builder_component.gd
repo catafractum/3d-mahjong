@@ -105,7 +105,7 @@ func clear_board() -> void:
 func get_tiles() -> Array[Node3D]:
 	var tiles: Array[Node3D] = []
 	for child in board.get_children():
-		if child is Node3D:
+		if child is Node3D and MahjongTileComponent.of_as(child) != null:
 			tiles.append(child)
 	return tiles
 

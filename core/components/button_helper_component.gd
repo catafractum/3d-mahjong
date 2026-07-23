@@ -47,5 +47,11 @@ func _on_pressed() -> void:
 		SoundManager.play_sfx(click_sfx_path)
 
 
+func set_base_scale(value: Vector2) -> void:
+	_original_scale = value
+	if is_instance_valid(_button):
+		_button.scale = _original_scale * hover_scale_multiplier if _button.is_hovered() else _original_scale
+
+
 static func of_as(node: Node) -> ButtonHelperComponent:
 	return BaseComponent.of(node, ButtonHelperComponent) as ButtonHelperComponent
