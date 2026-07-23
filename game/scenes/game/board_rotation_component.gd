@@ -31,6 +31,9 @@ func shuffle() -> void:
 		return
 	_rotating = true
 	interaction.begin_shuffle()
+	var framing := BoardCameraFramingComponent.of_as(self)
+	if framing != null:
+		framing.begin_shuffle()
 	for _step in shuffle_step_count:
 		var axis := ["x", "y", "z"].pick_random() as String
 		var layers := _get_occupied_layers(builder.get_tiles(), axis)
@@ -41,6 +44,8 @@ func shuffle() -> void:
 			angle = [90, 180, -90].pick_random()
 		await _rotate_layer(builder, axis, layers.pick_random(), angle)
 	interaction.finish_shuffle()
+	if framing != null:
+		framing.settle_on_board()
 	_rotating = false
 
 
@@ -85,7 +90,7 @@ func _rotate_layer(
 		)
 		component.grid_position = next_position
 		tile.reparent(board, true)
-		tile.position = _grid_to_board_position(builder, next_position)
+		tile.position = _rotation_coordinate_to_board_position(builder, next_position)
 	pivot.queue_free()
 
 
@@ -120,24 +125,33 @@ func _axis_value(position: Vector3i, axis: String) -> int:
 
 func _layer_center(builder: BoardBuilderComponent, axis: String, layer: int) -> Vector3:
 	var bounds := builder.rotation_bounds
-	var center := Vector3(
+	var center_coordinate := Vector3(
 		(float(bounds.min_x) + float(bounds.max_x)) * 0.5,
 		(float(bounds.min_y) + float(bounds.max_y)) * 0.5,
 		(float(bounds.min_z) + float(bounds.max_z)) * 0.5
 	)
 	match axis:
-		"x": center.x = layer
-		"y": center.y = layer
-		"z": center.z = layer
-	return _grid_to_board_position(builder, center)
+		"x": center_coordinate.x = layer
+		"y": center_coordinate.y = layer
+		"z": center_coordinate.z = layer
+	return _rotation_coordinate_to_board_position(builder, center_coordinate)
 
 
-func _grid_to_board_position(builder: BoardBuilderComponent, position: Vector3) -> Vector3:
-	var center := float(builder.grid_size - 1) * 0.5
+func _rotation_coordinate_to_board_position(
+	builder: BoardBuilderComponent,
+	coordinate: Vector3
+) -> Vector3:
+	var grid_center := float(builder.grid_size - 1) * 0.5
 	return Vector3(
-		(position.x - center + builder.visual_offset.x) * builder.tile_spacing,
-		(position.y + BoardBuilderComponent.BOARD_Y_OFFSET) * builder.tile_spacing,
-		(position.z - center + builder.visual_offset.z) * builder.tile_spacing
+		(
+			coordinate.x - grid_center + builder.rotation_visual_offset.x
+		) * builder.tile_spacing,
+		(
+			coordinate.y + builder.rotation_visual_offset.y
+		) * builder.tile_spacing,
+		(
+			coordinate.z - grid_center + builder.rotation_visual_offset.z
+		) * builder.tile_spacing
 	)
 
 

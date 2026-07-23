@@ -78,9 +78,9 @@ func build_level(level: Dictionary) -> void:
 		var tile := tile_scene.instantiate() as Node3D
 		board.add_child(tile)
 		tile.position = Vector3(
-			(coordinate.x - center + visual_offset.x) * tile_spacing,
+			(coordinate.x - center + rotation_visual_offset.x) * tile_spacing,
 			(coordinate.y + BOARD_Y_OFFSET) * tile_spacing,
-			(coordinate.z - center + visual_offset.z) * tile_spacing
+			(coordinate.z - center + rotation_visual_offset.z) * tile_spacing
 		)
 		tile.name = "Tile_%d" % tiles.size()
 		var tile_component := MahjongTileComponent.of_as(tile)

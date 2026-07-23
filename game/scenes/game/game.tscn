@@ -13,6 +13,7 @@
 [ext_resource type="Script" uid="uid://cf8ko6d6rofqv" path="res://game/components/board/mahjong_solver_component.gd" id="14_solver"]
 [ext_resource type="Script" uid="uid://bvoiotg157h1d" path="res://game/scenes/game/game_timer_component.gd" id="16_timer"]
 [ext_resource type="Script" uid="uid://b4vb57slqgc00" path="res://game/scenes/game/board_rotation_component.gd" id="18_rotation"]
+[ext_resource type="Script" uid="uid://bd7m7tychu041" path="res://game/scenes/game/board_camera_framing_component.gd" id="19_camera_framing"]
 [ext_resource type="PackedScene" uid="uid://gf2mwoapytuo" path="res://prefabs/game_settings_menu/game_settings_menu.tscn" id="21_settings_menu"]
 
 [sub_resource type="Environment" id="Environment_game"]
@@ -59,6 +60,15 @@ owner_node_path = NodePath("../..")
 [node name="BoardRotationComponent" type="Node" parent="Components" unique_id=983857444 node_paths=PackedStringArray("board")]
 script = ExtResource("18_rotation")
 board = NodePath("../../Board")
+owner_node_path = NodePath("../..")
+
+[node name="BoardCameraFramingComponent" type="Node" parent="Components" unique_id=1422066261 node_paths=PackedStringArray("camera", "board")]
+script = ExtResource("19_camera_framing")
+camera = NodePath("../../Camera3D")
+board = NodePath("../../Board")
+shuffle_zoom_multiplier = 2.0
+shuffle_zoom_duration = 1.0
+settle_duration = 1.0
 owner_node_path = NodePath("../..")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1559911230]

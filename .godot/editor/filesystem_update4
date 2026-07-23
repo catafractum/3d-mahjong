@@ -10,3 +10,7 @@ res://prefabs/game_ui/game_ui_component.gd
 res://tmp_ui_bounds_test.gd
 res://tmp_relative_ui_test.gd
 res://game/scenes/game/board_rotation_component.gd
+res://tmp_portrait_shuffle_test.gd
+res://tmp_rotation_consistency_test.gd
+res://game/scenes/game/board_camera_framing_component.gd
+res://game/scenes/game/game.tscn
