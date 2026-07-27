@@ -49,6 +49,11 @@ func _ready() -> void:
 
 
 func _setup_responsive_ui() -> void:
+	# The initial viewport size and Control layout settle after the first frame.
+	# Waiting here makes startup use the real window aspect, just like a resize.
+	await get_tree().process_frame
+	if not is_inside_tree():
+		return
 	for control in _all_controls():
 		_base_scales[control] = control.scale
 		_base_positions_y[control] = control.position.y

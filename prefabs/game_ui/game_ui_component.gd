@@ -86,6 +86,11 @@ func set_selected_tile_texture(texture: Texture2D) -> void:
 
 
 func _setup_responsive_ui() -> void:
+	# The initial viewport size and Control layout settle after the first frame.
+	# Waiting here makes startup use the real window aspect, just like a resize.
+	await get_tree().process_frame
+	if not is_inside_tree():
+		return
 	var timer := minutes_label.get_parent() as Control
 	for control in [timer, selected_tile, rotate_left_button, rotate_right_button, shuffle_button]:
 		_base_scales[control] = control.scale
