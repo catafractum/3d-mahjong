@@ -10,6 +10,8 @@ signal shuffle_completed
 @export var camera: Camera3D
 @export var ray_length := 1000.0
 @export var maximum_tap_distance := 16.0
+@export var minimum_swipe_distance := 80.0
+@export var swipe_vertical_tolerance := 0.6
 @export_file("*.mp3", "*.wav", "*.ogg") var correct_sfx_path: String
 @export_file("*.mp3", "*.wav", "*.ogg") var wrong_sfx_path: String
 @export_file("*.mp3", "*.wav", "*.ogg") var tile_click_sfx_path: String
@@ -40,7 +42,16 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if _input_locked:
 		return
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+	if event is InputEventKey:
+		if not event.pressed or event.echo:
+			return
+		if event.keycode == KEY_RIGHT:
+			_rotate_board(true)
+			get_viewport().set_input_as_handled()
+		elif event.keycode == KEY_LEFT:
+			_rotate_board(false)
+			get_viewport().set_input_as_handled()
+	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
 			_begin_pointer(event.position)
 		else:
@@ -65,8 +76,22 @@ func _end_pointer(position: Vector2) -> void:
 	if not _tracking_pointer:
 		return
 	_tracking_pointer = false
-	if _press_position.distance_to(position) <= maximum_tap_distance:
+	var delta := position - _press_position
+	var absolute_delta := delta.abs()
+	if (
+		absolute_delta.x >= minimum_swipe_distance
+		and absolute_delta.y <= absolute_delta.x * swipe_vertical_tolerance
+	):
+		_rotate_board(delta.x > 0.0)
+		get_viewport().set_input_as_handled()
+	elif delta.length() <= maximum_tap_distance:
 		_pick_tile(position)
+
+
+func _rotate_board(right: bool) -> void:
+	var rotation := BoardRotationComponent.of_as(self)
+	if rotation != null:
+		rotation.rotate(right)
 
 
 func _pick_tile(screen_position: Vector2) -> void:
