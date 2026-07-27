@@ -44,6 +44,8 @@ func deselect() -> void:
 	_set_body_selected(false)
 	if _is_hovered:
 		_apply_hover(true)
+	elif not _editor_dimmed:
+		_set_body_color(Color("f3e8d2"))
 
 
 func set_hovered(is_hovered: bool) -> void:
@@ -135,12 +137,33 @@ func _apply_hover(is_hovered: bool) -> void:
 		for surface in mesh.mesh.get_surface_count():
 			var material := mesh.get_surface_override_material(surface) as StandardMaterial3D
 			if material != null:
+				if is_hovered:
+					material.albedo_color = Color.WHITE
 				_hover_tween.tween_property(
 					material,
 					"emission_energy_multiplier",
 					hover_emission_energy if is_hovered else 0.0,
 					hover_transition_duration
 				)
+	if not is_hovered:
+		_hover_tween.finished.connect(_finish_hover_clear, CONNECT_ONE_SHOT)
+
+
+func _finish_hover_clear() -> void:
+	_hover_tween = null
+	if _is_hovered or _is_selected or _is_removing or _editor_dimmed:
+		return
+	_set_body_color(Color("f3e8d2"))
+
+
+func _set_body_color(color: Color) -> void:
+	for mesh in _body_meshes:
+		if mesh.mesh == null:
+			continue
+		for surface in mesh.mesh.get_surface_count():
+			var material := mesh.get_surface_override_material(surface) as StandardMaterial3D
+			if material != null:
+				material.albedo_color = color
 
 
 func counter_rotate_icons(delta_radians: float) -> void:

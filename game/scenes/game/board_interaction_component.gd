@@ -182,7 +182,12 @@ func finish_shuffle() -> void:
 
 
 func _update_hovered_tile() -> void:
-	if _input_locked or camera == null or get_viewport().gui_get_hovered_control() != null:
+	if (
+		_input_locked
+		or _tracking_pointer
+		or camera == null
+		or get_viewport().gui_get_hovered_control() != null
+	):
 		_set_hovered_tile(null)
 		return
 	var origin := camera.project_ray_origin(get_viewport().get_mouse_position())
