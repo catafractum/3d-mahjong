@@ -1,3 +1,5 @@
 res://game/scenes/game/game.tscn
 res://prefabs/game_settings_menu/game_settings_menu_component.gd
 res://prefabs/game_ui/game_ui_component.gd
+res://prefabs/next_level_menu/next_level_menu_component.gd
+res://game/gamedb/gamedb.tscn

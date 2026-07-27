@@ -7,6 +7,7 @@ signal play_requested
 @export var play_button: BaseButton
 @export var button_label: Label
 @export_file("*.mp3", "*.wav", "*.ogg") var popup_sfx_path: String
+@export var show_delay := 1.0
 
 var _session: GameSession
 var _builder: BoardBuilderComponent
@@ -33,6 +34,10 @@ func _on_level_completed() -> void:
 	if _session == null or not _session.has_next_level():
 		return
 	_timer.pause()
+	if show_delay > 0.0:
+		await get_tree().create_timer(show_delay).timeout
+		if not is_inside_tree():
+			return
 	var next_level := _session.levels[_session.current_level_index + 1]
 	show_menu(str(next_level.get("difficulty", "next")))
 
