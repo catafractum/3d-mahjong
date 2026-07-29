@@ -144,6 +144,10 @@ func _collapse() -> void:
 
 
 func _set_sfx(enabled: bool) -> void:
+	_transfer_toggle_position(
+		sfx_on_button if _sfx_enabled else sfx_off_button,
+		sfx_on_button if enabled else sfx_off_button
+	)
 	_sfx_enabled = enabled
 	_set_bus_enabled("SFX", enabled)
 	_refresh_toggle_buttons()
@@ -151,6 +155,10 @@ func _set_sfx(enabled: bool) -> void:
 
 
 func _set_music(enabled: bool) -> void:
+	_transfer_toggle_position(
+		music_on_button if _music_enabled else music_off_button,
+		music_on_button if enabled else music_off_button
+	)
 	_music_enabled = enabled
 	_set_bus_enabled("Music", enabled)
 	_refresh_toggle_buttons()
@@ -168,6 +176,10 @@ func _refresh_toggle_buttons() -> void:
 	sfx_off_button.visible = _open and not _sfx_enabled
 	music_on_button.visible = _open and _music_enabled
 	music_off_button.visible = _open and not _music_enabled
+
+
+func _transfer_toggle_position(current_button: Control, next_button: Control) -> void:
+	next_button.position = current_button.position
 
 
 func _visible_controls() -> Array[Control]:

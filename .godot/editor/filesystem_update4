@@ -1,8 +1,2 @@
-res://game/scenes/game/game.tscn
-res://prefabs/game_settings_menu/game_settings_menu_component.gd
-res://prefabs/game_ui/game_ui_component.gd
-res://prefabs/next_level_menu/next_level_menu_component.gd
 res://game/gamedb/gamedb.tscn
-res://game/scenes/game/board_interaction_component.gd
-res://prefabs/mahjong_tile/mahjong_tile_visual_component.gd
-res://game/scenes/game/board_builder_component.gd
+res://prefabs/game_settings_menu/game_settings_menu_component.gd
