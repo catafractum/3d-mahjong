@@ -1,2 +1,2 @@
 res://game/gamedb/gamedb.tscn
-res://prefabs/game_settings_menu/game_settings_menu_component.gd
+res://game/scenes/boot/boot.tscn
