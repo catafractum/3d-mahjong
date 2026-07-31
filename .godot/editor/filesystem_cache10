@@ -7,7 +7,7 @@ README.md::TextFile::-1::1784576529::0::1::::<><><>0<>0<><>::
 ::res://assets/::1783615563
 ::res://assets/fonts/::1781627517
 Montserrat-SemiBold.ttf::FontFile::814516863294606419::1781627517::1781627517::1::::<><><>0<>0<>b6bb261d71042422f5cc66e44946dfd8<>res://.godot/imported/Montserrat-SemiBold.ttf-6086a97dc2fcb684054d9f5bbbb469a2.fontdata::
-::res://assets/images/::1784361791
+::res://assets/images/::1785515269
 background.jpg::CompressedTexture2D::5569672726385267844::1781627517::1781627517::1::::<><><>0<>0<>9e6e27042666aef9d56afbc7454286b1<>res://.godot/imported/background.jpg-d656ee7c3b4e3ad9f24b9850cd3d67b3.ctex::
 bg_challenge_completed_level.png::CompressedTexture2D::2605702052599880720::1783615563::1783615564::1::::<><><>0<>0<>a33740b58556c107a779d71a67d0c6a4<>res://.godot/imported/bg_challenge_completed_level.png-4c6974e39a2d58ec2e922f8046d39c20.ctex::
 bg_game_over_menu.png::CompressedTexture2D::2098345377981706820::1781627517::1781627517::1::::<><><>0<>0<>06601a7464fd1fff2299d2b5eb766c9e<>res://.godot/imported/bg_game_over_menu.png-e0597b972632cb26009def66ad158614.ctex::
@@ -20,6 +20,7 @@ spark_01.png::CompressedTexture2D::1744198811748509064::1781627517::1781627517::
 spark_02.png::CompressedTexture2D::280031000698907310::1781627517::1781627517::1::::<><><>0<>0<>d0a15952f807e9de77d5281a2acb8294<>res://.godot/imported/spark_02.png-c8873b961c2e58fcae7a9362368171f5.ctex::
 spark_03.png::CompressedTexture2D::4489862101744496703::1781627517::1781627517::1::::<><><>0<>0<>4f219f34cc9ac1493ebead264926c001<>res://.godot/imported/spark_03.png-14791e818d6aca67ffd0923b8644d651.ctex::
 spark_04.png::CompressedTexture2D::7102574408580225178::1781627517::1781627517::1::::<><><>0<>0<>05b5280642e2c26338144c8e65ca3cd8<>res://.godot/imported/spark_04.png-9ad7c84d841bbc29ec96b1cf89a19d14.ctex::
+spinner.png::CompressedTexture2D::5169467173952428499::1785515269::1785515270::1::::<><><>0<>0<>161187fe0c7d2792ee4a4619d74cc7ec<>res://.godot/imported/spinner.png-23790ee16f15d8e82e84257481b297ee.ctex::
 tick_icon.png::CompressedTexture2D::5355642643571731946::1784361758::1784361791::1::::<><><>0<>0<>c1fc4ab582715c293290e6d29742ce29<>res://.godot/imported/tick_icon.png-25cde0b9575b2d967bc43b5a469a8577.ctex::
 ::res://assets/images/buttons/::1783615564
 btn_arrow.png::CompressedTexture2D::6869068806280379333::1781627517::1781627517::1::::<><><>0<>0<>b2d2820e53fc4d31dbe8c087f2830cb9<>res://.godot/imported/btn_arrow.png-d9ebb09d4e6312973159cf16dd703fe2.ctex::
@@ -133,16 +134,16 @@ tile_rules_component.gd::GDScript::2203523997157045184::1784453643::0::1::::Tile
 daily_challenge_service.gd::GDScript::201303055435283207::1784576756::0::1::::<>Node<><>0<>0<><>::
 ::res://game/events/::1784306218
 game_event_manager.gd::GDScript::1827704799890185596::1784306238::0::1::::<>Node<><>0<>0<><>::
-::res://game/gamedb/::1785346989
+::res://game/gamedb/::1785514741
 gamedb.gd::GDScript::7747444375049274276::1784779142::0::1::::<>Node<><>0<>0<><>::
-gamedb.tscn::PackedScene::5367877814685516212::1785346989::0::1::::<><><>0<>0<><>::uid://dim6joe5ueuye::::res://game/gamedb/gamedb.gd
+gamedb.tscn::PackedScene::5367877814685516212::1785514741::0::1::::<><><>0<>0<><>::uid://dim6joe5ueuye::::res://game/gamedb/gamedb.gd
 ::res://game/models/::1784451072
 game_session.gd::GDScript::2203713083800539727::1784576757::0::1::::GameSession<>RefCounted<><>0<>0<><>::
 savedata_dto.gd::GDScript::1264440402844454692::1784576757::0::1::::SavedataDTO<>BaseDTO<><>0<>0<><>::
 ::res://game/scenes/::1784574620
-::res://game/scenes/boot/::1784576311
+::res://game/scenes/boot/::1785514838
 boot.gd::GDScript::6871993472684851817::1784308007::0::1::::<>Node2D<><>0<>0<><>::
-boot.tscn::PackedScene::6793518742467207191::1784576311::0::1::::<><><>0<>0<><>::uid://b1jdk0ci2r673::::res://core/components/scene_switcher_component.gd<>uid://c453y1el2n546::::res://game/scenes/boot/boot.gd
+boot.tscn::PackedScene::6793518742467207191::1785514838::0::1::::<><><>0<>0<><>::uid://b1jdk0ci2r673::::res://core/components/scene_switcher_component.gd<>uid://c453y1el2n546::::res://game/scenes/boot/boot.gd
 ::res://game/scenes/game/::1785170702
 board_builder_component.gd::GDScript::7099014082620970562::1785171249::0::1::::BoardBuilderComponent<>BaseComponent<><>0<>0<><>::
 board_camera_framing_component.gd::GDScript::2663834087175265192::1784779727::0::1::::BoardCameraFramingComponent<>BaseComponent<><>0<>0<><>::
