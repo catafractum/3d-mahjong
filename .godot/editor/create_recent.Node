@@ -1,12 +1,12 @@
+TextureRect
+ColorRect
 Control
 SplashCalendarDayComponent
 Node
 CanvasLayer
 Node2D
 SceneSwitcherComponent
-TextureRect
 AudioStreamPlayer2D
-ColorRect
 HBoxContainer
 AspectRatioContainer
 VBoxContainer

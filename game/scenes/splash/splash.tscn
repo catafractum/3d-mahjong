@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://bxsh7ctu63ghw" path="res://prefabs/splash_days_carousel/splash_days_carousel.tscn" id="6_carousel"]
 [ext_resource type="PackedScene" path="res://prefabs/splash_streak/splash_streak.tscn" id="7_streak"]
 [ext_resource type="Script" uid="uid://dnaqbk04qydfb" path="res://game/scenes/splash/splash_sound_component.gd" id="8_sound"]
+[ext_resource type="Texture2D" uid="uid://cfwemswtovpqp" path="res://assets/images/spinner.png" id="9_t66fi"]
 
 [node name="Splash" type="Node2D" unique_id=100442976]
 
@@ -210,5 +211,41 @@ grow_horizontal = 2
 grow_vertical = 0
 scale = Vector2(1.39, 1.39)
 pivot_offset_ratio = Vector2(0.5, 1)
+
+[node name="Loading" type="Control" parent="UI" unique_id=1501389120]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="UI/Loading" unique_id=1685380037]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.3882353)
+
+[node name="TextureRect" type="TextureRect" parent="UI/Loading/ColorRect" unique_id=919941227]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = 477.0
+offset_right = 50.0
+offset_bottom = 577.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+texture = ExtResource("9_t66fi")
+expand_mode = 1
+stretch_mode = 5
 
 [editable path="UI/PortraitUI/SplashChallengeContainer"]
