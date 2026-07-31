@@ -3,3 +3,4 @@ res://game/scenes/boot/boot.tscn
 res://game/scenes/splash/splash.tscn
 res://core/components/scene_switcher_component.gd
 res://prefabs/splash_challenge_container/splash_challenge_container_component.gd
+res://prefabs/mahjong_tile/mahjong_tile_component.gd

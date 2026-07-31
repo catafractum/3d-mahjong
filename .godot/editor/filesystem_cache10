@@ -7,7 +7,7 @@ README.md::TextFile::-1::1784576529::0::1::::<><><>0<>0<><>::
 ::res://assets/::1783615563
 ::res://assets/fonts/::1781627517
 Montserrat-SemiBold.ttf::FontFile::814516863294606419::1781627517::1781627517::1::::<><><>0<>0<>b6bb261d71042422f5cc66e44946dfd8<>res://.godot/imported/Montserrat-SemiBold.ttf-6086a97dc2fcb684054d9f5bbbb469a2.fontdata::
-::res://assets/images/::1785515269
+::res://assets/images/::1785515270
 background.jpg::CompressedTexture2D::5569672726385267844::1781627517::1781627517::1::::<><><>0<>0<>9e6e27042666aef9d56afbc7454286b1<>res://.godot/imported/background.jpg-d656ee7c3b4e3ad9f24b9850cd3d67b3.ctex::
 bg_challenge_completed_level.png::CompressedTexture2D::2605702052599880720::1783615563::1783615564::1::::<><><>0<>0<>a33740b58556c107a779d71a67d0c6a4<>res://.godot/imported/bg_challenge_completed_level.png-4c6974e39a2d58ec2e922f8046d39c20.ctex::
 bg_game_over_menu.png::CompressedTexture2D::2098345377981706820::1781627517::1781627517::1::::<><><>0<>0<>06601a7464fd1fff2299d2b5eb766c9e<>res://.godot/imported/bg_game_over_menu.png-e0597b972632cb26009def66ad158614.ctex::
@@ -97,7 +97,7 @@ base_component.gd::GDScript::3021653427247457852::1781262592::0::1::::BaseCompon
 button_helper_component.gd::GDScript::1768736598297191517::1784772576::0::1::::ButtonHelperComponent<>BaseComponent<><>0<>0<><>::
 click_sfx_component.gd::GDScript::539508042194843236::1782922208::0::1::::ClickSFXComponent<>BaseComponent<><>0<>0<><>::
 music_player_component.gd::GDScript::8268675865555142003::1783007060::0::1::::MusicPlayerComponent<>BaseComponent<><>0<>0<><>::
-scene_switcher_component.gd::GDScript::4230111343559461392::1784307182::0::1::::SceneSwitcherComponent<>BaseComponent<><>0<>0<><>::
+scene_switcher_component.gd::GDScript::4230111343559461392::1785515646::0::1::::SceneSwitcherComponent<>BaseComponent<><>0<>0<><>::
 shake_component.gd::GDScript::1062657786554109465::1775973349::0::1::::ShakeComponent<>BaseComponent<><>0<>0<><>::
 ::res://core/dto/::1775975147
 base_dto.gd::GDScript::8792800322378804473::1775978098::0::1::::BaseDTO<>RefCounted<><>1<>0<><>::
@@ -155,8 +155,8 @@ game_timer_component.gd::GDScript::3889799434140575283::1784460508::0::1::::Game
 ::res://game/scenes/level_editor/::1784576615
 level_editor.tscn::PackedScene::1369394555833257133::1784576615::0::1::::<><><>0<>0<><>::uid://6yrol78c0yxl::::res://game/scenes/level_editor/level_editor_component.gd<>uid://blgsgj24xjt4t::::res://prefabs/mahjong_tile/mahjong_tile.tscn
 level_editor_component.gd::GDScript::2226457037561782657::1784575517::0::1::::LevelEditorComponent<>BaseComponent<><>0<>0<><>::
-::res://game/scenes/splash/::1784772559
-splash.tscn::PackedScene::7112065814285064211::1784772559::0::1::::<><><>0<>0<><>::uid://dpawpb2gs63r8::::res://game/components/window_resize_listener_component.gd<>uid://cll8xwwdv46we::::res://assets/images/background.jpg<>uid://dy4dtrdnge65v::::res://assets/images/splash/game_logo.png<>uid://ife5h8wg7pi8::::res://prefabs/splash_calendar_day/splash_calendar_day.tscn<>uid://d2j1ruu616fo3::::res://prefabs/splash_challenge_container/splash_challenge_container.tscn<>uid://bxsh7ctu63ghw::::res://prefabs/splash_days_carousel/splash_days_carousel.tscn<>res://prefabs/splash_streak/splash_streak.tscn<>uid://dnaqbk04qydfb::::res://game/scenes/splash/splash_sound_component.gd
+::res://game/scenes/splash/::1785515799
+splash.tscn::PackedScene::7112065814285064211::1785515799::0::1::::<><><>0<>0<><>::uid://dpawpb2gs63r8::::res://game/components/window_resize_listener_component.gd<>uid://cll8xwwdv46we::::res://assets/images/background.jpg<>uid://dy4dtrdnge65v::::res://assets/images/splash/game_logo.png<>uid://ife5h8wg7pi8::::res://prefabs/splash_calendar_day/splash_calendar_day.tscn<>uid://d2j1ruu616fo3::::res://prefabs/splash_challenge_container/splash_challenge_container.tscn<>uid://bxsh7ctu63ghw::::res://prefabs/splash_days_carousel/splash_days_carousel.tscn<>res://prefabs/splash_streak/splash_streak.tscn<>uid://dnaqbk04qydfb::::res://game/scenes/splash/splash_sound_component.gd<>uid://cfwemswtovpqp::::res://assets/images/spinner.png
 splash_sound_component.gd::GDScript::8072690841245459927::1784461305::0::1::::SplashSoundComponent<>BaseComponent<><>0<>0<><>::
 ::res://game/shaders/::1784772576
 tile_outline.gdshader::Shader::7083540195950481640::1784772576::0::1::::<><><>0<>0<><>::
@@ -179,7 +179,7 @@ game_ui.tscn::PackedScene::4574382418810655546::1784778406::0::1::::<><><>0<>0<>
 game_ui_component.gd::GDScript::4949381841634860405::1785170557::0::1::::GameUIComponent<>BaseComponent<><>0<>0<><>::
 ::res://prefabs/mahjong_tile/::1784454718
 mahjong_tile.tscn::PackedScene::3171988366637651921::1784454939::0::1::::<><><>0<>0<><>::uid://bbwf3tf8sg8ub::::res://prefabs/mahjong_tile/mahjong_tile_component.gd<>uid://coo44x3xtim1c::::res://prefabs/mahjong_tile/mahjong_tile_visual_component.gd<>res://assets/models/cube.scn<>uid://dhyleexn6jvry::::res://assets/images/icons_tiles/icon_1.png<>uid://cq7fjagl6nbju::::res://assets/images/icons_tiles/icon_2.png<>uid://cxff4nukh4m8g::::res://assets/images/icons_tiles/icon_3.png<>uid://bkth2fr85alul::::res://assets/images/icons_tiles/icon_4.png<>uid://iyrk2ilkb7pr::::res://assets/images/icons_tiles/icon_5.png<>uid://b2ekqqwpd36sq::::res://assets/images/icons_tiles/icon_6.png<>uid://blvbenx87mlap::::res://assets/images/icons_tiles/icon_7.png<>uid://bljia2g0touao::::res://assets/images/icons_tiles/icon_8.png<>uid://bdhic3n32uy0b::::res://assets/images/icons_tiles/icon_9.png<>uid://c7eq85aj1hver::::res://assets/images/icons_tiles/icon_10.png<>uid://drq37rnufn7tg::::res://assets/images/icons_tiles/icon_11.png<>uid://dyd86kuc5pn64::::res://assets/images/icons_tiles/icon_12.png<>uid://clrldrhpl5jwq::::res://assets/images/icons_tiles/icon_13.png<>uid://c4dlt8iq2e6t0::::res://assets/images/icons_tiles/icon_14.png<>uid://bm5juixmos3p3::::res://assets/images/icons_tiles/icon_15.png<>uid://bfh2iqarkwjnn::::res://assets/images/icons_tiles/icon_16.png<>res://prefabs/tile_disappear_particles/tile_disappear_particles.tscn
-mahjong_tile_component.gd::GDScript::2502380432304990429::1784456666::0::1::::MahjongTileComponent<>BaseComponent<><>0<>0<><>::
+mahjong_tile_component.gd::GDScript::2502380432304990429::1785516483::0::1::::MahjongTileComponent<>BaseComponent<><>0<>0<><>::
 mahjong_tile_visual_component.gd::GDScript::5786200300051273078::1785170865::0::1::::MahjongTileVisualComponent<>BaseComponent<><>0<>0<><>::
 ::res://prefabs/next_level_menu/::1784574003
 next_level_menu.tscn::PackedScene::8737706820483242213::1784574003::0::1::::<><><>0<>0<><>::uid://bmu8cmhr2w262::::res://prefabs/next_level_menu/next_level_menu_component.gd<>uid://c1vt6ybw21ec8::::res://assets/images/bg_next_level_easy.png<>uid://cyyix8x2dsplv::::res://assets/images/buttons/btn_play_next_level.png<>uid://lus8dvysyfip::::res://assets/fonts/Montserrat-SemiBold.ttf<>uid://0g13lmkx4usr::::res://core/components/button_helper_component.gd
@@ -189,7 +189,7 @@ splash_calendar_day.tscn::PackedScene::572129499313640141::1784309924::0::1::::<
 splash_calendar_day_component.gd::GDScript::7514588405060359359::1784309924::0::1::::SplashCalendarDayComponent<>BaseComponent<><>0<>0<><>::
 ::res://prefabs/splash_challenge_container/::1784458767
 splash_challenge_container.tscn::PackedScene::9074550312208585604::1784458767::0::1::::<><><>0<>0<><>::uid://66b10r8ht5so::::res://prefabs/splash_challenge_container/splash_challenge_container_component.gd<>uid://b0mdt7mv21vj3::::res://assets/images/buttons/btn_play.png<>uid://dvg3fb4pya5s::::res://assets/images/splash/challenge_bg.png<>uid://bme411pvplbfk::::res://assets/images/splash/title-edge.png<>uid://lus8dvysyfip::::res://assets/fonts/Montserrat-SemiBold.ttf<>uid://c416j1cv6240u::::res://assets/images/splash/arrow.png<>uid://w4a3dl72375u::::res://assets/images/splash/timer_icon.png<>uid://0g13lmkx4usr::::res://core/components/button_helper_component.gd
-splash_challenge_container_component.gd::GDScript::2239958351644084818::1784576757::0::1::::SplashChallengeContainerComponent<>BaseComponent<><>0<>0<><>::
+splash_challenge_container_component.gd::GDScript::2239958351644084818::1785515646::0::1::::SplashChallengeContainerComponent<>BaseComponent<><>0<>0<><>::
 ::res://prefabs/splash_days_carousel/::1784362179
 splash_days_carousel.tscn::PackedScene::4038405186644470572::1784362179::0::1::::<><><>0<>0<><>::uid://bgi5hjcbfsqtj::::res://prefabs/splash_days_carousel/splash_days_carousel_component.gd<>uid://c3i0xy0pm7dge::::res://assets/images/splash/bg_days_carousel.png<>uid://bp0u883p8xife::::res://assets/images/splash/badge_empty.png<>uid://lus8dvysyfip::::res://assets/fonts/Montserrat-SemiBold.ttf<>uid://cikkwftd686n3::::res://assets/images/tick_icon.png
 splash_days_carousel_component.gd::GDScript::2825903253746705615::1784576758::0::1::::SplashDaysCarouselComponent<>BaseComponent<><>0<>0<><>::

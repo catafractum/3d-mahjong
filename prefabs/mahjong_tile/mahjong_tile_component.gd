@@ -3,6 +3,8 @@ extends BaseComponent
 
 signal configured
 
+const ICON_FACE_BASE_SCALE := 0.36
+
 @export var icon_faces: Array[MeshInstance3D]
 @export var icon_textures: Array[Texture2D]
 
@@ -41,6 +43,23 @@ func _apply_icon_texture(texture: Texture2D) -> void:
 		material.albedo_texture = texture
 		material.albedo_color = Color.WHITE
 		face.set_surface_override_material(0, material)
+		_apply_icon_aspect_ratio(face, texture)
+
+
+func _apply_icon_aspect_ratio(face: MeshInstance3D, texture: Texture2D) -> void:
+	var texture_size := texture.get_size()
+	if texture_size.x <= 0.0 or texture_size.y <= 0.0:
+		return
+
+	var current_scale := face.scale
+	var aspect := texture_size.y / texture_size.x
+	var width_scale := ICON_FACE_BASE_SCALE
+	var height_scale := ICON_FACE_BASE_SCALE
+	if aspect > 1.0:
+		width_scale = ICON_FACE_BASE_SCALE / aspect
+	else:
+		height_scale = ICON_FACE_BASE_SCALE * aspect
+	face.scale = Vector3(width_scale, current_scale.y, height_scale)
 
 
 static func of_as(node: Node) -> MahjongTileComponent:

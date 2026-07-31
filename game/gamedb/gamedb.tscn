@@ -4,5 +4,6 @@
 
 [node name="GameDB" type="Node" unique_id=1156595539]
 script = ExtResource("1_gamedb")
+use_development_levels = false
 original_levels_path = "res://data/levels.json"
 development_levels_path = "res://data/levels_dev.json"
