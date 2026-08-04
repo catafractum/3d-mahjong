@@ -14,7 +14,6 @@
 [ext_resource type="Script" uid="uid://bvoiotg157h1d" path="res://game/scenes/game/game_timer_component.gd" id="16_timer"]
 [ext_resource type="Script" uid="uid://b4vb57slqgc00" path="res://game/scenes/game/board_rotation_component.gd" id="18_rotation"]
 [ext_resource type="Script" uid="uid://bd7m7tychu041" path="res://game/scenes/game/board_camera_framing_component.gd" id="19_camera_framing"]
-[ext_resource type="PackedScene" path="res://prefabs/tile_disappear_particles/tile_disappear_particles.tscn" id="20_disappear_particles"]
 [ext_resource type="PackedScene" uid="uid://gf2mwoapytuo" path="res://prefabs/game_settings_menu/game_settings_menu.tscn" id="21_settings_menu"]
 
 [sub_resource type="Environment" id="Environment_game"]
@@ -104,9 +103,6 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="Board" type="Node3D" parent="." unique_id=541336519]
-
-[node name="TileDisappearParticlesWarmup" parent="." unique_id=680898454 instance=ExtResource("20_disappear_particles")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -100, 0)
 
 [node name="GameUI" parent="." unique_id=578073262 instance=ExtResource("3_game_ui")]
 

@@ -1,11 +1,71 @@
 [gd_scene format=3 uid="uid://c313i447xrval"]
 
 [ext_resource type="Script" uid="uid://b1jdk0ci2r673" path="res://core/components/scene_switcher_component.gd" id="1_1qikl"]
+[ext_resource type="Texture2D" uid="uid://76wtmrdiqw0t" path="res://assets/images/catafractum-logo.png" id="2_logo"]
 [ext_resource type="Script" uid="uid://c453y1el2n546" path="res://game/scenes/boot/boot.gd" id="3_boot"]
+[ext_resource type="Texture2D" uid="uid://cfwemswtovpqp" path="res://assets/images/spinner.png" id="4_spinner"]
 
-[node name="Boot" type="Node2D" unique_id=834666498]
+[node name="Boot" type="Node2D" unique_id=834666498 node_paths=PackedStringArray("spinner", "warmup_root")]
 script = ExtResource("3_boot")
 splash_scene_path = "uid://c8lexjylyx41t"
+game_scene_path = "res://game/scenes/game/game.tscn"
+tile_scene_path = "res://prefabs/mahjong_tile/mahjong_tile.tscn"
+particles_scene_path = "res://prefabs/tile_disappear_particles/tile_disappear_particles.tscn"
+spinner = NodePath("BootUI/Overlay/Spinner")
+warmup_root = NodePath("WarmupRoot")
+
+[node name="WarmupRoot" type="Node3D" parent="." unique_id=1495643129]
+
+[node name="Camera3D" type="Camera3D" parent="WarmupRoot" unique_id=1950411096]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+current = true
+
+[node name="BootUI" type="CanvasLayer" parent="." unique_id=2000187909]
+layer = 100
+
+[node name="Overlay" type="ColorRect" parent="BootUI" unique_id=1347878317]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.027451, 0.105882, 0.086275, 1)
+
+[node name="Spinner" type="TextureRect" parent="BootUI/Overlay" unique_id=1681896971]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 0
+offset_left = 400.0
+offset_top = 1119.0
+offset_right = 500.0
+offset_bottom = 1219.0
+pivot_offset_ratio = Vector2(0.5, 0.5)
+size_flags_horizontal = 4
+texture = ExtResource("4_spinner")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Content" type="VBoxContainer" parent="BootUI/Overlay" unique_id=1177932860]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -246.5
+offset_top = -271.0
+offset_right = 246.5
+offset_bottom = 271.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Logo" type="TextureRect" parent="BootUI/Overlay/Content" unique_id=1031623525]
+custom_minimum_size = Vector2(493, 442)
+layout_mode = 2
+texture = ExtResource("2_logo")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Components" type="Node" parent="." unique_id=1084655071]
 
