@@ -39,8 +39,9 @@ func _on_play_button_pressed() -> void:
 		_loading_control.show()
 		_loading_control.move_to_front()
 
-	# Give the loading overlay a frame to draw before loading begins.
+	# Wait until the overlay is actually presented before the synchronous web load begins.
 	await get_tree().process_frame
+	await RenderingServer.frame_post_draw
 
 	var scene_switcher := SceneSwitcherComponent.of_as(self)
 	if scene_switcher == null:
