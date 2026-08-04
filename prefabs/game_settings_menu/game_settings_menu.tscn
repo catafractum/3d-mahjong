@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://0g13lmkx4usr" path="res://core/components/button_helper_component.gd" id="9_button_helper"]
 
 [node name="GameSettingsMenu" type="CanvasLayer" unique_id=2037524175]
+metadata/_edit_vertical_guides_ = [885.0]
 
 [node name="Components" type="Node" parent="." unique_id=2113380329]
 
@@ -58,13 +59,14 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -115.0
-offset_top = 119.0
-offset_right = -3.0
-offset_bottom = 190.0
+offset_left = -124.640015
+offset_top = 119.255
+offset_right = -12.640015
+offset_bottom = 190.255
 grow_horizontal = 0
 scale = Vector2(0.81, 0.81)
 pivot_offset_ratio = Vector2(0.5, 0.5)
+button_mask = 0
 texture_normal = ExtResource("3_sfx_on")
 
 [node name="ButtonHelperComponent" type="Node" parent="Controls/SfxOnButton" unique_id=1816983790]
@@ -77,13 +79,14 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -115.0
-offset_top = 119.0
-offset_right = -3.0
-offset_bottom = 190.0
+offset_left = -124.63995
+offset_top = 119.255005
+offset_right = -12.639954
+offset_bottom = 190.255
 grow_horizontal = 0
 scale = Vector2(0.81, 0.81)
 pivot_offset_ratio = Vector2(0.5, 0.5)
+button_mask = 0
 texture_normal = ExtResource("4_sfx_off")
 
 [node name="ButtonHelperComponent" type="Node" parent="Controls/SfxOffButton" unique_id=710524969]
@@ -96,13 +99,14 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -114.0
-offset_top = 185.0
-offset_right = -2.0
-offset_bottom = 256.0
+offset_left = -124.63995
+offset_top = 185.255
+offset_right = -12.639954
+offset_bottom = 256.255
 grow_horizontal = 0
 scale = Vector2(0.81, 0.81)
 pivot_offset_ratio = Vector2(0.5, 0.5)
+button_mask = 0
 texture_normal = ExtResource("5_music_on")
 
 [node name="ButtonHelperComponent" type="Node" parent="Controls/MusicOnButton" unique_id=842762819]
@@ -115,14 +119,17 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -114.0
-offset_top = 185.0
-offset_right = -2.0
-offset_bottom = 256.0
+offset_left = -124.06702
+offset_top = 185.255
+offset_right = -13.0979
+offset_bottom = 256.255
 grow_horizontal = 0
 scale = Vector2(0.81, 0.81)
 pivot_offset_ratio = Vector2(0.5, 0.5)
+button_mask = 0
 texture_normal = ExtResource("6_music_off")
+ignore_texture_size = true
+stretch_mode = 0
 
 [node name="ButtonHelperComponent" type="Node" parent="Controls/MusicOffButton" unique_id=1856061923]
 script = ExtResource("9_button_helper")
@@ -134,13 +141,14 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -113.0
-offset_top = 252.0
-offset_right = -1.0
-offset_bottom = 323.0
+offset_left = -124.63995
+offset_top = 252.255
+offset_right = -12.639954
+offset_bottom = 323.255
 grow_horizontal = 0
 scale = Vector2(0.808, 0.81)
 pivot_offset_ratio = Vector2(0.5, 0.5)
+button_mask = 0
 texture_normal = ExtResource("7_reset")
 
 [node name="ButtonHelperComponent" type="Node" parent="Controls/ResetButton" unique_id=2031796670]
@@ -153,14 +161,17 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -114.0
-offset_top = 320.0
-offset_right = -2.0
-offset_bottom = 391.0
+offset_left = -122.25519
+offset_top = 320.255
+offset_right = -15.064697
+offset_bottom = 391.255
 grow_horizontal = 0
 scale = Vector2(0.84, 0.81)
 pivot_offset_ratio = Vector2(0.5, 0.5)
+button_mask = 0
 texture_normal = ExtResource("8_home")
+ignore_texture_size = true
+stretch_mode = 0
 
 [node name="ButtonHelperComponent" type="Node" parent="Controls/HomeButton" unique_id=94304357]
 script = ExtResource("9_button_helper")
