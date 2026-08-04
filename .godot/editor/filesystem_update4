@@ -1,8 +1,1 @@
-res://prefabs/game_ui/game_ui.tscn
-res://prefabs/game_settings_menu/game_settings_menu.tscn
-res://game/scenes/game/game.tscn
-res://game/gamedb/gamedb.gd
-res://core/components/scene_switcher_component.gd
-res://prefabs/splash_challenge_container/splash_challenge_container_component.gd
-res://game/scenes/boot/boot.gd
 res://game/scenes/boot/boot.tscn
