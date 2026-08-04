@@ -66,7 +66,7 @@ offset_bottom = 190.255
 grow_horizontal = 0
 scale = Vector2(0.81, 0.81)
 pivot_offset_ratio = Vector2(0.5, 0.5)
-button_mask = 0
+button_mask = 1
 texture_normal = ExtResource("3_sfx_on")
 
 [node name="ButtonHelperComponent" type="Node" parent="Controls/SfxOnButton" unique_id=1816983790]
@@ -86,7 +86,7 @@ offset_bottom = 190.255
 grow_horizontal = 0
 scale = Vector2(0.81, 0.81)
 pivot_offset_ratio = Vector2(0.5, 0.5)
-button_mask = 0
+button_mask = 1
 texture_normal = ExtResource("4_sfx_off")
 
 [node name="ButtonHelperComponent" type="Node" parent="Controls/SfxOffButton" unique_id=710524969]
@@ -106,7 +106,7 @@ offset_bottom = 256.255
 grow_horizontal = 0
 scale = Vector2(0.81, 0.81)
 pivot_offset_ratio = Vector2(0.5, 0.5)
-button_mask = 0
+button_mask = 1
 texture_normal = ExtResource("5_music_on")
 
 [node name="ButtonHelperComponent" type="Node" parent="Controls/MusicOnButton" unique_id=842762819]
@@ -126,7 +126,7 @@ offset_bottom = 256.255
 grow_horizontal = 0
 scale = Vector2(0.81, 0.81)
 pivot_offset_ratio = Vector2(0.5, 0.5)
-button_mask = 0
+button_mask = 1
 texture_normal = ExtResource("6_music_off")
 ignore_texture_size = true
 stretch_mode = 0
@@ -148,7 +148,7 @@ offset_bottom = 323.255
 grow_horizontal = 0
 scale = Vector2(0.808, 0.81)
 pivot_offset_ratio = Vector2(0.5, 0.5)
-button_mask = 0
+button_mask = 1
 texture_normal = ExtResource("7_reset")
 
 [node name="ButtonHelperComponent" type="Node" parent="Controls/ResetButton" unique_id=2031796670]
@@ -168,7 +168,7 @@ offset_bottom = 391.255
 grow_horizontal = 0
 scale = Vector2(0.84, 0.81)
 pivot_offset_ratio = Vector2(0.5, 0.5)
-button_mask = 0
+button_mask = 1
 texture_normal = ExtResource("8_home")
 ignore_texture_size = true
 stretch_mode = 0
