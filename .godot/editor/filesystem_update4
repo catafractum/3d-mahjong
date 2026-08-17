@@ -1,1 +1,2 @@
-res://game/scenes/boot/boot.tscn
+res://game/gamedb/gamedb.tscn
+res://prefabs/game_ui/game_ui.tscn

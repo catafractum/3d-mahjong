@@ -16,6 +16,7 @@ const BASE_SIDE_MARGIN := 25.0
 @export var rotate_left_button: BaseButton
 @export var rotate_right_button: BaseButton
 @export var shuffle_button: BaseButton
+@export var remove_pair_button: BaseButton
 
 var _session: GameSession
 var _displayed_selected_tile: Node3D
@@ -31,6 +32,8 @@ func _ready() -> void:
 	rotate_left_button.pressed.connect(_rotate_board.bind(false))
 	rotate_right_button.pressed.connect(_rotate_board.bind(true))
 	shuffle_button.pressed.connect(_shuffle_board)
+	remove_pair_button.visible = GameDB.enable_remove_pair_button
+	remove_pair_button.pressed.connect(_remove_pair_for_testing)
 	set_selected_tile_texture(null)
 	_initialize.call_deferred()
 	_setup_responsive_ui.call_deferred()
@@ -59,6 +62,12 @@ func _shuffle_board() -> void:
 	var rotation := BoardRotationComponent.of_as(self)
 	if rotation != null:
 		rotation.shuffle()
+
+
+func _remove_pair_for_testing() -> void:
+	var interaction := BoardInteractionComponent.of_as(self)
+	if interaction != null:
+		interaction.remove_matching_pair_for_testing()
 
 
 func _refresh_selected_tile() -> void:
@@ -92,7 +101,7 @@ func _setup_responsive_ui() -> void:
 	if not is_inside_tree():
 		return
 	var timer := minutes_label.get_parent() as Control
-	for control in [timer, selected_tile, rotate_left_button, rotate_right_button, shuffle_button]:
+	for control in [timer, selected_tile, rotate_left_button, rotate_right_button, shuffle_button, remove_pair_button]:
 		_base_scales[control] = control.scale
 	_selected_tile_base_position = selected_tile.position
 	# These normalized corner pivots match the legacy layout while remaining
@@ -130,6 +139,7 @@ func _update_responsive_ui() -> void:
 
 	var hud_multiplier := _responsive_multiplier(1.0, HUD_DESKTOP_SCALE)
 	_apply_button_scale(shuffle_button, Vector2(_base_scales[shuffle_button]) * hud_multiplier)
+	_apply_button_scale(remove_pair_button, Vector2(_base_scales[remove_pair_button]) * hud_multiplier)
 	_align_shuffle_to_settings.call_deferred()
 	selected_tile.position = _selected_tile_base_position * hud_multiplier
 	selected_tile.scale = Vector2(_base_scales[selected_tile]) * hud_multiplier

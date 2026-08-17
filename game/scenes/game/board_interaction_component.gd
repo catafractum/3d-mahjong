@@ -148,18 +148,39 @@ func _on_tile_pressed(tile: Node3D, hit_normal: Vector3) -> void:
 	var first_is_free := rules.is_tile_free(first_position, _make_occupancy(), _grid_size)
 	if first_is_free and _icon_type(_selected_tile) == _icon_type(tile):
 		var first_tile := _selected_tile
-		_grid.erase(first_position)
-		_grid.erase(tile_position)
-		_set_selected_tile(null)
-		match_succeeded.emit(first_tile, tile)
-		MahjongTileVisualComponent.of_as(first_tile).remove()
-		MahjongTileVisualComponent.of_as(tile).remove()
-		SoundManager.play_sfx(correct_sfx_path)
-		if not _completed and _grid.is_empty():
-			_completed = true
-			level_completed.emit()
+		_remove_pair(first_tile, tile)
 		return
 	_set_selected_tile(tile)
+
+
+func remove_matching_pair_for_testing() -> bool:
+	if _input_locked or _completed:
+		return false
+	var rules := TileRulesComponent.of_as(self)
+	if rules == null:
+		return false
+	var free_by_icon: Dictionary = {}
+	for position in rules.get_free_positions(_make_occupancy(), _grid_size):
+		var tile: Node3D = _grid[position]
+		var icon := _icon_type(tile)
+		if free_by_icon.has(icon):
+			_remove_pair(free_by_icon[icon] as Node3D, tile)
+			return true
+		free_by_icon[icon] = tile
+	return false
+
+
+func _remove_pair(first_tile: Node3D, second_tile: Node3D) -> void:
+	_grid.erase(_tile_position(first_tile))
+	_grid.erase(_tile_position(second_tile))
+	_set_selected_tile(null)
+	match_succeeded.emit(first_tile, second_tile)
+	MahjongTileVisualComponent.of_as(first_tile).remove()
+	MahjongTileVisualComponent.of_as(second_tile).remove()
+	SoundManager.play_sfx(correct_sfx_path)
+	if not _completed and _grid.is_empty():
+		_completed = true
+		level_completed.emit()
 
 
 func _set_selected_tile(tile: Node3D) -> void:

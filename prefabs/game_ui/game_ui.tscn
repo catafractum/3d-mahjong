@@ -16,7 +16,7 @@ font_size = 34
 
 [node name="Components" type="Node" parent="." unique_id=737909878]
 
-[node name="GameUIComponent" type="Node" parent="Components" unique_id=13058409 node_paths=PackedStringArray("minutes_label", "seconds_label", "selected_tile", "selected_tile_icon", "rotate_left_button", "rotate_right_button", "shuffle_button")]
+[node name="GameUIComponent" type="Node" parent="Components" unique_id=13058409 node_paths=PackedStringArray("minutes_label", "seconds_label", "selected_tile", "selected_tile_icon", "rotate_left_button", "rotate_right_button", "shuffle_button", "remove_pair_button")]
 script = ExtResource("1_component")
 minutes_label = NodePath("../../HUD/Timer/MinutesLabel")
 seconds_label = NodePath("../../HUD/Timer/SecondsLabel")
@@ -25,6 +25,7 @@ selected_tile_icon = NodePath("../../HUD/SelectedTile/Icon")
 rotate_left_button = NodePath("../../HUD/RotateLeftButton")
 rotate_right_button = NodePath("../../HUD/RotateRightButton")
 shuffle_button = NodePath("../../HUD/ShuffleButton")
+remove_pair_button = NodePath("../../HUD/RemovePairButton")
 owner_node_path = NodePath("../..")
 
 [node name="HUD" type="Control" parent="." unique_id=1578376281]
@@ -146,6 +147,24 @@ pivot_offset_ratio = Vector2(0.5, 0.5)
 texture_normal = ExtResource("3_shuffle")
 
 [node name="ButtonHelperComponent" type="Node" parent="HUD/ShuffleButton" unique_id=1140720011]
+script = ExtResource("9_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")
+
+[node name="RemovePairButton" type="Button" parent="HUD" unique_id=932596771]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -94.0
+offset_top = 18.0
+offset_right = 94.0
+offset_bottom = 78.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 24
+text = "REMOVE A PAIR"
+
+[node name="ButtonHelperComponent" type="Node" parent="HUD/RemovePairButton" unique_id=1214892071]
 script = ExtResource("9_button_helper")
 click_sfx_path = "res://assets/sounds/click.mp3"
 owner_node_path = NodePath("..")

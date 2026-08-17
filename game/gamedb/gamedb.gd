@@ -1,6 +1,7 @@
 extends Node
 
 @export var use_development_levels := true
+@export var enable_remove_pair_button := false
 @export_file("*.json") var original_levels_path: String
 @export_file("*.json") var development_levels_path: String
 @export var challenge_difficulties: Array[String] = ["easy", "medium", "hard"]
