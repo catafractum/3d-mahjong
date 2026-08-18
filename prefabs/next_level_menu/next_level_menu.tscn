@@ -1,0 +1,91 @@
+[gd_scene format=3 uid="uid://dwqu0wqid64jx"]
+
+[ext_resource type="Script" uid="uid://bmu8cmhr2w262" path="res://prefabs/next_level_menu/next_level_menu_component.gd" id="1_component"]
+[ext_resource type="Texture2D" uid="uid://c1vt6ybw21ec8" path="res://assets/images/bg_next_level_easy.png" id="2_background"]
+[ext_resource type="Texture2D" uid="uid://cyyix8x2dsplv" path="res://assets/images/buttons/btn_play_next_level.png" id="3_play"]
+[ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="4_font"]
+[ext_resource type="Script" uid="uid://0g13lmkx4usr" path="res://core/components/button_helper_component.gd" id="5_button_helper"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_button"]
+font = ExtResource("4_font")
+font_size = 56
+
+[node name="NextLevelMenu" type="CanvasLayer" unique_id=1267724779]
+
+[node name="Components" type="Node" parent="." unique_id=1275429086]
+
+[node name="NextLevelMenuComponent" type="Node" parent="Components" unique_id=305667616 node_paths=PackedStringArray("menu", "play_button", "button_label")]
+script = ExtResource("1_component")
+menu = NodePath("../../Menu")
+play_button = NodePath("../../Menu/Panel/PlayButton")
+button_label = NodePath("../../Menu/Panel/PlayButton/Label")
+popup_sfx_path = "res://assets/sounds/popup.mp3"
+owner_node_path = NodePath("../..")
+
+[node name="Menu" type="Control" parent="." unique_id=1963629387]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Overlay" type="ColorRect" parent="Menu" unique_id=757201314]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.03, 0.02, 0.05, 0.34)
+
+[node name="Panel" type="TextureRect" parent="Menu" unique_id=824151029]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -418.75
+offset_top = -502.25
+offset_right = 418.75
+offset_bottom = 502.25
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_background")
+stretch_mode = 5
+
+[node name="PlayButton" type="TextureButton" parent="Menu/Panel" unique_id=43572092]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -282.5
+offset_top = -229.0
+offset_right = 282.5
+offset_bottom = -59.0
+grow_horizontal = 2
+grow_vertical = 0
+pivot_offset_ratio = Vector2(0.5, 0.5)
+texture_normal = ExtResource("3_play")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Menu/Panel/PlayButton" unique_id=123470269]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "PLAY MEDIUM"
+label_settings = SubResource("LabelSettings_button")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ButtonHelperComponent" type="Node" parent="Menu/Panel/PlayButton" unique_id=1960506404]
+script = ExtResource("5_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")

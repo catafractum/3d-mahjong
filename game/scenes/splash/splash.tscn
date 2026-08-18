@@ -1,0 +1,251 @@
+[gd_scene format=3 uid="uid://c8lexjylyx41t"]
+
+[ext_resource type="Script" uid="uid://dpawpb2gs63r8" path="res://game/components/window_resize_listener_component.gd" id="1_resize"]
+[ext_resource type="Texture2D" uid="uid://cll8xwwdv46we" path="res://assets/images/background.jpg" id="2_4shk6"]
+[ext_resource type="Texture2D" uid="uid://dy4dtrdnge65v" path="res://assets/images/splash/game_logo.png" id="3_8dd55"]
+[ext_resource type="PackedScene" uid="uid://ife5h8wg7pi8" path="res://prefabs/splash_calendar_day/splash_calendar_day.tscn" id="4_tmpah"]
+[ext_resource type="PackedScene" uid="uid://d2j1ruu616fo3" path="res://prefabs/splash_challenge_container/splash_challenge_container.tscn" id="5_challenge"]
+[ext_resource type="PackedScene" uid="uid://bxsh7ctu63ghw" path="res://prefabs/splash_days_carousel/splash_days_carousel.tscn" id="6_carousel"]
+[ext_resource type="PackedScene" path="res://prefabs/splash_streak/splash_streak.tscn" id="7_streak"]
+[ext_resource type="Script" uid="uid://dnaqbk04qydfb" path="res://game/scenes/splash/splash_sound_component.gd" id="8_sound"]
+[ext_resource type="Texture2D" uid="uid://cfwemswtovpqp" path="res://assets/images/spinner.png" id="9_t66fi"]
+
+[node name="Splash" type="Node2D" unique_id=100442976]
+
+[node name="Components" type="Node" parent="." unique_id=211836836]
+
+[node name="WindowResizeListenerComponent" type="Node" parent="Components" unique_id=767328126 node_paths=PackedStringArray("landscape", "portrait")]
+script = ExtResource("1_resize")
+landscape = NodePath("../../UI/LandscapeUI")
+portrait = NodePath("../../UI/PortraitUI")
+owner_node_path = NodePath("../..")
+
+[node name="SplashSoundComponent" type="Node" parent="Components" unique_id=348874464]
+script = ExtResource("8_sound")
+music_path = "res://assets/sounds/music.mp3"
+owner_node_path = NodePath("../..")
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1927576681]
+
+[node name="Bg" type="Control" parent="UI" unique_id=267593060]
+custom_minimum_size = Vector2(3600, 1800)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1350.0
+offset_right = 1350.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="TextureRect" parent="UI/Bg" unique_id=230821400]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_4shk6")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Overlay" type="ColorRect" parent="UI/Bg" unique_id=1855733602]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.03, 0.02, 0.05, 0.34)
+
+[node name="LandscapeUI" type="Control" parent="UI" unique_id=1319850694]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Logo" type="TextureRect" parent="UI/LandscapeUI" unique_id=426404393]
+custom_minimum_size = Vector2(570, 330)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -446.0
+offset_top = 66.0
+offset_right = 445.27246
+offset_bottom = 670.0
+grow_horizontal = 2
+texture = ExtResource("3_8dd55")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Section" type="Control" parent="UI/LandscapeUI" unique_id=1176360987]
+custom_minimum_size = Vector2(2200, 660)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -1100.0
+offset_top = -131.0
+offset_right = 1100.0
+offset_bottom = 529.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0)
+
+[node name="SplashCalendarDay" parent="UI/LandscapeUI/Section" unique_id=847538879 instance=ExtResource("4_tmpah")]
+layout_mode = 0
+
+[node name="SplashChallengeContainer" parent="UI/LandscapeUI/Section" unique_id=731102767 instance=ExtResource("5_challenge")]
+layout_mode = 0
+offset_left = 441.0
+offset_top = 21.0
+offset_right = 832.0
+offset_bottom = 271.0
+scale = Vector2(2, 2)
+
+[node name="SplashDaysCarousel" parent="UI/LandscapeUI/Section" unique_id=987524499 instance=ExtResource("6_carousel")]
+layout_mode = 0
+offset_left = 1300.0
+offset_top = 73.000015
+offset_right = 1896.0
+offset_bottom = 216.00002
+scale = Vector2(1.4, 1.4)
+
+[node name="SplashStreak" parent="UI/LandscapeUI/Section" unique_id=792587543 instance=ExtResource("7_streak")]
+layout_mode = 0
+offset_left = 1300.0
+offset_top = 316.0
+offset_right = 1901.0
+offset_bottom = 423.0
+scale = Vector2(1.4, 1.4)
+
+[node name="PortraitUI" type="Control" parent="UI" unique_id=1897949588]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Logo" type="TextureRect" parent="UI/PortraitUI" unique_id=1442729808]
+custom_minimum_size = Vector2(480, 330)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 124.0
+offset_right = -2.0
+offset_bottom = -1142.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_8dd55")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SplashChallengeContainer" parent="UI/PortraitUI" unique_id=1097770764 instance=ExtResource("5_challenge")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = 119.0
+offset_right = 250.0
+offset_bottom = 369.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.7, 1.7)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+
+[node name="SplashCalendarDay" parent="UI/PortraitUI" unique_id=65817169 instance=ExtResource("4_tmpah")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -394.0
+offset_top = 83.0
+offset_right = -31.0
+offset_bottom = 605.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.6, 0.6)
+
+[node name="SplashDaysCarousel" parent="UI/PortraitUI" unique_id=1411838154 instance=ExtResource("6_carousel")]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -298.0
+offset_top = -383.0
+offset_right = 298.0
+offset_bottom = -240.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1.4, 1.4)
+pivot_offset_ratio = Vector2(0.5, 1)
+
+[node name="SplashStreak" parent="UI/PortraitUI" unique_id=208888580 instance=ExtResource("7_streak")]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -300.5
+offset_top = -140.0
+offset_right = 300.5
+offset_bottom = -33.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1.39, 1.39)
+pivot_offset_ratio = Vector2(0.5, 1)
+
+[node name="Loading" type="Control" parent="UI" unique_id=1501389120]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="UI/Loading" unique_id=1685380037]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.3882353)
+
+[node name="TextureRect" type="TextureRect" parent="UI/Loading/ColorRect" unique_id=919941227]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = 477.0
+offset_right = 50.0
+offset_bottom = 577.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+texture = ExtResource("9_t66fi")
+expand_mode = 1
+stretch_mode = 5
+
+[editable path="UI/PortraitUI/SplashChallengeContainer"]

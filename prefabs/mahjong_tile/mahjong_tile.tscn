@@ -1,0 +1,78 @@
+[gd_scene format=3 uid="uid://blgsgj24xjt4t"]
+
+[ext_resource type="Script" uid="uid://bbwf3tf8sg8ub" path="res://prefabs/mahjong_tile/mahjong_tile_component.gd" id="1_component"]
+[ext_resource type="Script" uid="uid://coo44x3xtim1c" path="res://prefabs/mahjong_tile/mahjong_tile_visual_component.gd" id="2_visual"]
+[ext_resource type="PackedScene" path="res://assets/models/cube.scn" id="3_cube"]
+[ext_resource type="Texture2D" uid="uid://dhyleexn6jvry" path="res://assets/images/icons_tiles/icon_1.png" id="4_icon1"]
+[ext_resource type="Texture2D" uid="uid://cq7fjagl6nbju" path="res://assets/images/icons_tiles/icon_2.png" id="5_icon2"]
+[ext_resource type="Texture2D" uid="uid://cxff4nukh4m8g" path="res://assets/images/icons_tiles/icon_3.png" id="6_icon3"]
+[ext_resource type="Texture2D" uid="uid://bkth2fr85alul" path="res://assets/images/icons_tiles/icon_4.png" id="7_icon4"]
+[ext_resource type="Texture2D" uid="uid://iyrk2ilkb7pr" path="res://assets/images/icons_tiles/icon_5.png" id="8_icon5"]
+[ext_resource type="Texture2D" uid="uid://b2ekqqwpd36sq" path="res://assets/images/icons_tiles/icon_6.png" id="9_icon6"]
+[ext_resource type="Texture2D" uid="uid://blvbenx87mlap" path="res://assets/images/icons_tiles/icon_7.png" id="10_icon7"]
+[ext_resource type="Texture2D" uid="uid://bljia2g0touao" path="res://assets/images/icons_tiles/icon_8.png" id="11_icon8"]
+[ext_resource type="Texture2D" uid="uid://bdhic3n32uy0b" path="res://assets/images/icons_tiles/icon_9.png" id="12_icon9"]
+[ext_resource type="Texture2D" uid="uid://c7eq85aj1hver" path="res://assets/images/icons_tiles/icon_10.png" id="13_icon10"]
+[ext_resource type="Texture2D" uid="uid://drq37rnufn7tg" path="res://assets/images/icons_tiles/icon_11.png" id="14_icon11"]
+[ext_resource type="Texture2D" uid="uid://dyd86kuc5pn64" path="res://assets/images/icons_tiles/icon_12.png" id="15_icon12"]
+[ext_resource type="Texture2D" uid="uid://clrldrhpl5jwq" path="res://assets/images/icons_tiles/icon_13.png" id="16_icon13"]
+[ext_resource type="Texture2D" uid="uid://c4dlt8iq2e6t0" path="res://assets/images/icons_tiles/icon_14.png" id="17_icon14"]
+[ext_resource type="Texture2D" uid="uid://bm5juixmos3p3" path="res://assets/images/icons_tiles/icon_15.png" id="18_icon15"]
+[ext_resource type="Texture2D" uid="uid://bfh2iqarkwjnn" path="res://assets/images/icons_tiles/icon_16.png" id="19_icon16"]
+[ext_resource type="PackedScene" path="res://prefabs/tile_disappear_particles/tile_disappear_particles.tscn" id="20_particles"]
+
+[sub_resource type="BoxShape3D" id="BoxShape_tile"]
+
+[sub_resource type="StandardMaterial3D" id="IconMaterial"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+shading_mode = 2
+albedo_texture = ExtResource("4_icon1")
+
+[sub_resource type="PlaneMesh" id="IconPlane"]
+material = SubResource("IconMaterial")
+
+[node name="MahjongTile" type="Node3D" unique_id=77515676]
+
+[node name="Components" type="Node" parent="." unique_id=478383767]
+
+[node name="MahjongTileComponent" type="Node" parent="Components" unique_id=2052982736 node_paths=PackedStringArray("icon_faces")]
+script = ExtResource("1_component")
+icon_faces = [NodePath("../../FaceFront"), NodePath("../../FaceBack"), NodePath("../../FaceLeft"), NodePath("../../FaceRight")]
+icon_textures = Array[Texture2D]([ExtResource("4_icon1"), ExtResource("5_icon2"), ExtResource("6_icon3"), ExtResource("7_icon4"), ExtResource("8_icon5"), ExtResource("9_icon6"), ExtResource("10_icon7"), ExtResource("11_icon8"), ExtResource("12_icon9"), ExtResource("13_icon10"), ExtResource("14_icon11"), ExtResource("15_icon12"), ExtResource("16_icon13"), ExtResource("17_icon14"), ExtResource("18_icon15"), ExtResource("19_icon16")])
+owner_node_path = NodePath("../..")
+
+[node name="MahjongTileVisualComponent" type="Node" parent="Components" unique_id=1481483704 node_paths=PackedStringArray("tile", "body_root", "icon_faces")]
+script = ExtResource("2_visual")
+tile = NodePath("../..")
+body_root = NodePath("../../Body")
+icon_faces = [NodePath("../../FaceFront"), NodePath("../../FaceBack"), NodePath("../../FaceLeft"), NodePath("../../FaceRight")]
+disappear_particles_scene = ExtResource("20_particles")
+removal_grow_duration = 0.225
+removal_shrink_duration = 0.36
+removal_finish_delay = 0.2
+owner_node_path = NodePath("../..")
+
+[node name="Body" parent="." unique_id=1953810809 instance=ExtResource("3_cube")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1947840515]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=574653263]
+shape = SubResource("BoxShape_tile")
+
+[node name="FaceFront" type="MeshInstance3D" parent="." unique_id=1965073590]
+transform = Transform3D(0.36, 0, 0, 0, -1.639177e-08, -0.36, 0, 0.36, -1.639177e-08, 0, 0, 0.51)
+mesh = SubResource("IconPlane")
+
+[node name="FaceBack" type="MeshInstance3D" parent="." unique_id=1328187806]
+transform = Transform3D(-1.639177e-08, 0.36, -1.639177e-08, 0, -1.639177e-08, -0.36, -0.36, -1.639177e-08, 7.165071e-16, 0.51, 0, 0)
+mesh = SubResource("IconPlane")
+
+[node name="FaceLeft" type="MeshInstance3D" parent="." unique_id=578447449]
+transform = Transform3D(-0.36, 5.6623428e-08, -2.4750885e-15, 0, -1.639177e-08, -0.36, -5.6623428e-08, -0.36, 1.639177e-08, 0, 0, -0.51)
+mesh = SubResource("IconPlane")
+
+[node name="FaceRight" type="MeshInstance3D" parent="." unique_id=1029456183]
+transform = Transform3D(-1.639177e-08, -0.36, 1.639177e-08, 0, -1.639177e-08, -0.36, 0.36, -1.639177e-08, 7.165071e-16, -0.51, 0, 0)
+mesh = SubResource("IconPlane")

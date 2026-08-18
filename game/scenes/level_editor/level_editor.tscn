@@ -1,0 +1,69 @@
+[gd_scene format=3 uid="uid://trly04w1b2xl"]
+
+[ext_resource type="Script" uid="uid://6yrol78c0yxl" path="res://game/scenes/level_editor/level_editor_component.gd" id="1_component"]
+[ext_resource type="PackedScene" uid="uid://blgsgj24xjt4t" path="res://prefabs/mahjong_tile/mahjong_tile.tscn" id="2_tile"]
+
+[sub_resource type="Environment" id="Environment_editor"]
+background_mode = 3
+background_color = Color(0.055, 0.065, 0.075, 1)
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_energy = 0.7
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_panel"]
+content_margin_left = 14.0
+content_margin_top = 14.0
+content_margin_right = 14.0
+content_margin_bottom = 14.0
+bg_color = Color(0.04, 0.05, 0.055, 0.92)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="LevelEditor" type="Node3D" unique_id=1678640684]
+
+[node name="Components" type="Node" parent="." unique_id=2046363603]
+
+[node name="LevelEditorComponent" type="Node" parent="Components" unique_id=213647611 node_paths=PackedStringArray("view_root", "grid_root", "tiles_root", "layer_grid_root", "camera", "ui_layer", "panel")]
+script = ExtResource("1_component")
+tile_scene = ExtResource("2_tile")
+view_root = NodePath("../../ViewRoot")
+grid_root = NodePath("../../ViewRoot/GridRoot")
+tiles_root = NodePath("../../ViewRoot/TilesRoot")
+layer_grid_root = NodePath("../../ViewRoot/LayerGridRoot")
+camera = NodePath("../../Camera3D")
+ui_layer = NodePath("../../UI")
+panel = NodePath("../../UI/PanelContainer/Panel")
+owner_node_path = NodePath("../..")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1583588936]
+environment = SubResource("Environment_editor")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=740800024]
+transform = Transform3D(0.707107, -0.331295, 0.624695, 0, 0.883452, 0.468521, -0.707107, -0.331295, 0.624695, 10, 7, 10)
+projection = 1
+size = 11.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1414717668]
+transform = Transform3D(0.866025, 0.25, -0.433013, 0, 0.866025, 0.5, 0.5, -0.433013, 0.75, 0, 0, 5)
+light_energy = 1.25
+
+[node name="ViewRoot" type="Node3D" parent="." unique_id=1894877971]
+
+[node name="GridRoot" type="Node3D" parent="ViewRoot" unique_id=288177245]
+
+[node name="LayerGridRoot" type="Node3D" parent="ViewRoot" unique_id=1051194414]
+
+[node name="TilesRoot" type="Node3D" parent="ViewRoot" unique_id=1718319408]
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1202720577]
+
+[node name="PanelContainer" type="PanelContainer" parent="UI" unique_id=1946385204]
+custom_minimum_size = Vector2(230, 560)
+offset_right = 230.0
+offset_bottom = 560.0
+theme_override_styles/panel = SubResource("StyleBox_panel")
+
+[node name="Panel" type="VBoxContainer" parent="UI/PanelContainer" unique_id=817267655]
+layout_mode = 2

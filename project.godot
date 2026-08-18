@@ -12,7 +12,7 @@ config_version=5
 
 config/name="3D Mahjong"
 config/version="1.0.0"
-run/main_scene="uid://brugxgm251okg"
+run/main_scene="uid://c313i447xrval"
 config/features=PackedStringArray("4.6", "Mobile")
 boot_splash/bg_color=Color(0.02745098, 0.105882354, 0.08627451, 1)
 boot_splash/stretch_mode=0
@@ -21,9 +21,11 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-GameState="*res://scripts/game_state.gd"
-Soundmanager="*res://scenes/soundmanager.tscn"
-ByteBrewWeb="*res://scripts/bytebrew_web.gd"
+GameDB="*res://game/gamedb/gamedb.tscn"
+SoundManager="*res://core/sound_manager/sound_manager.gd"
+ByteBrewWeb="*res://game/bytebrew/bytebrew_web.gd"
+SaveLoadManager="*uid://biaucwe1ge88s"
+DailyChallengeService="*res://game/daily_challenge/daily_challenge_service.gd"
 
 [display]
 

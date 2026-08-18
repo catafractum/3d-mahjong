@@ -1,0 +1,282 @@
+[gd_scene format=3 uid="uid://bxsh7ctu63ghw"]
+
+[ext_resource type="Script" uid="uid://bgi5hjcbfsqtj" path="res://prefabs/splash_days_carousel/splash_days_carousel_component.gd" id="1_component"]
+[ext_resource type="Texture2D" uid="uid://c3i0xy0pm7dge" path="res://assets/images/splash/bg_days_carousel.png" id="2_background"]
+[ext_resource type="Texture2D" uid="uid://bp0u883p8xife" path="res://assets/images/splash/badge_empty.png" id="3_badge"]
+[ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="4_font"]
+[ext_resource type="Texture2D" uid="uid://cikkwftd686n3" path="res://assets/images/tick_icon.png" id="5_tick"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_weekday"]
+font = ExtResource("4_font")
+font_size = 18
+font_color = Color(0.768627, 0.623529, 0.933333, 1)
+
+[node name="SplashDaysCarousel" type="Control" unique_id=1939107156]
+custom_minimum_size = Vector2(596, 143)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 596.0
+offset_bottom = 143.0
+
+[node name="Components" type="Node" parent="." unique_id=335650532]
+
+[node name="SplashDaysCarouselComponent" type="Node" parent="Components" unique_id=1524741809 node_paths=PackedStringArray("weekday_labels", "completion_ticks")]
+script = ExtResource("1_component")
+weekday_labels = [NodePath("../../DaysRow/Day1/Weekday"), NodePath("../../DaysRow/Day2/Weekday"), NodePath("../../DaysRow/Day3/Weekday"), NodePath("../../DaysRow/Day4/Weekday"), NodePath("../../DaysRow/Day5/Weekday"), NodePath("../../DaysRow/Day6/Weekday"), NodePath("../../DaysRow/Day7/Weekday")]
+completion_ticks = [NodePath("../../DaysRow/Day1/Badge/Tick"), NodePath("../../DaysRow/Day2/Badge/Tick"), NodePath("../../DaysRow/Day3/Badge/Tick"), NodePath("../../DaysRow/Day4/Badge/Tick"), NodePath("../../DaysRow/Day5/Badge/Tick"), NodePath("../../DaysRow/Day6/Badge/Tick"), NodePath("../../DaysRow/Day7/Badge/Tick")]
+owner_node_path = NodePath("../..")
+
+[node name="Background" type="TextureRect" parent="." unique_id=504708966]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_background")
+stretch_mode = 5
+
+[node name="DaysRow" type="HBoxContainer" parent="." unique_id=194482785]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 34.0
+offset_top = 43.0
+offset_right = -34.0
+offset_bottom = -7.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="Day1" type="VBoxContainer" parent="DaysRow" unique_id=607414539]
+custom_minimum_size = Vector2(50, 82)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="Weekday" type="Label" parent="DaysRow/Day1" unique_id=2015556458]
+custom_minimum_size = Vector2(50, 24)
+layout_mode = 2
+text = "MON"
+label_settings = SubResource("LabelSettings_weekday")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Badge" type="TextureRect" parent="DaysRow/Day1" unique_id=1427422190]
+custom_minimum_size = Vector2(46, 47)
+layout_mode = 2
+texture = ExtResource("3_badge")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Tick" type="TextureRect" parent="DaysRow/Day1/Badge" unique_id=1110884134]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_tick")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Day2" type="VBoxContainer" parent="DaysRow" unique_id=2059744213]
+custom_minimum_size = Vector2(50, 82)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="Weekday" type="Label" parent="DaysRow/Day2" unique_id=663121160]
+custom_minimum_size = Vector2(50, 24)
+layout_mode = 2
+text = "TUE"
+label_settings = SubResource("LabelSettings_weekday")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Badge" type="TextureRect" parent="DaysRow/Day2" unique_id=1434427662]
+custom_minimum_size = Vector2(46, 47)
+layout_mode = 2
+texture = ExtResource("3_badge")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Tick" type="TextureRect" parent="DaysRow/Day2/Badge" unique_id=98934499]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_tick")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Day3" type="VBoxContainer" parent="DaysRow" unique_id=1345396500]
+custom_minimum_size = Vector2(50, 82)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="Weekday" type="Label" parent="DaysRow/Day3" unique_id=1998249945]
+custom_minimum_size = Vector2(50, 24)
+layout_mode = 2
+text = "WED"
+label_settings = SubResource("LabelSettings_weekday")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Badge" type="TextureRect" parent="DaysRow/Day3" unique_id=748078204]
+custom_minimum_size = Vector2(46, 47)
+layout_mode = 2
+texture = ExtResource("3_badge")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Tick" type="TextureRect" parent="DaysRow/Day3/Badge" unique_id=1109745667]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_tick")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Day4" type="VBoxContainer" parent="DaysRow" unique_id=500392385]
+custom_minimum_size = Vector2(50, 82)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="Weekday" type="Label" parent="DaysRow/Day4" unique_id=1393545466]
+custom_minimum_size = Vector2(50, 24)
+layout_mode = 2
+text = "THU"
+label_settings = SubResource("LabelSettings_weekday")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Badge" type="TextureRect" parent="DaysRow/Day4" unique_id=704633929]
+custom_minimum_size = Vector2(46, 47)
+layout_mode = 2
+texture = ExtResource("3_badge")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Tick" type="TextureRect" parent="DaysRow/Day4/Badge" unique_id=1354488301]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_tick")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Day5" type="VBoxContainer" parent="DaysRow" unique_id=1757495373]
+custom_minimum_size = Vector2(50, 82)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="Weekday" type="Label" parent="DaysRow/Day5" unique_id=19174040]
+custom_minimum_size = Vector2(50, 24)
+layout_mode = 2
+text = "FRI"
+label_settings = SubResource("LabelSettings_weekday")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Badge" type="TextureRect" parent="DaysRow/Day5" unique_id=1281508794]
+custom_minimum_size = Vector2(46, 47)
+layout_mode = 2
+texture = ExtResource("3_badge")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Tick" type="TextureRect" parent="DaysRow/Day5/Badge" unique_id=1870707772]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_tick")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Day6" type="VBoxContainer" parent="DaysRow" unique_id=1746662042]
+custom_minimum_size = Vector2(50, 82)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="Weekday" type="Label" parent="DaysRow/Day6" unique_id=1119580998]
+custom_minimum_size = Vector2(50, 24)
+layout_mode = 2
+text = "SAT"
+label_settings = SubResource("LabelSettings_weekday")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Badge" type="TextureRect" parent="DaysRow/Day6" unique_id=1904777195]
+custom_minimum_size = Vector2(46, 47)
+layout_mode = 2
+texture = ExtResource("3_badge")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Tick" type="TextureRect" parent="DaysRow/Day6/Badge" unique_id=101076145]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_tick")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Day7" type="VBoxContainer" parent="DaysRow" unique_id=1215301329]
+custom_minimum_size = Vector2(50, 82)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="Weekday" type="Label" parent="DaysRow/Day7" unique_id=299079248]
+custom_minimum_size = Vector2(50, 24)
+layout_mode = 2
+text = "SUN"
+label_settings = SubResource("LabelSettings_weekday")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Badge" type="TextureRect" parent="DaysRow/Day7" unique_id=750699099]
+custom_minimum_size = Vector2(46, 47)
+layout_mode = 2
+texture = ExtResource("3_badge")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Tick" type="TextureRect" parent="DaysRow/Day7/Badge" unique_id=512910220]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_tick")
+expand_mode = 1
+stretch_mode = 5

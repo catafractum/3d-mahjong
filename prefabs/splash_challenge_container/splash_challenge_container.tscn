@@ -1,0 +1,217 @@
+[gd_scene format=3 uid="uid://d2j1ruu616fo3"]
+
+[ext_resource type="Script" uid="uid://66b10r8ht5so" path="res://prefabs/splash_challenge_container/splash_challenge_container_component.gd" id="1_component"]
+[ext_resource type="Texture2D" uid="uid://b0mdt7mv21vj3" path="res://assets/images/buttons/btn_play.png" id="2_play"]
+[ext_resource type="Texture2D" uid="uid://dvg3fb4pya5s" path="res://assets/images/splash/challenge_bg.png" id="3_background"]
+[ext_resource type="Texture2D" uid="uid://bme411pvplbfk" path="res://assets/images/splash/title-edge.png" id="4_title_edge"]
+[ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="5_font"]
+[ext_resource type="Texture2D" uid="uid://c416j1cv6240u" path="res://assets/images/splash/arrow.png" id="6_arrow"]
+[ext_resource type="Texture2D" uid="uid://w4a3dl72375u" path="res://assets/images/splash/timer_icon.png" id="7_timer"]
+[ext_resource type="Script" uid="uid://0g13lmkx4usr" path="res://core/components/button_helper_component.gd" id="8_button_helper"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_title"]
+font = ExtResource("5_font")
+font_color = Color(1, 0.8352941, 0.40392157, 1)
+shadow_color = Color(0, 0, 0, 0.4392157)
+
+[sub_resource type="LabelSettings" id="LabelSettings_easy"]
+font = ExtResource("5_font")
+font_size = 20
+font_color = Color(1, 0.8352941, 0.40392157, 1)
+shadow_color = Color(0, 0, 0, 0.4392157)
+
+[sub_resource type="LabelSettings" id="LabelSettings_medium"]
+font = ExtResource("5_font")
+font_size = 20
+font_color = Color(1, 0.64705884, 0.003921569, 1)
+shadow_color = Color(0, 0, 0, 0.4392157)
+
+[sub_resource type="LabelSettings" id="LabelSettings_hard"]
+font = ExtResource("5_font")
+font_size = 20
+font_color = Color(1, 0.2901961, 0.3764706, 1)
+shadow_color = Color(0, 0, 0, 0.4392157)
+
+[sub_resource type="LabelSettings" id="LabelSettings_body"]
+font = ExtResource("5_font")
+
+[sub_resource type="LabelSettings" id="LabelSettings_time"]
+font = ExtResource("5_font")
+font_color = Color(1, 1, 0, 1)
+
+[node name="SplashChallengeContainer" type="Control" unique_id=1837072958]
+custom_minimum_size = Vector2(391, 250)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 391.0
+offset_bottom = 250.0
+
+[node name="Components" type="Node" parent="." unique_id=220682934]
+
+[node name="SplashChallengeContainerComponent" type="Node" parent="Components" unique_id=988472689 node_paths=PackedStringArray("play_button")]
+script = ExtResource("1_component")
+game_scene_path = "uid://jlwf1qqvvmq7"
+play_button = NodePath("../../Background/Content/PlayButton")
+owner_node_path = NodePath("../..")
+
+[node name="Background" type="NinePatchRect" parent="." unique_id=1415559383]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_background")
+patch_margin_left = 30
+patch_margin_top = 30
+patch_margin_right = 30
+patch_margin_bottom = 30
+
+[node name="Content" type="Control" parent="Background" unique_id=370922621]
+custom_minimum_size = Vector2(390, 250)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -390.0
+offset_bottom = 250.0
+grow_horizontal = 0
+
+[node name="TitleContainer" type="HBoxContainer" parent="Background/Content" unique_id=283921637]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -121.0
+offset_top = 18.0
+offset_right = 122.0
+offset_bottom = 58.0
+grow_horizontal = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="LeftEdge" type="TextureRect" parent="Background/Content/TitleContainer" unique_id=1100771235]
+custom_minimum_size = Vector2(60, 20)
+layout_mode = 2
+texture = ExtResource("4_title_edge")
+expand_mode = 1
+stretch_mode = 5
+flip_h = true
+
+[node name="Title" type="Label" parent="Background/Content/TitleContainer" unique_id=1232827530]
+layout_mode = 2
+text = "TODAY'S CHALLENGE"
+label_settings = SubResource("LabelSettings_title")
+
+[node name="RightEdge" type="TextureRect" parent="Background/Content/TitleContainer" unique_id=1998289247]
+custom_minimum_size = Vector2(60, 20)
+layout_mode = 2
+texture = ExtResource("4_title_edge")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DifficultyContainer" type="HBoxContainer" parent="Background/Content" unique_id=185999881]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -130.5
+offset_top = 60.0
+offset_right = 130.5
+offset_bottom = 100.0
+grow_horizontal = 2
+
+[node name="Easy" type="Label" parent="Background/Content/DifficultyContainer" unique_id=894520173]
+layout_mode = 2
+text = "Easy"
+label_settings = SubResource("LabelSettings_easy")
+
+[node name="Arrow1" type="TextureRect" parent="Background/Content/DifficultyContainer" unique_id=2032802452]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("6_arrow")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Medium" type="Label" parent="Background/Content/DifficultyContainer" unique_id=1203046998]
+layout_mode = 2
+text = "Medium"
+label_settings = SubResource("LabelSettings_medium")
+
+[node name="Arrow2" type="TextureRect" parent="Background/Content/DifficultyContainer" unique_id=1933746738]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("6_arrow")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Hard" type="Label" parent="Background/Content/DifficultyContainer" unique_id=1604911173]
+layout_mode = 2
+text = "Hard"
+label_settings = SubResource("LabelSettings_hard")
+
+[node name="TimerContainer" type="HBoxContainer" parent="Background/Content" unique_id=594956464]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -133.5
+offset_top = 108.0
+offset_right = 134.5
+offset_bottom = 148.0
+grow_horizontal = 2
+
+[node name="TimerIcon" type="TextureRect" parent="Background/Content/TimerContainer" unique_id=1698490427]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+texture = ExtResource("7_timer")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Description" type="Label" parent="Background/Content/TimerContainer" unique_id=1322228029]
+layout_mode = 2
+text = "Complete all 3 boards in"
+label_settings = SubResource("LabelSettings_body")
+
+[node name="Time" type="Label" parent="Background/Content/TimerContainer" unique_id=1212804764]
+layout_mode = 2
+text = "15:00"
+label_settings = SubResource("LabelSettings_time")
+
+[node name="Separator" type="HSeparator" parent="Background/Content" unique_id=1683764128]
+self_modulate = Color(1, 1, 1, 0.39215687)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -144.0
+offset_top = 153.0
+offset_right = 145.0
+offset_bottom = 157.0
+grow_horizontal = 2
+
+[node name="PlayButton" type="TextureButton" parent="Background/Content" unique_id=282838297]
+custom_minimum_size = Vector2(276, 59)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -138.0
+offset_top = -76.0
+offset_right = 138.0
+offset_bottom = -17.0
+grow_horizontal = 2
+grow_vertical = 0
+pivot_offset = Vector2(138, 29.5)
+texture_normal = ExtResource("2_play")
+texture_pressed = ExtResource("2_play")
+texture_hover = ExtResource("2_play")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="ButtonHelperComponent" type="Node" parent="Background/Content/PlayButton" unique_id=1494249928]
+script = ExtResource("8_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")

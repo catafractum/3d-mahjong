@@ -1,0 +1,98 @@
+[gd_scene format=3 uid="uid://dw33pljsvxs0b"]
+
+[ext_resource type="Script" uid="uid://xclhkh7vs2ad" path="res://prefabs/challenge_complete_menu/challenge_complete_menu_component.gd" id="1_component"]
+[ext_resource type="Texture2D" uid="uid://bdehsdd8ywr3e" path="res://assets/images/bg_challenge_completed_level.png" id="2_background"]
+[ext_resource type="Texture2D" uid="uid://41n8u4xms12l" path="res://assets/images/buttons/btn_play_again_challenge_completed_menu.png" id="3_replay"]
+[ext_resource type="Texture2D" uid="uid://qpsbrjs1pd14" path="res://assets/images/buttons/btn_home_challenge_completed_menu.png" id="4_home"]
+[ext_resource type="Script" uid="uid://0g13lmkx4usr" path="res://core/components/button_helper_component.gd" id="5_button_helper"]
+
+[node name="ChallengeCompleteMenu" type="CanvasLayer" unique_id=551178752]
+
+[node name="Components" type="Node" parent="." unique_id=124015894]
+
+[node name="ChallengeCompleteMenuComponent" type="Node" parent="Components" unique_id=549943520 node_paths=PackedStringArray("menu", "home_button", "replay_button")]
+script = ExtResource("1_component")
+menu = NodePath("../../Menu")
+home_button = NodePath("../../Menu/Panel/HomeButton")
+replay_button = NodePath("../../Menu/Panel/ReplayButton")
+splash_scene_path = "uid://c8lexjylyx41t"
+popup_sfx_path = "res://assets/sounds/popup.mp3"
+owner_node_path = NodePath("../..")
+
+[node name="Menu" type="Control" parent="." unique_id=461371204]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Overlay" type="ColorRect" parent="Menu" unique_id=514865417]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.03, 0.02, 0.05, 0.34)
+
+[node name="Panel" type="TextureRect" parent="Menu" unique_id=1619609016]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -395.25
+offset_top = -455.44
+offset_right = 395.25
+offset_bottom = 455.44
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_background")
+stretch_mode = 5
+
+[node name="ReplayButton" type="TextureButton" parent="Menu/Panel" unique_id=1828766172]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -240.0
+offset_top = -272.44
+offset_right = 240.0
+offset_bottom = -140.44
+grow_horizontal = 2
+grow_vertical = 0
+pivot_offset_ratio = Vector2(0.5, 0.5)
+texture_normal = ExtResource("3_replay")
+stretch_mode = 5
+
+[node name="ButtonHelperComponent" type="Node" parent="Menu/Panel/ReplayButton" unique_id=21953572]
+script = ExtResource("5_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")
+
+[node name="HomeButton" type="TextureButton" parent="Menu/Panel" unique_id=1966215131]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -240.0
+offset_top = -138.44
+offset_right = 240.0
+offset_bottom = -37.44
+grow_horizontal = 2
+grow_vertical = 0
+pivot_offset_ratio = Vector2(0.5, 0.5)
+texture_normal = ExtResource("4_home")
+stretch_mode = 5
+
+[node name="ButtonHelperComponent" type="Node" parent="Menu/Panel/HomeButton" unique_id=391793509]
+script = ExtResource("5_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")

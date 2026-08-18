@@ -1,0 +1,115 @@
+[gd_scene format=3 uid="uid://jlwf1qqvvmq7"]
+
+[ext_resource type="Script" uid="uid://8wwjeotuimbe" path="res://game/scenes/game/current_game_session_component.gd" id="1_session"]
+[ext_resource type="Texture2D" uid="uid://cll8xwwdv46we" path="res://assets/images/background.jpg" id="2_background"]
+[ext_resource type="PackedScene" uid="uid://b6f4n7dbwus5w" path="res://prefabs/game_ui/game_ui.tscn" id="3_game_ui"]
+[ext_resource type="PackedScene" uid="uid://dwqu0wqid64jx" path="res://prefabs/next_level_menu/next_level_menu.tscn" id="4_next_menu"]
+[ext_resource type="PackedScene" uid="uid://dp3nkngs7ius3" path="res://prefabs/game_over_menu/game_over_menu.tscn" id="5_game_over_menu"]
+[ext_resource type="PackedScene" uid="uid://dw33pljsvxs0b" path="res://prefabs/challenge_complete_menu/challenge_complete_menu.tscn" id="6_challenge_menu"]
+[ext_resource type="Script" uid="uid://c8e2yv3bla643" path="res://game/scenes/game/board_builder_component.gd" id="7_board_builder"]
+[ext_resource type="PackedScene" uid="uid://blgsgj24xjt4t" path="res://prefabs/mahjong_tile/mahjong_tile.tscn" id="8_tile"]
+[ext_resource type="Script" uid="uid://bgcpmg25b1bl4" path="res://game/scenes/game/board_interaction_component.gd" id="9_interaction"]
+[ext_resource type="Script" uid="uid://6nnyol3rxp81" path="res://game/components/board/tile_rules_component.gd" id="13_rules"]
+[ext_resource type="Script" uid="uid://cf8ko6d6rofqv" path="res://game/components/board/mahjong_solver_component.gd" id="14_solver"]
+[ext_resource type="Script" uid="uid://bvoiotg157h1d" path="res://game/scenes/game/game_timer_component.gd" id="16_timer"]
+[ext_resource type="Script" uid="uid://b4vb57slqgc00" path="res://game/scenes/game/board_rotation_component.gd" id="18_rotation"]
+[ext_resource type="Script" uid="uid://bd7m7tychu041" path="res://game/scenes/game/board_camera_framing_component.gd" id="19_camera_framing"]
+[ext_resource type="PackedScene" uid="uid://gf2mwoapytuo" path="res://prefabs/game_settings_menu/game_settings_menu.tscn" id="21_settings_menu"]
+
+[sub_resource type="Environment" id="Environment_game"]
+background_mode = 3
+background_color = Color(0.14117648, 0.0627451, 0.19607843, 1)
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_energy = 0.59
+
+[node name="Game" type="Node3D" unique_id=162441300]
+
+[node name="Components" type="Node" parent="." unique_id=471442739]
+
+[node name="CurrentGameSessionComponent" type="Node" parent="Components" unique_id=122025426]
+script = ExtResource("1_session")
+owner_node_path = NodePath("../..")
+
+[node name="BoardBuilderComponent" type="Node" parent="Components" unique_id=430247265 node_paths=PackedStringArray("board")]
+script = ExtResource("7_board_builder")
+board = NodePath("../../Board")
+tile_scene = ExtResource("8_tile")
+owner_node_path = NodePath("../..")
+
+[node name="BoardInteractionComponent" type="Node" parent="Components" unique_id=1512249790 node_paths=PackedStringArray("camera")]
+script = ExtResource("9_interaction")
+camera = NodePath("../../Camera3D")
+correct_sfx_path = "res://assets/sounds/correct.mp3"
+wrong_sfx_path = "res://assets/sounds/wrong.mp3"
+tile_click_sfx_path = "res://assets/sounds/tile_click.mp3"
+owner_node_path = NodePath("../..")
+
+[node name="TileRulesComponent" type="Node" parent="Components" unique_id=577509781]
+script = ExtResource("13_rules")
+owner_node_path = NodePath("../..")
+
+[node name="MahjongSolverComponent" type="Node" parent="Components" unique_id=1559194266]
+script = ExtResource("14_solver")
+owner_node_path = NodePath("../..")
+
+[node name="GameTimerComponent" type="Node" parent="Components" unique_id=1838793639]
+script = ExtResource("16_timer")
+owner_node_path = NodePath("../..")
+
+[node name="BoardRotationComponent" type="Node" parent="Components" unique_id=983857444 node_paths=PackedStringArray("board")]
+script = ExtResource("18_rotation")
+board = NodePath("../../Board")
+owner_node_path = NodePath("../..")
+
+[node name="BoardCameraFramingComponent" type="Node" parent="Components" unique_id=1422066261 node_paths=PackedStringArray("camera", "board")]
+script = ExtResource("19_camera_framing")
+camera = NodePath("../../Camera3D")
+board = NodePath("../../Board")
+shuffle_zoom_multiplier = 1.7
+shuffle_zoom_duration = 2.0
+settle_duration = 1.0
+owner_node_path = NodePath("../..")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1559911230]
+environment = SubResource("Environment_game")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="WorldEnvironment" unique_id=1488466537]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 5, 4)
+light_energy = 0.832
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1333637883]
+transform = Transform3D(0.8660254, 0.25, -0.4330127, 0, 0.8660254, 0.5, 0.5, -0.4330127, 0.75, 0, 0, 5)
+light_energy = 0.85
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1645664976]
+transform = Transform3D(0.70710677, -0.15304592, 0.6903455, 0, 0.976296, 0.21643962, -0.70710677, -0.15304592, 0.6903455, 7, 3.8, 7)
+projection = 1
+size = 7.433
+
+[node name="Background" type="CanvasLayer" parent="." unique_id=1514614094]
+layer = -1
+
+[node name="Texture" type="TextureRect" parent="Background" unique_id=2112510139]
+custom_minimum_size = Vector2(3600, 1800)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_background")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Board" type="Node3D" parent="." unique_id=541336519]
+
+[node name="GameUI" parent="." unique_id=578073262 instance=ExtResource("3_game_ui")]
+
+[node name="GameSettingsMenu" parent="." unique_id=299455565 instance=ExtResource("21_settings_menu")]
+
+[node name="NextLevelMenu" parent="." unique_id=1837869081 instance=ExtResource("4_next_menu")]
+
+[node name="GameOverMenu" parent="." unique_id=649285576 instance=ExtResource("5_game_over_menu")]
+
+[node name="ChallengeCompleteMenu" parent="." unique_id=590672846 instance=ExtResource("6_challenge_menu")]

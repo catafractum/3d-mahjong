@@ -1,0 +1,179 @@
+[gd_scene format=3 uid="uid://gf2mwoapytuo"]
+
+[ext_resource type="Script" uid="uid://dx4ohqff2yuca" path="res://prefabs/game_settings_menu/game_settings_menu_component.gd" id="1_component"]
+[ext_resource type="Texture2D" uid="uid://ic10ws4jssj3" path="res://assets/images/buttons/btn_settings.png" id="2_settings"]
+[ext_resource type="Texture2D" uid="uid://dyq0ggulxd6fl" path="res://assets/images/buttons/btn_sfx_on.png" id="3_sfx_on"]
+[ext_resource type="Texture2D" uid="uid://b6gdcvp0d0055" path="res://assets/images/buttons/btn_sfx_off.png" id="4_sfx_off"]
+[ext_resource type="Texture2D" uid="uid://cqghs8u3d41s1" path="res://assets/images/buttons/btn_soundtrack_on.png" id="5_music_on"]
+[ext_resource type="Texture2D" uid="uid://b8lj6d7m2wpts" path="res://assets/images/buttons/btn_soundtrack_off.png" id="6_music_off"]
+[ext_resource type="Texture2D" uid="uid://dwtjdlhjpxmc3" path="res://assets/images/buttons/btn_reset.png" id="7_reset"]
+[ext_resource type="Texture2D" uid="uid://ds2yg3ca5aqln" path="res://assets/images/buttons/btn_home.png" id="8_home"]
+[ext_resource type="Script" uid="uid://0g13lmkx4usr" path="res://core/components/button_helper_component.gd" id="9_button_helper"]
+
+[node name="GameSettingsMenu" type="CanvasLayer" unique_id=2037524175]
+metadata/_edit_vertical_guides_ = [885.0]
+
+[node name="Components" type="Node" parent="." unique_id=2113380329]
+
+[node name="GameSettingsMenuComponent" type="Node" parent="Components" unique_id=1758220262 node_paths=PackedStringArray("settings_button", "sfx_on_button", "sfx_off_button", "music_on_button", "music_off_button", "reset_button", "home_button")]
+script = ExtResource("1_component")
+settings_button = NodePath("../../Controls/SettingsButton")
+sfx_on_button = NodePath("../../Controls/SfxOnButton")
+sfx_off_button = NodePath("../../Controls/SfxOffButton")
+music_on_button = NodePath("../../Controls/MusicOnButton")
+music_off_button = NodePath("../../Controls/MusicOffButton")
+reset_button = NodePath("../../Controls/ResetButton")
+home_button = NodePath("../../Controls/HomeButton")
+splash_scene_path = "uid://c8lexjylyx41t"
+owner_node_path = NodePath("../..")
+
+[node name="Controls" type="Control" parent="." unique_id=2017589721]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="SettingsButton" type="TextureButton" parent="Controls" unique_id=873065341]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -124.0
+offset_top = 16.0
+offset_bottom = 131.0
+grow_horizontal = 0
+scale = Vector2(0.9148177, 0.87402207)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+texture_normal = ExtResource("2_settings")
+
+[node name="ButtonHelperComponent" type="Node" parent="Controls/SettingsButton" unique_id=1009753776]
+script = ExtResource("9_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")
+
+[node name="SfxOnButton" type="TextureButton" parent="Controls" unique_id=1600612484]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -124.640015
+offset_top = 119.255
+offset_right = -12.640015
+offset_bottom = 190.255
+grow_horizontal = 0
+scale = Vector2(0.81, 0.81)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+button_mask = 1
+texture_normal = ExtResource("3_sfx_on")
+
+[node name="ButtonHelperComponent" type="Node" parent="Controls/SfxOnButton" unique_id=1816983790]
+script = ExtResource("9_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")
+
+[node name="SfxOffButton" type="TextureButton" parent="Controls" unique_id=912178731]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -124.63995
+offset_top = 119.255005
+offset_right = -12.639954
+offset_bottom = 190.255
+grow_horizontal = 0
+scale = Vector2(0.81, 0.81)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+button_mask = 1
+texture_normal = ExtResource("4_sfx_off")
+
+[node name="ButtonHelperComponent" type="Node" parent="Controls/SfxOffButton" unique_id=710524969]
+script = ExtResource("9_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")
+
+[node name="MusicOnButton" type="TextureButton" parent="Controls" unique_id=578435598]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -124.63995
+offset_top = 185.255
+offset_right = -12.639954
+offset_bottom = 256.255
+grow_horizontal = 0
+scale = Vector2(0.81, 0.81)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+button_mask = 1
+texture_normal = ExtResource("5_music_on")
+
+[node name="ButtonHelperComponent" type="Node" parent="Controls/MusicOnButton" unique_id=842762819]
+script = ExtResource("9_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")
+
+[node name="MusicOffButton" type="TextureButton" parent="Controls" unique_id=1234344619]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -124.06702
+offset_top = 185.255
+offset_right = -13.0979
+offset_bottom = 256.255
+grow_horizontal = 0
+scale = Vector2(0.81, 0.81)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+button_mask = 1
+texture_normal = ExtResource("6_music_off")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="ButtonHelperComponent" type="Node" parent="Controls/MusicOffButton" unique_id=1856061923]
+script = ExtResource("9_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")
+
+[node name="ResetButton" type="TextureButton" parent="Controls" unique_id=1540524030]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -124.63995
+offset_top = 252.255
+offset_right = -12.639954
+offset_bottom = 323.255
+grow_horizontal = 0
+scale = Vector2(0.808, 0.81)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+button_mask = 1
+texture_normal = ExtResource("7_reset")
+
+[node name="ButtonHelperComponent" type="Node" parent="Controls/ResetButton" unique_id=2031796670]
+script = ExtResource("9_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")
+
+[node name="HomeButton" type="TextureButton" parent="Controls" unique_id=1000405547]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -122.25519
+offset_top = 320.255
+offset_right = -15.064697
+offset_bottom = 391.255
+grow_horizontal = 0
+scale = Vector2(0.84, 0.81)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+button_mask = 1
+texture_normal = ExtResource("8_home")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="ButtonHelperComponent" type="Node" parent="Controls/HomeButton" unique_id=94304357]
+script = ExtResource("9_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")

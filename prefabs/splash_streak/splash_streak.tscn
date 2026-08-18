@@ -1,0 +1,57 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://prefabs/splash_streak/splash_streak_component.gd" id="1_component"]
+[ext_resource type="Texture2D" uid="uid://ctvcnfictrub1" path="res://assets/images/splash/bg_streak_landscape.png" id="2_background"]
+[ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="3_font"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_value"]
+font = ExtResource("3_font")
+font_size = 24
+font_color = Color(1, 0.772549, 0.427451, 1)
+
+[node name="SplashStreak" type="Control"]
+custom_minimum_size = Vector2(601, 107)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 601.0
+offset_bottom = 107.0
+
+[node name="Components" type="Node" parent="."]
+
+[node name="SplashStreakComponent" type="Node" parent="Components" node_paths=PackedStringArray("current_streak_label", "best_streak_label")]
+script = ExtResource("1_component")
+owner_node_path = NodePath("../..")
+current_streak_label = NodePath("../../CurrentStreakValue")
+best_streak_label = NodePath("../../BestStreakValue")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_background")
+stretch_mode = 5
+
+[node name="CurrentStreakValue" type="Label" parent="."]
+layout_mode = 1
+offset_left = 127.0
+offset_top = 53.0
+offset_right = 191.0
+offset_bottom = 84.0
+text = "3"
+label_settings = SubResource("LabelSettings_value")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="BestStreakValue" type="Label" parent="."]
+layout_mode = 1
+offset_left = 410.0
+offset_top = 53.0
+offset_right = 474.0
+offset_bottom = 84.0
+text = "7"
+label_settings = SubResource("LabelSettings_value")
+horizontal_alignment = 2
+vertical_alignment = 1

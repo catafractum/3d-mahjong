@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://ciqifs3l72chg"]
+
+[ext_resource type="Script" uid="uid://dim6joe5ueuye" path="res://game/gamedb/gamedb.gd" id="1_gamedb"]
+
+[node name="GameDB" type="Node" unique_id=1156595539]
+script = ExtResource("1_gamedb")
+enable_remove_pair_button = true
+original_levels_path = "res://data/levels.json"
+development_levels_path = "res://data/levels_new.json"

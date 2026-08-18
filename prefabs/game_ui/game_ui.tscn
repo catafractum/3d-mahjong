@@ -1,0 +1,198 @@
+[gd_scene format=3 uid="uid://b6f4n7dbwus5w"]
+
+[ext_resource type="Script" uid="uid://ccrrui1ba8a7n" path="res://prefabs/game_ui/game_ui_component.gd" id="1_component"]
+[ext_resource type="Texture2D" uid="uid://c44ota7ymi83j" path="res://assets/images/buttons/btn_arrow.png" id="2_arrow"]
+[ext_resource type="Texture2D" uid="uid://b82ismf5gaamr" path="res://assets/images/buttons/btn_shuffle.png" id="3_shuffle"]
+[ext_resource type="Texture2D" uid="uid://cayvpkr5ygu3j" path="res://assets/images/bg_timer.png" id="6_timer_bg"]
+[ext_resource type="Texture2D" uid="uid://d1gwfduejp5i5" path="res://assets/images/rounded_rect_bg.png" id="7_selected_bg"]
+[ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="8_font"]
+[ext_resource type="Script" uid="uid://0g13lmkx4usr" path="res://core/components/button_helper_component.gd" id="9_button_helper"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_timer"]
+font = ExtResource("8_font")
+font_size = 34
+
+[node name="GameUI" type="CanvasLayer" unique_id=1952755210]
+
+[node name="Components" type="Node" parent="." unique_id=737909878]
+
+[node name="GameUIComponent" type="Node" parent="Components" unique_id=13058409 node_paths=PackedStringArray("minutes_label", "seconds_label", "selected_tile", "selected_tile_icon", "rotate_left_button", "rotate_right_button", "shuffle_button", "remove_pair_button")]
+script = ExtResource("1_component")
+minutes_label = NodePath("../../HUD/Timer/MinutesLabel")
+seconds_label = NodePath("../../HUD/Timer/SecondsLabel")
+selected_tile = NodePath("../../HUD/SelectedTile")
+selected_tile_icon = NodePath("../../HUD/SelectedTile/Icon")
+rotate_left_button = NodePath("../../HUD/RotateLeftButton")
+rotate_right_button = NodePath("../../HUD/RotateRightButton")
+shuffle_button = NodePath("../../HUD/ShuffleButton")
+remove_pair_button = NodePath("../../HUD/RemovePairButton")
+owner_node_path = NodePath("../..")
+
+[node name="HUD" type="Control" parent="." unique_id=1578376281]
+custom_minimum_size = Vector2(900, 1800)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Timer" type="Control" parent="HUD" unique_id=84392473]
+custom_minimum_size = Vector2(248, 89)
+layout_mode = 1
+anchors_preset = 0
+offset_right = 248.0
+offset_bottom = 89.0
+
+[node name="Background" type="TextureRect" parent="HUD/Timer" unique_id=415190463]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_timer_bg")
+stretch_mode = 5
+
+[node name="MinutesLabel" type="Label" parent="HUD/Timer" unique_id=1450756413]
+layout_mode = 1
+offset_left = 72.0
+offset_top = 25.0
+offset_right = 126.0
+offset_bottom = 68.0
+scale = Vector2(1.2, 1.2)
+text = "15"
+label_settings = SubResource("LabelSettings_timer")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="SeparatorLabel" type="Label" parent="HUD/Timer" unique_id=477051950]
+layout_mode = 1
+offset_left = 138.0
+offset_top = 22.0
+offset_right = 156.0
+offset_bottom = 65.0
+scale = Vector2(1.2, 1.2)
+text = ":"
+label_settings = SubResource("LabelSettings_timer")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SecondsLabel" type="Label" parent="HUD/Timer" unique_id=1467927551]
+layout_mode = 1
+offset_left = 160.0
+offset_top = 26.0
+offset_right = 214.0
+offset_bottom = 69.0
+scale = Vector2(1.2, 1.2)
+text = "00"
+label_settings = SubResource("LabelSettings_timer")
+vertical_alignment = 1
+
+[node name="RotateLeftButton" type="TextureButton" parent="HUD" unique_id=1786618340]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 25.0
+offset_top = -118.0
+offset_right = 229.0
+offset_bottom = -5.0
+grow_vertical = 0
+scale = Vector2(0.95, 0.95)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+texture_normal = ExtResource("2_arrow")
+flip_h = true
+
+[node name="ButtonHelperComponent" type="Node" parent="HUD/RotateLeftButton" unique_id=1373311554]
+script = ExtResource("9_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")
+
+[node name="RotateRightButton" type="TextureButton" parent="HUD" unique_id=980993178]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -213.0
+offset_top = -118.0
+offset_right = -9.0
+offset_bottom = -5.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.95, 0.95)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+texture_normal = ExtResource("2_arrow")
+
+[node name="ButtonHelperComponent" type="Node" parent="HUD/RotateRightButton" unique_id=884829011]
+script = ExtResource("9_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")
+
+[node name="ShuffleButton" type="TextureButton" parent="HUD" unique_id=829106106]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -262.0
+offset_top = 16.0
+offset_right = -138.0
+offset_bottom = 131.0
+grow_horizontal = 0
+scale = Vector2(0.9287576, 0.8625481)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+texture_normal = ExtResource("3_shuffle")
+
+[node name="ButtonHelperComponent" type="Node" parent="HUD/ShuffleButton" unique_id=1140720011]
+script = ExtResource("9_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")
+
+[node name="RemovePairButton" type="Button" parent="HUD" unique_id=932596771]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -94.0
+offset_top = 18.0
+offset_right = 94.0
+offset_bottom = 78.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 24
+text = "REMOVE A PAIR"
+
+[node name="ButtonHelperComponent" type="Node" parent="HUD/RemovePairButton" unique_id=1214892071]
+script = ExtResource("9_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")
+
+[node name="SelectedTile" type="TextureRect" parent="HUD" unique_id=1593279549]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 1
+offset_left = 24.0
+offset_top = 140.0
+offset_right = 124.0
+offset_bottom = 240.0
+texture = ExtResource("7_selected_bg")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Icon" type="TextureRect" parent="HUD/SelectedTile" unique_id=1049336120]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -40.0
+offset_right = 40.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5

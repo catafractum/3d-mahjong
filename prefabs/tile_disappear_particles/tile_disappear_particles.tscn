@@ -1,0 +1,26 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://prefabs/tile_disappear_particles/tile_disappear_particles_component.gd" id="1_component"]
+[ext_resource type="Texture2D" path="res://assets/images/spark_01.png" id="2_spark1"]
+[ext_resource type="Texture2D" path="res://assets/images/spark_02.png" id="3_spark2"]
+[ext_resource type="Texture2D" path="res://assets/images/spark_03.png" id="4_spark3"]
+[ext_resource type="Texture2D" path="res://assets/images/spark_04.png" id="5_spark4"]
+
+[node name="TileDisappearParticles" type="Node3D"]
+
+[node name="Components" type="Node" parent="."]
+
+[node name="TileDisappearParticlesComponent" type="Node" parent="Components" node_paths=PackedStringArray("effect_root")]
+script = ExtResource("1_component")
+owner_node_path = NodePath("../..")
+effect_root = NodePath("../..")
+spark_textures = Array[Texture2D]([ExtResource("2_spark1"), ExtResource("3_spark2"), ExtResource("4_spark3"), ExtResource("5_spark4")])
+spark_weights = Array[int]([4, 4, 4, 1])
+distance_multipliers = Array[float]([1.0, 1.0, 1.0, 1.35])
+duration_multipliers = Array[float]([1.0, 1.0, 1.0, 0.55])
+particle_count = 36
+tile_edge = 0.84
+spark_size = Vector2(0.33, 0.4125)
+expand_duration = 0.4
+fade_duration = 0.2
+auto_play = true
