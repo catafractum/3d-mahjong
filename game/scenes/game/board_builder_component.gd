@@ -16,7 +16,8 @@ signal board_cleared
 @export var icon_type_count := 16
 @export var default_grid_size := 7
 @export var tile_spacing := 1.03
-@export var maximum_sequence_attempts := 80
+@export var maximum_sequence_attempts := 500
+@export var build_on_ready := true
 
 var grid_size := 7
 var visual_offset := Vector3.ZERO
@@ -25,7 +26,8 @@ var rotation_bounds: Dictionary = {}
 
 
 func _ready() -> void:
-	_build_current_level.call_deferred()
+	if build_on_ready:
+		_build_current_level.call_deferred()
 
 
 func _build_current_level() -> void:
@@ -61,12 +63,10 @@ func build_level(level: Dictionary) -> void:
 	board.rotation_degrees = BOARD_INITIAL_ROTATION
 	board.scale = Vector3.ONE * _get_level_scale(_get_height(coordinates))
 
-	var icon_assignment := assign_solvable_icons(
-		coordinates,
-		grid_size,
-		icon_type_count,
-		str(level.get("difficulty", "easy"))
-	)
+	var icon_assignment := _saved_icon_assignment(level, coordinates)
+	if icon_assignment.size() != coordinates.size():
+		push_error("BoardBuilderComponent: Refusing to build a level without a verified solvable assignment.")
+		return
 	var center := float(grid_size - 1) * 0.5
 	var tiles: Array[Node3D] = []
 
@@ -92,6 +92,21 @@ func build_level(level: Dictionary) -> void:
 		tiles.append(tile)
 
 	board_built.emit(tiles)
+
+
+func _saved_icon_assignment(level: Dictionary, coordinates: Array) -> Dictionary:
+	var saved_icons = level.get("tile_icons", [])
+	if not saved_icons is Array or saved_icons.size() != coordinates.size():
+		push_error("BoardBuilderComponent: Level is missing its required tile_icons assignment.")
+		return {}
+	var result: Dictionary = {}
+	for index in coordinates.size():
+		result[Vector3i(coordinates[index])] = int(saved_icons[index])
+	var solver := MahjongSolverComponent.of_as(self)
+	if solver == null or not solver.is_solvable(result, grid_size):
+		push_error("BoardBuilderComponent: Saved tile_icons assignment is not solvable.")
+		return {}
+	return result
 
 
 func clear_board() -> void:
@@ -129,7 +144,8 @@ func assign_solvable_icons(
 	coordinates: Array,
 	assignment_grid_size: int,
 	maximum_icon_count: int,
-	difficulty := "easy"
+	difficulty := "easy",
+	requested_icon_count := 0
 ) -> Dictionary:
 	var positions: Array[Vector3i] = []
 	for coordinate in coordinates:
@@ -139,10 +155,11 @@ func assign_solvable_icons(
 
 	var removal_pairs := _make_removal_sequence(positions, assignment_grid_size)
 	if removal_pairs.is_empty():
-		return _assign_pair_icons(positions, maximum_icon_count, difficulty)
+		push_error("BoardBuilderComponent: Layout has no complete removal sequence; refusing an unsafe random assignment.")
+		return {}
 
 	var result: Dictionary = {}
-	var icons := _make_icon_sequence(removal_pairs.size(), positions.size(), maximum_icon_count, difficulty)
+	var icons := _make_icon_sequence(removal_pairs.size(), positions.size(), maximum_icon_count, difficulty, requested_icon_count)
 	for index in removal_pairs.size():
 		var pair: Array = removal_pairs[index]
 		result[pair[0]] = icons[index]
@@ -155,24 +172,57 @@ func assign_solvable_icons(
 
 
 func _make_removal_sequence(positions: Array[Vector3i], assignment_grid_size: int) -> Array[Array]:
-	var rules := TileRulesComponent.of_as(self)
-	if rules == null:
-		return []
 	for _attempt in maximum_sequence_attempts:
-		var occupancy := rules.make_occupancy(positions)
+		var occupancy: Dictionary = {}
+		for position in positions:
+			occupancy[position] = true
 		var sequence: Array[Array] = []
 		while not occupancy.is_empty():
-			var free_positions := rules.get_free_positions(occupancy, assignment_grid_size)
+			var free_positions := _get_free_positions(occupancy, assignment_grid_size)
 			if free_positions.size() < 2:
 				break
 			free_positions.shuffle()
-			var pair := [free_positions[0], free_positions[1]]
+			var first := free_positions[0]
+			var second := free_positions[1]
+			# Prefer a separated partner from the randomized order. Pairing two
+			# immediately adjacent cells made generated boards look striped even
+			# though their icon sequence was technically shuffled.
+			for index in range(1, free_positions.size()):
+				var candidate := free_positions[index]
+				var distance := absi(candidate.x - first.x) \
+					+ absi(candidate.y - first.y) \
+					+ absi(candidate.z - first.z)
+				if distance >= 3:
+					second = candidate
+					break
+			var pair := [first, second]
 			occupancy.erase(pair[0])
 			occupancy.erase(pair[1])
 			sequence.append(pair)
 		if occupancy.is_empty():
 			return sequence
 	return []
+
+
+func _get_free_positions(occupancy: Dictionary, assignment_grid_size: int) -> Array[Vector3i]:
+	var result: Array[Vector3i] = []
+	for position: Vector3i in occupancy:
+		var free_sides: Array[Vector3i] = []
+		for direction: Vector3i in TileRulesComponent.SIDE_DIRECTIONS:
+			var neighbor := position + direction
+			if not _is_inside_grid(neighbor, assignment_grid_size) or not occupancy.has(neighbor):
+				free_sides.append(direction)
+		var is_free := false
+		for first in range(free_sides.size()):
+			for second in range(first + 1, free_sides.size()):
+				if free_sides[first] + free_sides[second] != Vector3i.ZERO:
+					is_free = true
+					break
+			if is_free:
+				break
+		if is_free:
+			result.append(position)
+	return result
 
 
 func _assign_pair_icons(positions: Array[Vector3i], maximum_icon_count: int, difficulty: String) -> Dictionary:
@@ -189,8 +239,8 @@ func _assign_pair_icons(positions: Array[Vector3i], maximum_icon_count: int, dif
 	return result
 
 
-func _make_icon_sequence(pair_count: int, tile_count: int, maximum_icon_count: int, difficulty: String) -> Array[int]:
-	var pool_size := _icon_pool_size(tile_count, maximum_icon_count, difficulty)
+func _make_icon_sequence(pair_count: int, tile_count: int, maximum_icon_count: int, difficulty: String, requested_icon_count := 0) -> Array[int]:
+	var pool_size := clampi(requested_icon_count, 1, maximum_icon_count) if requested_icon_count > 0 else _icon_pool_size(tile_count, maximum_icon_count, difficulty)
 	var result: Array[int] = []
 	for index in pair_count:
 		result.append(index % pool_size)

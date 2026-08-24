@@ -9,11 +9,12 @@ func is_solvable(icon_by_position: Dictionary, grid_size: int) -> bool:
 
 
 func get_available_pairs(icon_by_position: Dictionary, grid_size: int) -> Array[Dictionary]:
-	var rules := TileRulesComponent.of_as(self)
-	var occupancy := rules.make_occupancy(icon_by_position.keys())
+	var occupancy: Dictionary = {}
+	for position in icon_by_position:
+		occupancy[position] = true
 	var free_by_icon: Dictionary = {}
 	for position: Vector3i in icon_by_position:
-		if not rules.is_tile_free(position, occupancy, grid_size):
+		if not _is_tile_free(position, occupancy, grid_size):
 			continue
 		var icon := int(icon_by_position[position])
 		if not free_by_icon.has(icon):
@@ -26,6 +27,22 @@ func get_available_pairs(icon_by_position: Dictionary, grid_size: int) -> Array[
 			for second in range(first + 1, positions.size()):
 				result.append({"a": positions[first], "b": positions[second], "icon_type": icon})
 	return result
+
+
+func _is_tile_free(position: Vector3i, occupancy: Dictionary, grid_size: int) -> bool:
+	var free_sides: Array[Vector3i] = []
+	for direction: Vector3i in TileRulesComponent.SIDE_DIRECTIONS:
+		var neighbor := position + direction
+		var inside := neighbor.x >= 0 and neighbor.x < grid_size \
+			and neighbor.y >= 0 and neighbor.y < grid_size \
+			and neighbor.z >= 0 and neighbor.z < grid_size
+		if not inside or not occupancy.has(neighbor):
+			free_sides.append(direction)
+	for first in range(free_sides.size()):
+		for second in range(first + 1, free_sides.size()):
+			if free_sides[first] + free_sides[second] != Vector3i.ZERO:
+				return true
+	return false
 
 
 func _can_solve(state: Dictionary, grid_size: int, memo: Dictionary, searched: Array) -> bool:
