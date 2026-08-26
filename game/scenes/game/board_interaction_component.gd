@@ -51,6 +51,12 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif event.keycode == KEY_LEFT:
 			_rotate_board(false)
 			get_viewport().set_input_as_handled()
+	elif event is InputEventMouseButton and event.pressed and (
+		event.button_index == MOUSE_BUTTON_WHEEL_UP
+		or event.button_index == MOUSE_BUTTON_WHEEL_DOWN
+	):
+		_rotate_board(event.button_index == MOUSE_BUTTON_WHEEL_UP)
+		get_viewport().set_input_as_handled()
 	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
 			_begin_pointer(event.position)
@@ -171,8 +177,28 @@ func remove_matching_pair_for_testing() -> bool:
 
 
 func _remove_pair(first_tile: Node3D, second_tile: Node3D) -> void:
-	_grid.erase(_tile_position(first_tile))
-	_grid.erase(_tile_position(second_tile))
+	if first_tile == second_tile or not is_instance_valid(first_tile) or not is_instance_valid(second_tile):
+		return
+	var first_position := _tile_position(first_tile)
+	var second_position := _tile_position(second_tile)
+	if (
+		not _grid.has(first_position)
+		or _grid[first_position] != first_tile
+		or not _grid.has(second_position)
+		or _grid[second_position] != second_tile
+		or _icon_type(first_tile) != _icon_type(second_tile)
+	):
+		return
+	var rules := TileRulesComponent.of_as(self)
+	var occupancy := _make_occupancy()
+	if (
+		rules == null
+		or not rules.is_tile_free(first_position, occupancy, _grid_size)
+		or not rules.is_tile_free(second_position, occupancy, _grid_size)
+	):
+		return
+	_grid.erase(first_position)
+	_grid.erase(second_position)
 	_set_selected_tile(null)
 	match_succeeded.emit(first_tile, second_tile)
 	MahjongTileVisualComponent.of_as(first_tile).remove()

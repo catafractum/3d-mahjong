@@ -41,12 +41,7 @@ func settle_on_board() -> void:
 	if tiles.is_empty():
 		return
 	var target := _calculate_target(tiles, _level_start_camera_size)
-	_kill_tween()
-	_tween = create_tween().set_parallel(true)
-	_tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
-	_tween.tween_property(camera, "global_position", target.position, settle_duration)
-	_tween.tween_property(camera, "size", target.size, settle_duration)
-	_tween.chain().tween_callback(framing_settled.emit)
+	_tween_to_target(target)
 
 
 func _on_board_built(tiles: Array[Node3D]) -> void:
@@ -58,9 +53,17 @@ func _on_board_built(tiles: Array[Node3D]) -> void:
 		_level_start_camera_size = 0.0
 		return
 	var target := _calculate_target(tiles, _default_camera_size)
-	camera.global_position = target.position
-	camera.size = target.size
 	_level_start_camera_size = target.size
+	_tween_to_target(target)
+
+
+func _tween_to_target(target: Dictionary) -> void:
+	_kill_tween()
+	_tween = create_tween().set_parallel(true)
+	_tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	_tween.tween_property(camera, "global_position", target.position, settle_duration)
+	_tween.tween_property(camera, "size", target.size, settle_duration)
+	_tween.chain().tween_callback(framing_settled.emit)
 
 
 func _on_viewport_size_changed() -> void:

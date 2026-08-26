@@ -1,1 +1,7 @@
 res://game/scenes/level_editor/level_editor.tscn
+res://game/scenes/game/board_camera_framing_component.gd
+res://game/gamedb/gamedb.gd
+res://prefabs/game_ui/game_ui_component.gd
+res://game/scenes/game/board_interaction_component.gd
+res://game/scenes/game/board_rotation_component.gd
+res://prefabs/game_settings_menu/game_settings_menu_component.gd

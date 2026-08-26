@@ -7,19 +7,32 @@ extends BaseComponent
 @export var shuffle_step_count := 7
 
 var _rotating := false
+var _queued_rotation := 0
+var _shuffling := false
 var _counter_rotated_tiles: Array[Node3D] = []
 var _last_layer_angle := 0.0
 
 
 func rotate(right: bool) -> void:
 	if _rotating:
+		if not _shuffling:
+			_queued_rotation = 1 if right else -1
 		return
 	_rotating = true
 	var direction := 90.0 if right else -90.0
 	var tween := create_tween()
 	tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 	tween.tween_property(board, "rotation_degrees:y", board.rotation_degrees.y + direction, rotation_duration)
-	tween.tween_callback(func() -> void: _rotating = false)
+	tween.tween_callback(_finish_rotation)
+
+
+func _finish_rotation() -> void:
+	_rotating = false
+	if _queued_rotation == 0:
+		return
+	var queued_right := _queued_rotation > 0
+	_queued_rotation = 0
+	rotate(queued_right)
 
 
 func shuffle() -> void:
@@ -30,6 +43,8 @@ func shuffle() -> void:
 	if builder == null or interaction == null or builder.get_tiles().is_empty():
 		return
 	_rotating = true
+	_shuffling = true
+	_queued_rotation = 0
 	interaction.begin_shuffle()
 	var framing := BoardCameraFramingComponent.of_as(self)
 	if framing != null:
@@ -46,6 +61,7 @@ func shuffle() -> void:
 	interaction.finish_shuffle()
 	if framing != null:
 		framing.settle_on_board()
+	_shuffling = false
 	_rotating = false
 
 

@@ -5,7 +5,7 @@ extends Node
 @export_file("*.json") var original_levels_path: String
 @export_file("*.json") var development_levels_path: String
 @export var challenge_difficulties: Array[String] = ["easy", "medium", "hard"]
-@export_range(0.0, 3600.0, 1.0, "or_greater") var challenge_time_limit_seconds := 180.0
+@export_range(0.0, 3600.0, 1.0, "or_greater") var challenge_time_limit_seconds := 1200.0
 
 var current_session: GameSession = null
 var levels_path: String:

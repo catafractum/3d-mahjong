@@ -36,6 +36,8 @@ var _current_responsive_multiplier := 1.0
 
 
 func _ready() -> void:
+	for control in _all_controls():
+		(control as BaseButton).focus_mode = Control.FOCUS_NONE
 	set_toggle_states(_is_bus_enabled("SFX"), _is_bus_enabled("Music"))
 	settings_button.pressed.connect(_toggle)
 	(sfx_on_button as BaseButton).pressed.connect(_set_sfx.bind(false))
