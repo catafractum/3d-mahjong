@@ -1,8 +1,1 @@
-res://prefabs/game_ui/game_ui.tscn
 res://game/scenes/level_editor/level_editor.tscn
-res://game/scenes/game/board_builder_component.gd
-res://game/scenes/level_editor/level_editor_component.gd
-res://tools/validate_levels.gd
-res://game/components/board/mahjong_solver_component.gd
-res://data/levels.json
-res://game/gamedb/gamedb.gd
