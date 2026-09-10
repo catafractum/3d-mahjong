@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dpawpb2gs63r8" path="res://game/components/window_resize_listener_component.gd" id="1_resize"]
 [ext_resource type="Texture2D" uid="uid://cll8xwwdv46we" path="res://assets/images/background.jpg" id="2_4shk6"]
 [ext_resource type="Texture2D" uid="uid://dy4dtrdnge65v" path="res://assets/images/splash/game_logo.png" id="3_8dd55"]
+[ext_resource type="PackedScene" uid="uid://vyutwihntgf0" path="res://prefabs/previous_days_popup/previous_days_popup.tscn" id="4_2m24u"]
 [ext_resource type="PackedScene" uid="uid://ife5h8wg7pi8" path="res://prefabs/splash_calendar_day/splash_calendar_day.tscn" id="4_tmpah"]
 [ext_resource type="PackedScene" uid="uid://d2j1ruu616fo3" path="res://prefabs/splash_challenge_container/splash_challenge_container.tscn" id="5_challenge"]
 [ext_resource type="PackedScene" uid="uid://bxsh7ctu63ghw" path="res://prefabs/splash_days_carousel/splash_days_carousel.tscn" id="6_carousel"]
@@ -57,6 +58,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.03, 0.02, 0.05, 0.34)
+
+[node name="PreviousDaysPopup" parent="UI" unique_id=1097462152 instance=ExtResource("4_2m24u")]
+visible = false
 
 [node name="LandscapeUI" type="Control" parent="UI" unique_id=1319850694]
 layout_mode = 3

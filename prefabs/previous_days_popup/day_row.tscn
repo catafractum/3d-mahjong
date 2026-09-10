@@ -1,0 +1,96 @@
+[gd_scene format=3 uid="uid://b45chr42r5m3t"]
+
+[ext_resource type="Texture2D" uid="uid://d1gwfduejp5i5" path="res://assets/images/rounded_rect_bg.png" id="1_tt4hx"]
+[ext_resource type="Texture2D" uid="uid://bp0u883p8xife" path="res://assets/images/splash/badge_empty.png" id="2_u7i5o"]
+[ext_resource type="Texture2D" uid="uid://cikkwftd686n3" path="res://assets/images/tick_icon.png" id="3_05kn8"]
+[ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="4_us08o"]
+[ext_resource type="Texture2D" uid="uid://cyyix8x2dsplv" path="res://assets/images/buttons/btn_play_next_level.png" id="5_udrek"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_iiom5"]
+font = ExtResource("4_us08o")
+font_size = 32
+
+[sub_resource type="LabelSettings" id="LabelSettings_dlcce"]
+font = ExtResource("4_us08o")
+font_size = 40
+font_color = Color(0.54643, 0.6796216, 0.55410594, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_fe1nj"]
+font = ExtResource("4_us08o")
+font_size = 30
+
+[node name="DayRow" type="NinePatchRect" unique_id=520908403]
+self_modulate = Color(0, 0, 0, 0.43529412)
+custom_minimum_size = Vector2(0, 120)
+texture = ExtResource("1_tt4hx")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=172152710]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 10.0
+offset_right = -11.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="CheckBox" type="TextureRect" parent="HBoxContainer" unique_id=2089643046]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture = ExtResource("2_u7i5o")
+expand_mode = 1
+stretch_mode = 3
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/CheckBox" unique_id=1239280071]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_05kn8")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=814159640]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Date" type="Label" parent="HBoxContainer/VBoxContainer" unique_id=1059451528]
+layout_mode = 2
+text = "June 09"
+label_settings = SubResource("LabelSettings_iiom5")
+
+[node name="Day" type="Label" parent="HBoxContainer/VBoxContainer" unique_id=1771659130]
+layout_mode = 2
+text = "Tuesday"
+label_settings = SubResource("LabelSettings_dlcce")
+
+[node name="TextureButton" type="NinePatchRect" parent="HBoxContainer" unique_id=1180907218]
+self_modulate = Color(1, 0.69411767, 0.23137255, 1)
+custom_minimum_size = Vector2(200, 54)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("5_udrek")
+patch_margin_left = 20
+patch_margin_right = 20
+
+[node name="Label" type="Label" parent="HBoxContainer/TextureButton" unique_id=293711793]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "PLAY"
+label_settings = SubResource("LabelSettings_fe1nj")
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -1,0 +1,193 @@
+[gd_scene format=3 uid="uid://vyutwihntgf0"]
+
+[ext_resource type="Texture2D" uid="uid://dvg3fb4pya5s" path="res://assets/images/splash/challenge_bg.png" id="1_vuosq"]
+[ext_resource type="Texture2D" uid="uid://bme411pvplbfk" path="res://assets/images/splash/title-edge.png" id="2_3bsh6"]
+[ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="3_yedd6"]
+[ext_resource type="PackedScene" uid="uid://b45chr42r5m3t" path="res://prefabs/previous_days_popup/day_row.tscn" id="4_7dpwm"]
+[ext_resource type="Texture2D" uid="uid://c3cuffjg326ra" path="res://assets/images/buttons/btn_play_hard.png" id="5_as7no"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_as7no"]
+font = ExtResource("3_yedd6")
+font_size = 30
+font_color = Color(1, 0.8352941, 0.40392157, 1)
+shadow_color = Color(0, 0, 0, 0.4392157)
+
+[sub_resource type="LabelSettings" id="LabelSettings_7dpwm"]
+font = ExtResource("3_yedd6")
+font_size = 30
+font_color = Color(0.68, 0.68, 0.68, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_wefvu"]
+font = ExtResource("3_yedd6")
+font_size = 30
+
+[node name="PreviousDaysPopup" type="Control" unique_id=1097462152]
+z_index = 10
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1856773788]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.59607846)
+
+[node name="Shadow" type="NinePatchRect" parent="." unique_id=710379268]
+self_modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(780, 1050)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -362.0
+offset_top = -494.0
+offset_right = 418.0
+offset_bottom = 556.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_vuosq")
+patch_margin_left = 50
+patch_margin_top = 50
+patch_margin_right = 50
+patch_margin_bottom = 50
+
+[node name="PopupBg" type="NinePatchRect" parent="." unique_id=1495471298]
+custom_minimum_size = Vector2(780, 1050)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -390.0
+offset_top = -525.0
+offset_right = 390.0
+offset_bottom = 525.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+texture = ExtResource("1_vuosq")
+patch_margin_left = 50
+patch_margin_top = 80
+patch_margin_right = 50
+patch_margin_bottom = 50
+
+[node name="TitleContainer" type="HBoxContainer" parent="PopupBg" unique_id=1263368650]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -159.0
+offset_top = 40.0
+offset_right = 160.0
+offset_bottom = 80.0
+grow_horizontal = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="LeftEdge" type="TextureRect" parent="PopupBg/TitleContainer" unique_id=836201598]
+custom_minimum_size = Vector2(90, 20)
+layout_mode = 2
+texture = ExtResource("2_3bsh6")
+expand_mode = 1
+stretch_mode = 5
+flip_h = true
+
+[node name="Title" type="Label" parent="PopupBg/TitleContainer" unique_id=631048141]
+layout_mode = 2
+text = "PAST CHALLENGES"
+label_settings = SubResource("LabelSettings_as7no")
+
+[node name="RightEdge" type="TextureRect" parent="PopupBg/TitleContainer" unique_id=561305479]
+custom_minimum_size = Vector2(90, 20)
+layout_mode = 2
+texture = ExtResource("2_3bsh6")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PopupBg" unique_id=873982874]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 34.0
+offset_top = 128.0
+offset_right = -34.0
+offset_bottom = -32.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DayRow" parent="PopupBg/VBoxContainer" unique_id=520908403 instance=ExtResource("4_7dpwm")]
+layout_mode = 2
+
+[node name="DayRow2" parent="PopupBg/VBoxContainer" unique_id=1499230008 instance=ExtResource("4_7dpwm")]
+layout_mode = 2
+
+[node name="DayRow3" parent="PopupBg/VBoxContainer" unique_id=1892812955 instance=ExtResource("4_7dpwm")]
+layout_mode = 2
+
+[node name="DayRow4" parent="PopupBg/VBoxContainer" unique_id=1289849011 instance=ExtResource("4_7dpwm")]
+layout_mode = 2
+
+[node name="DayRow5" parent="PopupBg/VBoxContainer" unique_id=1924171735 instance=ExtResource("4_7dpwm")]
+layout_mode = 2
+
+[node name="DayRow6" parent="PopupBg/VBoxContainer" unique_id=734258148 instance=ExtResource("4_7dpwm")]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PopupBg" unique_id=1247219686]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -152.0
+offset_bottom = -38.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Playing missed challenges does not count towards your streak."
+label_settings = SubResource("LabelSettings_7dpwm")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="CloseButton" type="NinePatchRect" parent="." unique_id=966401448]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -138.0
+offset_top = -278.0
+offset_right = 138.0
+offset_bottom = -224.0
+grow_horizontal = 2
+grow_vertical = 0
+pivot_offset_ratio = Vector2(0.5, 0.5)
+texture = ExtResource("5_as7no")
+patch_margin_left = 20
+patch_margin_right = 20
+
+[node name="Label" type="Label" parent="CloseButton" unique_id=995349078]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "CLOSE"
+label_settings = SubResource("LabelSettings_wefvu")
+horizontal_alignment = 1
+vertical_alignment = 1
