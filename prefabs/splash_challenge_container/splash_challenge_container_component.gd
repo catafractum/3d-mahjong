@@ -3,6 +3,7 @@ extends BaseComponent
 
 @export_file("*.tscn") var game_scene_path: String
 @export var play_button: TextureButton
+@export var time_label: Label
 @export var spinner_speed_degrees := 240.0
 
 var _loading_control: Control
@@ -12,6 +13,12 @@ var _is_loading := false
 
 func _ready() -> void:
 	play_button.pressed.connect(_on_play_button_pressed)
+	var times := PackedStringArray()
+	for difficulty in GameDB.challenge_difficulties:
+		var seconds := int(GameDB.get_difficulty_time_limit_seconds(difficulty))
+		times.append("%02d:%02d" % [seconds / 60, seconds % 60])
+	if time_label != null:
+		time_label.text = " / ".join(times)
 	_loading_control = _find_loading_control()
 	if _loading_control != null:
 		_spinner = _loading_control.find_child("TextureRect", true, false) as TextureRect

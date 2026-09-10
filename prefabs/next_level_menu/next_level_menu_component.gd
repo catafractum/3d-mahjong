@@ -46,7 +46,7 @@ func _request_play() -> void:
 	if _session != null and _session.advance_to_next_level():
 		hide_menu()
 		_builder.build_level(_session.get_current_level())
-		_timer.resume()
+		_timer.reset()
 	play_requested.emit()
 
 

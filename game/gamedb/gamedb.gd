@@ -5,7 +5,10 @@ extends Node
 @export_file("*.json") var original_levels_path: String
 @export_file("*.json") var development_levels_path: String
 @export var challenge_difficulties: Array[String] = ["easy", "medium", "hard"]
-@export_range(0.0, 3600.0, 1.0, "or_greater") var challenge_time_limit_seconds := 1200.0
+@export_group("Challenge timers (seconds)")
+@export_range(1.0, 3600.0, 1.0, "or_greater") var easy_time_limit_seconds := 180.0
+@export_range(1.0, 3600.0, 1.0, "or_greater") var medium_time_limit_seconds := 120.0
+@export_range(1.0, 3600.0, 1.0, "or_greater") var hard_time_limit_seconds := 90.0
 
 var current_session: GameSession = null
 var levels_path: String:
@@ -21,9 +24,20 @@ func create_challenge_session(date_key := "") -> GameSession:
 		push_error("GameDB: Could not select every daily challenge level from %s." % levels_path)
 		return null
 
+	for level in levels:
+		level["time_limit_seconds"] = get_difficulty_time_limit_seconds(str(level.difficulty))
 	return GameSession.new(
-		levels, GameSession.Mode.CHALLENGE, challenge_time_limit_seconds, date_key
+		levels, GameSession.Mode.CHALLENGE, float(levels[0].time_limit_seconds), date_key
 	)
+
+
+func get_difficulty_time_limit_seconds(difficulty: String) -> float:
+	match difficulty:
+		"easy": return easy_time_limit_seconds
+		"medium": return medium_time_limit_seconds
+		"hard": return hard_time_limit_seconds
+	push_error("GameDB: Unknown challenge difficulty: %s" % difficulty)
+	return easy_time_limit_seconds
 
 
 func _select_daily_levels(date_key: String) -> Array[Dictionary]:

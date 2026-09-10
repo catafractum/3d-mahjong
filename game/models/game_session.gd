@@ -49,11 +49,13 @@ func advance_to_next_level() -> bool:
 	if not has_next_level():
 		return false
 	current_level_index += 1
+	_refresh_level_time_limit()
 	return true
 
 
 func reset() -> void:
 	current_level_index = 0
+	_refresh_level_time_limit()
 	elapsed_seconds = 0.0
 	status = Status.READY
 	selected_tile = null
@@ -61,3 +63,9 @@ func reset() -> void:
 
 func get_remaining_seconds() -> float:
 	return maxf(time_limit_seconds - elapsed_seconds, 0.0)
+
+
+func _refresh_level_time_limit() -> void:
+	time_limit_seconds = maxf(
+		float(get_current_level().get("time_limit_seconds", time_limit_seconds)), 0.0
+	)

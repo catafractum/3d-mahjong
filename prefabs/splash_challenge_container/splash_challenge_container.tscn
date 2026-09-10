@@ -48,9 +48,10 @@ offset_bottom = 250.0
 
 [node name="Components" type="Node" parent="." unique_id=220682934]
 
-[node name="SplashChallengeContainerComponent" type="Node" parent="Components" unique_id=988472689 node_paths=PackedStringArray("play_button")]
+[node name="SplashChallengeContainerComponent" type="Node" parent="Components" unique_id=988472689 node_paths=PackedStringArray("play_button", "time_label")]
 script = ExtResource("1_component")
 game_scene_path = "uid://jlwf1qqvvmq7"
+time_label = NodePath("../../Background/Content/TimerContainer/Time")
 play_button = NodePath("../../Background/Content/PlayButton")
 owner_node_path = NodePath("../..")
 
@@ -170,12 +171,12 @@ stretch_mode = 5
 
 [node name="Description" type="Label" parent="Background/Content/TimerContainer" unique_id=1322228029]
 layout_mode = 2
-text = "Complete all 3 boards in"
+text = "Per board:"
 label_settings = SubResource("LabelSettings_body")
 
 [node name="Time" type="Label" parent="Background/Content/TimerContainer" unique_id=1212804764]
 layout_mode = 2
-text = "20:00"
+text = "03:00 / 02:00 / 01:30"
 label_settings = SubResource("LabelSettings_time")
 
 [node name="Separator" type="HSeparator" parent="Background/Content" unique_id=1683764128]
