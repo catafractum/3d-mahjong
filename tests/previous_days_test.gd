@@ -134,7 +134,7 @@ func _run() -> void:
 		component._rows[0].play_button.pressed.emit()
 	_check(GameDB.current_session != null and GameDB.current_session.challenge_date_key == past[0], "Row launched wrong date")
 	_check(GameDB.current_session.is_catch_up, "Past session missing catch-up flag")
-	_check(GameDB.current_session.time_limit_seconds == GameDB.easy_time_limit_seconds, "Past challenge has wrong timer")
+	_check(GameDB.current_session.time_limit_seconds == GameDB.get_level_time_limit_seconds(GameDB.current_session.get_current_level()), "Past challenge has wrong timer")
 	var original_session := GameDB.current_session
 	component._rows[2].play_button.pressed.emit()
 	_check(GameDB.current_session == original_session, "Double click started a second session")

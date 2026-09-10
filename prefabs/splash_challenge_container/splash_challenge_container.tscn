@@ -170,12 +170,12 @@ stretch_mode = 5
 
 [node name="Description" type="Label" parent="Background/Content/TimerContainer" unique_id=1322228029]
 layout_mode = 2
-text = "Per board:"
+text = "Per pair:"
 label_settings = SubResource("LabelSettings_body")
 
 [node name="Time" type="Label" parent="Background/Content/TimerContainer" unique_id=1212804764]
 layout_mode = 2
-text = "03:00 / 02:00 / 01:30"
+text = "7s / 5s / 3s"
 label_settings = SubResource("LabelSettings_time")
 
 [node name="Separator" type="HSeparator" parent="Background/Content" unique_id=1683764128]

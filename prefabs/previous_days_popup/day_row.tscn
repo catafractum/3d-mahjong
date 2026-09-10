@@ -5,9 +5,8 @@
 [ext_resource type="Texture2D" uid="uid://cikkwftd686n3" path="res://assets/images/tick_icon.png" id="3_05kn8"]
 [ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="4_us08o"]
 [ext_resource type="Texture2D" uid="uid://cyyix8x2dsplv" path="res://assets/images/buttons/btn_play_next_level.png" id="5_udrek"]
-
-[ext_resource type="Script" path="res://prefabs/previous_days_popup/day_row_component.gd" id="6_component"]
-[ext_resource type="Script" path="res://core/components/button_helper_component.gd" id="7_helper"]
+[ext_resource type="Script" uid="uid://dux5qmtswaaii" path="res://prefabs/previous_days_popup/day_row_component.gd" id="6_component"]
+[ext_resource type="Script" uid="uid://0g13lmkx4usr" path="res://core/components/button_helper_component.gd" id="7_helper"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_iiom5"]
 font = ExtResource("4_us08o")
@@ -20,7 +19,7 @@ font_color = Color(0.54643, 0.6796216, 0.55410594, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_fe1nj"]
 font = ExtResource("4_us08o")
-font_size = 30
+font_size = 26
 
 [node name="DayRow" type="NinePatchRect" unique_id=520908403]
 self_modulate = Color(0, 0, 0, 0.43529412)
@@ -98,7 +97,7 @@ label_settings = SubResource("LabelSettings_fe1nj")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button" type="Button" parent="HBoxContainer/TextureButton"]
+[node name="Button" type="Button" parent="HBoxContainer/TextureButton" unique_id=1915086166]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -108,14 +107,14 @@ grow_vertical = 2
 mouse_default_cursor_shape = 2
 flat = true
 
-[node name="ButtonHelperComponent" type="Node" parent="HBoxContainer/TextureButton/Button"]
+[node name="ButtonHelperComponent" type="Node" parent="HBoxContainer/TextureButton/Button" unique_id=2104240113]
 script = ExtResource("7_helper")
 click_sfx_path = "res://assets/sounds/click.mp3"
 owner_node_path = NodePath("..")
 
-[node name="Components" type="Node" parent="."]
+[node name="Components" type="Node" parent="." unique_id=1446399343]
 
-[node name="DayRowComponent" type="Node" parent="Components" node_paths=PackedStringArray("date_label", "weekday_label", "completion_tick", "play_button", "play_label")]
+[node name="DayRowComponent" type="Node" parent="Components" unique_id=194772912 node_paths=PackedStringArray("date_label", "weekday_label", "completion_tick", "play_button", "play_label")]
 script = ExtResource("6_component")
 date_label = NodePath("../../HBoxContainer/VBoxContainer/Date")
 weekday_label = NodePath("../../HBoxContainer/VBoxContainer/Day")

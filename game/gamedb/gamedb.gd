@@ -5,10 +5,10 @@ extends Node
 @export_file("*.json") var original_levels_path: String
 @export_file("*.json") var development_levels_path: String
 @export var challenge_difficulties: Array[String] = ["easy", "medium", "hard"]
-@export_group("Challenge timers (seconds)")
-@export_range(1.0, 3600.0, 1.0, "or_greater") var easy_time_limit_seconds := 180.0
-@export_range(1.0, 3600.0, 1.0, "or_greater") var medium_time_limit_seconds := 120.0
-@export_range(1.0, 3600.0, 1.0, "or_greater") var hard_time_limit_seconds := 90.0
+@export_group("Challenge timing (seconds per pair)")
+@export_range(0.1, 60.0, 0.1, "or_greater") var easy_seconds_per_pair := 7.0
+@export_range(0.1, 60.0, 0.1, "or_greater") var medium_seconds_per_pair := 5.0
+@export_range(0.1, 60.0, 0.1, "or_greater") var hard_seconds_per_pair := 3.0
 
 var current_session: GameSession = null
 var levels_path: String:
@@ -25,7 +25,7 @@ func create_challenge_session(date_key := "") -> GameSession:
 		return null
 
 	for level in levels:
-		level["time_limit_seconds"] = get_difficulty_time_limit_seconds(str(level.difficulty))
+		level["time_limit_seconds"] = get_level_time_limit_seconds(level)
 	var session := GameSession.new(
 		levels, GameSession.Mode.CHALLENGE, float(levels[0].time_limit_seconds), date_key
 	)
@@ -33,13 +33,21 @@ func create_challenge_session(date_key := "") -> GameSession:
 	return session
 
 
-func get_difficulty_time_limit_seconds(difficulty: String) -> float:
+func get_seconds_per_pair(difficulty: String) -> float:
 	match difficulty:
-		"easy": return easy_time_limit_seconds
-		"medium": return medium_time_limit_seconds
-		"hard": return hard_time_limit_seconds
+		"easy": return easy_seconds_per_pair
+		"medium": return medium_seconds_per_pair
+		"hard": return hard_seconds_per_pair
 	push_error("GameDB: Unknown challenge difficulty: %s" % difficulty)
-	return easy_time_limit_seconds
+	return easy_seconds_per_pair
+
+
+func get_level_time_limit_seconds(level: Dictionary) -> float:
+	# Use the original board size once; removing pairs does not change the budget.
+	var tiles: Array = level.get("tiles", [])
+	var pair_count := tiles.size() / 2.0
+	var seconds := pair_count * get_seconds_per_pair(str(level.get("difficulty", "easy")))
+	return ceilf(seconds / 60.0) * 60.0
 
 
 func _select_daily_levels(date_key: String) -> Array[Dictionary]:

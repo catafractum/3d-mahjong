@@ -5,9 +5,8 @@
 [ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="3_yedd6"]
 [ext_resource type="PackedScene" uid="uid://b45chr42r5m3t" path="res://prefabs/previous_days_popup/day_row.tscn" id="4_7dpwm"]
 [ext_resource type="Texture2D" uid="uid://c3cuffjg326ra" path="res://assets/images/buttons/btn_play_hard.png" id="5_as7no"]
-
-[ext_resource type="Script" path="res://prefabs/previous_days_popup/previous_days_popup_component.gd" id="6_component"]
-[ext_resource type="Script" path="res://core/components/button_helper_component.gd" id="7_helper"]
+[ext_resource type="Script" uid="uid://buj1hpv7u7oe0" path="res://prefabs/previous_days_popup/previous_days_popup_component.gd" id="6_component"]
+[ext_resource type="Script" uid="uid://0g13lmkx4usr" path="res://core/components/button_helper_component.gd" id="7_helper"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_as7no"]
 font = ExtResource("3_yedd6")
@@ -179,7 +178,7 @@ label_settings = SubResource("LabelSettings_wefvu")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button" type="Button" parent="PopupBg/CloseButton"]
+[node name="Button" type="Button" parent="PopupBg/CloseButton" unique_id=1975044004]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -189,19 +188,19 @@ grow_vertical = 2
 mouse_default_cursor_shape = 2
 flat = true
 
-[node name="ButtonHelperComponent" type="Node" parent="PopupBg/CloseButton/Button"]
+[node name="ButtonHelperComponent" type="Node" parent="PopupBg/CloseButton/Button" unique_id=1286684371]
 script = ExtResource("7_helper")
 click_sfx_path = "res://assets/sounds/click.mp3"
 owner_node_path = NodePath("..")
 
-[node name="Components" type="Node" parent="."]
+[node name="Components" type="Node" parent="." unique_id=2028724037]
 
-[node name="PreviousDaysPopupComponent" type="Node" parent="Components" node_paths=PackedStringArray("popup", "panel", "shadow", "rows_container", "close_button")]
+[node name="PreviousDaysPopupComponent" type="Node" parent="Components" unique_id=1822920972 node_paths=PackedStringArray("popup", "panel", "shadow", "rows_container", "close_button")]
 script = ExtResource("6_component")
 popup = NodePath("../..")
 panel = NodePath("../../PopupBg")
 shadow = NodePath("../../Shadow")
 rows_container = NodePath("../../PopupBg/VBoxContainer")
-close_button = NodePath("../../PopupBg/CloseButton/Button")
 day_row_scene = ExtResource("4_7dpwm")
+close_button = NodePath("../../PopupBg/CloseButton/Button")
 owner_node_path = NodePath("../..")

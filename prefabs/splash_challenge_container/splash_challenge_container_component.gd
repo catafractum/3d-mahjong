@@ -9,8 +9,8 @@ func _ready() -> void:
 	play_button.pressed.connect(_on_play_button_pressed)
 	var times := PackedStringArray()
 	for difficulty in GameDB.challenge_difficulties:
-		var seconds := int(GameDB.get_difficulty_time_limit_seconds(difficulty))
-		times.append("%02d:%02d" % [seconds / 60, seconds % 60])
+		var seconds := GameDB.get_seconds_per_pair(difficulty)
+		times.append(str(seconds).trim_suffix(".0") + "s")
 	if time_label != null:
 		time_label.text = " / ".join(times)
 
