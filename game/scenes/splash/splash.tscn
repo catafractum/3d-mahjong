@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" path="res://prefabs/splash_streak/splash_streak.tscn" id="7_streak"]
 [ext_resource type="Script" uid="uid://dnaqbk04qydfb" path="res://game/scenes/splash/splash_sound_component.gd" id="8_sound"]
 [ext_resource type="Texture2D" uid="uid://cfwemswtovpqp" path="res://assets/images/spinner.png" id="9_t66fi"]
+[ext_resource type="Script" uid="uid://drfvdek1imify" path="res://game/scenes/splash/splash_challenge_launcher_component.gd" id="10_launcher"]
 
 [node name="Splash" type="Node2D" unique_id=100442976]
 
@@ -24,6 +25,14 @@ owner_node_path = NodePath("../..")
 [node name="SplashSoundComponent" type="Node" parent="Components" unique_id=348874464]
 script = ExtResource("8_sound")
 music_path = "res://assets/sounds/music.mp3"
+owner_node_path = NodePath("../..")
+
+[node name="SplashChallengeLauncherComponent" type="Node" parent="Components" unique_id=622054559 node_paths=PackedStringArray("loading_control", "spinner", "previous_days_popup")]
+script = ExtResource("10_launcher")
+game_scene_path = "res://game/scenes/game/game.tscn"
+loading_control = NodePath("../../UI/Loading")
+spinner = NodePath("../../UI/Loading/ColorRect/TextureRect")
+previous_days_popup = NodePath("../../UI/PreviousDaysPopup")
 owner_node_path = NodePath("../..")
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1927576681]
@@ -60,7 +69,6 @@ grow_vertical = 2
 color = Color(0.03, 0.02, 0.05, 0.34)
 
 [node name="PreviousDaysPopup" parent="UI" unique_id=1097462152 instance=ExtResource("4_2m24u")]
-visible = false
 
 [node name="LandscapeUI" type="Control" parent="UI" unique_id=1319850694]
 layout_mode = 3
@@ -104,30 +112,32 @@ pivot_offset_ratio = Vector2(0.5, 0)
 [node name="SplashCalendarDay" parent="UI/LandscapeUI/Section" unique_id=847538879 instance=ExtResource("4_tmpah")]
 layout_mode = 0
 offset_left = 480.0
+offset_top = -38.0
 offset_right = 843.0
+offset_bottom = 484.0
 
 [node name="SplashChallengeContainer" parent="UI/LandscapeUI/Section" unique_id=731102767 instance=ExtResource("5_challenge")]
 layout_mode = 0
 offset_left = 921.0
-offset_top = 21.0
+offset_top = -17.0
 offset_right = 1312.0
-offset_bottom = 271.0
+offset_bottom = 233.0
 scale = Vector2(2, 2)
 
 [node name="SplashDaysCarousel" parent="UI/LandscapeUI/Section" unique_id=987524499 instance=ExtResource("6_carousel")]
 layout_mode = 0
 offset_left = 681.0
-offset_top = 581.0
+offset_top = 522.0
 offset_right = 1277.0
-offset_bottom = 724.0
+offset_bottom = 665.0
 scale = Vector2(1.4, 1.4)
 
 [node name="SplashStreak" parent="UI/LandscapeUI/Section" unique_id=792587543 instance=ExtResource("7_streak")]
 layout_mode = 0
 offset_left = 681.0
-offset_top = 824.0
+offset_top = 845.0
 offset_right = 1282.0
-offset_bottom = 931.0
+offset_bottom = 952.0
 scale = Vector2(1.4, 1.4)
 
 [node name="PortraitUI" type="Control" parent="UI" unique_id=1897949588]
@@ -163,9 +173,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -250.0
-offset_top = 119.0
+offset_top = 38.5
 offset_right = 250.0
-offset_bottom = 369.0
+offset_bottom = 288.5
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(1.7, 1.7)
@@ -179,9 +189,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -394.0
-offset_top = 83.0
+offset_top = 2.5
 offset_right = -31.0
-offset_bottom = 605.0
+offset_bottom = 524.5
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.6, 0.6)
@@ -194,9 +204,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -298.0
-offset_top = -383.0
+offset_top = -435.0
 offset_right = 298.0
-offset_bottom = -240.0
+offset_bottom = -292.0
 grow_horizontal = 2
 grow_vertical = 0
 scale = Vector2(1.4, 1.4)
@@ -220,6 +230,7 @@ pivot_offset_ratio = Vector2(0.5, 1)
 
 [node name="Loading" type="Control" parent="UI" unique_id=1501389120]
 visible = false
+z_index = 20
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

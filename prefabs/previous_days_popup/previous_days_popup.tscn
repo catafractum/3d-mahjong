@@ -6,6 +6,9 @@
 [ext_resource type="PackedScene" uid="uid://b45chr42r5m3t" path="res://prefabs/previous_days_popup/day_row.tscn" id="4_7dpwm"]
 [ext_resource type="Texture2D" uid="uid://c3cuffjg326ra" path="res://assets/images/buttons/btn_play_hard.png" id="5_as7no"]
 
+[ext_resource type="Script" path="res://prefabs/previous_days_popup/previous_days_popup_component.gd" id="6_component"]
+[ext_resource type="Script" path="res://core/components/button_helper_component.gd" id="7_helper"]
+
 [sub_resource type="LabelSettings" id="LabelSettings_as7no"]
 font = ExtResource("3_yedd6")
 font_size = 30
@@ -22,6 +25,7 @@ font = ExtResource("3_yedd6")
 font_size = 30
 
 [node name="PreviousDaysPopup" type="Control" unique_id=1097462152]
+visible = false
 z_index = 10
 layout_mode = 3
 anchors_preset = 15
@@ -54,6 +58,7 @@ offset_right = 418.0
 offset_bottom = 556.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
 texture = ExtResource("1_vuosq")
 patch_margin_left = 50
 patch_margin_top = 50
@@ -122,27 +127,9 @@ anchor_bottom = 1.0
 offset_left = 34.0
 offset_top = 128.0
 offset_right = -34.0
-offset_bottom = -32.0
+offset_bottom = -182.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="DayRow" parent="PopupBg/VBoxContainer" unique_id=520908403 instance=ExtResource("4_7dpwm")]
-layout_mode = 2
-
-[node name="DayRow2" parent="PopupBg/VBoxContainer" unique_id=1499230008 instance=ExtResource("4_7dpwm")]
-layout_mode = 2
-
-[node name="DayRow3" parent="PopupBg/VBoxContainer" unique_id=1892812955 instance=ExtResource("4_7dpwm")]
-layout_mode = 2
-
-[node name="DayRow4" parent="PopupBg/VBoxContainer" unique_id=1289849011 instance=ExtResource("4_7dpwm")]
-layout_mode = 2
-
-[node name="DayRow5" parent="PopupBg/VBoxContainer" unique_id=1924171735 instance=ExtResource("4_7dpwm")]
-layout_mode = 2
-
-[node name="DayRow6" parent="PopupBg/VBoxContainer" unique_id=734258148 instance=ExtResource("4_7dpwm")]
-layout_mode = 2
 
 [node name="Label" type="Label" parent="PopupBg" unique_id=1247219686]
 layout_mode = 1
@@ -150,8 +137,8 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -152.0
-offset_bottom = -38.0
+offset_top = -180.0
+offset_bottom = -90.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "Playing missed challenges does not count towards your streak."
@@ -160,7 +147,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="CloseButton" type="NinePatchRect" parent="." unique_id=966401448]
+[node name="CloseButton" type="NinePatchRect" parent="PopupBg" unique_id=966401448]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -168,9 +155,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -138.0
-offset_top = -278.0
+offset_top = -80.0
 offset_right = 138.0
-offset_bottom = -224.0
+offset_bottom = -26.0
 grow_horizontal = 2
 grow_vertical = 0
 pivot_offset_ratio = Vector2(0.5, 0.5)
@@ -178,7 +165,7 @@ texture = ExtResource("5_as7no")
 patch_margin_left = 20
 patch_margin_right = 20
 
-[node name="Label" type="Label" parent="CloseButton" unique_id=995349078]
+[node name="Label" type="Label" parent="PopupBg/CloseButton" unique_id=995349078]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -191,3 +178,30 @@ text = "CLOSE"
 label_settings = SubResource("LabelSettings_wefvu")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Button" type="Button" parent="PopupBg/CloseButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_default_cursor_shape = 2
+flat = true
+
+[node name="ButtonHelperComponent" type="Node" parent="PopupBg/CloseButton/Button"]
+script = ExtResource("7_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")
+
+[node name="Components" type="Node" parent="."]
+
+[node name="PreviousDaysPopupComponent" type="Node" parent="Components" node_paths=PackedStringArray("popup", "panel", "shadow", "rows_container", "close_button")]
+script = ExtResource("6_component")
+popup = NodePath("../..")
+panel = NodePath("../../PopupBg")
+shadow = NodePath("../../Shadow")
+rows_container = NodePath("../../PopupBg/VBoxContainer")
+close_button = NodePath("../../PopupBg/CloseButton/Button")
+day_row_scene = ExtResource("4_7dpwm")
+owner_node_path = NodePath("../..")

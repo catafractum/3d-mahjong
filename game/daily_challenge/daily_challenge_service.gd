@@ -21,18 +21,21 @@ func is_completed(date_key: String) -> bool:
 	return date_key in SaveLoadManager.data.completed_daily_challenges
 
 
-func complete_challenge(date_key: String) -> bool:
+func complete_challenge(date_key: String, streak_eligible := true) -> bool:
 	if not _is_valid_date_key(date_key) or is_completed(date_key):
 		return false
 	SaveLoadManager.data.completed_daily_challenges.append(date_key)
 	SaveLoadManager.data.completed_daily_challenges.sort()
+	if streak_eligible and date_key == get_today_key():
+		SaveLoadManager.data.streak_daily_challenges.append(date_key)
+		SaveLoadManager.data.streak_daily_challenges.sort()
 	SaveLoadManager.save_game()
 	completion_changed.emit(date_key)
 	return true
 
 
 func get_current_streak() -> int:
-	var completed := _completed_date_set()
+	var completed := _streak_date_set()
 	if completed.is_empty():
 		return 0
 	var today_unix := _date_key_to_unix(get_today_key())
@@ -48,7 +51,7 @@ func get_current_streak() -> int:
 
 func get_best_streak() -> int:
 	var timestamps: Array[int] = []
-	for date_key in _completed_date_set():
+	for date_key in _streak_date_set():
 		timestamps.append(_date_key_to_unix(date_key))
 	if timestamps.is_empty():
 		return 0
@@ -64,9 +67,9 @@ func get_best_streak() -> int:
 	return best
 
 
-func _completed_date_set() -> Dictionary:
+func _streak_date_set() -> Dictionary:
 	var result: Dictionary = {}
-	for date_key in SaveLoadManager.data.completed_daily_challenges:
+	for date_key in SaveLoadManager.data.streak_daily_challenges:
 		if _is_valid_date_key(date_key):
 			result[date_key] = true
 	return result
@@ -104,3 +107,10 @@ func _is_valid_date_key(date_key: String) -> bool:
 		return false
 	return date_key_from_dict(Time.get_date_dict_from_unix_time(_date_key_to_unix(date_key))) == date_key
 
+
+func get_previous_date_keys() -> Array[String]:
+	var dates: Array[String] = []
+	var today := _date_key_to_unix(get_today_key())
+	for days_ago in range(1, 7):
+		dates.append(_unix_to_date_key(today - days_ago * SECONDS_PER_DAY))
+	return dates

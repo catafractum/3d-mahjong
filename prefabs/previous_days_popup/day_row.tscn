@@ -6,6 +6,9 @@
 [ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="4_us08o"]
 [ext_resource type="Texture2D" uid="uid://cyyix8x2dsplv" path="res://assets/images/buttons/btn_play_next_level.png" id="5_udrek"]
 
+[ext_resource type="Script" path="res://prefabs/previous_days_popup/day_row_component.gd" id="6_component"]
+[ext_resource type="Script" path="res://core/components/button_helper_component.gd" id="7_helper"]
+
 [sub_resource type="LabelSettings" id="LabelSettings_iiom5"]
 font = ExtResource("4_us08o")
 font_size = 32
@@ -94,3 +97,29 @@ text = "PLAY"
 label_settings = SubResource("LabelSettings_fe1nj")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Button" type="Button" parent="HBoxContainer/TextureButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_default_cursor_shape = 2
+flat = true
+
+[node name="ButtonHelperComponent" type="Node" parent="HBoxContainer/TextureButton/Button"]
+script = ExtResource("7_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")
+
+[node name="Components" type="Node" parent="."]
+
+[node name="DayRowComponent" type="Node" parent="Components" node_paths=PackedStringArray("date_label", "weekday_label", "completion_tick", "play_button", "play_label")]
+script = ExtResource("6_component")
+date_label = NodePath("../../HBoxContainer/VBoxContainer/Date")
+weekday_label = NodePath("../../HBoxContainer/VBoxContainer/Day")
+completion_tick = NodePath("../../HBoxContainer/CheckBox/TextureRect")
+play_button = NodePath("../../HBoxContainer/TextureButton/Button")
+play_label = NodePath("../../HBoxContainer/TextureButton/Label")
+owner_node_path = NodePath("../..")

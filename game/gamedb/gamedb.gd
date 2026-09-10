@@ -26,9 +26,11 @@ func create_challenge_session(date_key := "") -> GameSession:
 
 	for level in levels:
 		level["time_limit_seconds"] = get_difficulty_time_limit_seconds(str(level.difficulty))
-	return GameSession.new(
+	var session := GameSession.new(
 		levels, GameSession.Mode.CHALLENGE, float(levels[0].time_limit_seconds), date_key
 	)
+	session.is_catch_up = date_key != DailyChallengeService.get_today_key()
+	return session
 
 
 func get_difficulty_time_limit_seconds(difficulty: String) -> float:

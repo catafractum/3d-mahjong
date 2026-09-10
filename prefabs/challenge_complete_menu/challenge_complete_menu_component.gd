@@ -38,7 +38,7 @@ func _on_level_completed() -> void:
 	_timer.pause()
 	_session.status = GameSession.Status.COMPLETED
 	if _session.mode == GameSession.Mode.CHALLENGE and not _session.challenge_date_key.is_empty():
-		DailyChallengeService.complete_challenge(_session.challenge_date_key)
+		DailyChallengeService.complete_challenge(_session.challenge_date_key, not _session.is_catch_up)
 	show_menu()
 
 

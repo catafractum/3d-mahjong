@@ -6,3 +6,4 @@
 script = ExtResource("1_gamedb")
 original_levels_path = "res://data/levels.json"
 development_levels_path = "res://data/levels_new.json"
+hard_time_limit_seconds = 180.0

@@ -13,11 +13,13 @@ const WEEKDAY_ABBREVIATIONS: Array[String] = [
 	"SAT",
 ]
 
+@export var previous_days_button: BaseButton
 @export var weekday_labels: Array[Label]
 @export var completion_ticks: Array[TextureRect]
 
 
 func _ready() -> void:
+	previous_days_button.pressed.connect(_show_previous_days)
 	var today := Time.get_date_dict_from_system()
 	var today_unix := Time.get_unix_time_from_datetime_dict({
 		"year": today.year,
@@ -42,3 +44,9 @@ func is_challenge_completed(date: Dictionary) -> bool:
 	return DailyChallengeService.is_completed(
 		DailyChallengeService.date_key_from_dict(date)
 	)
+
+
+func _show_previous_days() -> void:
+	var launcher := SplashChallengeLauncherComponent.of_as(self)
+	if launcher != null:
+		launcher.show_previous_days()

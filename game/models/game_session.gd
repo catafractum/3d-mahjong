@@ -21,6 +21,7 @@ var elapsed_seconds: float = 0.0
 var status: Status = Status.READY
 var selected_tile: Node3D
 var challenge_date_key := ""
+var is_catch_up := false
 
 
 func _init(
