@@ -64,7 +64,12 @@ func _load_all_levels() -> Array[Dictionary]:
 			var tiles = level.get("tiles", [])
 			var icons = level.get("tile_icons", [])
 			if not tiles is Array or not icons is Array or icons.size() != tiles.size():
-				push_error("GameDB: Level %s has invalid or missing tile_icons in %s." % [level.get("name", "unnamed"), levels_path])
+				push_error(
+					(
+						"GameDB: Level %s has invalid or missing tile_icons in %s."
+						% [level.get("name", "unnamed"), levels_path]
+					)
+				)
 				return []
 			result.append(level.duplicate(true))
 	return result

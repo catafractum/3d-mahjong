@@ -1,3 +1,5 @@
 res://game/gamedb/gamedb.tscn
 res://game/scenes/game/board_interaction_component.gd
 res://tests/board_input_test.gd
+res://game/scenes/splash/splash.tscn
+res://game/gamedb/gamedb.gd
