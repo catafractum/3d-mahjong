@@ -9,7 +9,6 @@ signal shuffle_completed
 
 @export var camera: Camera3D
 @export var ray_length := 1000.0
-@export var maximum_tap_distance := 16.0
 @export var minimum_swipe_distance := 80.0
 @export var swipe_vertical_tolerance := 0.6
 @export_file("*.mp3", "*.wav", "*.ogg") var correct_sfx_path: String
@@ -22,6 +21,9 @@ var _grid_size := 7
 var _completed := false
 var _press_position := Vector2.ZERO
 var _tracking_pointer := false
+var _pointer_index := -1
+var _pressed_tile: Node3D
+var _pressed_normal := Vector3.ZERO
 var _session: GameSession
 var _hovered_tile: Node3D
 var _input_locked := false
@@ -40,7 +42,7 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if _input_locked:
+	if _input_locked or event.device == InputEvent.DEVICE_ID_EMULATION:
 		return
 	if event is InputEventKey:
 		if not event.pressed or event.echo:
@@ -63,25 +65,37 @@ func _unhandled_input(event: InputEvent) -> void:
 		else:
 			_end_pointer(event.position)
 	elif event is InputEventScreenTouch:
-		if event.pressed:
-			_begin_pointer(event.position)
+		if event.canceled:
+			if _tracking_pointer and _pointer_index == event.index:
+				_cancel_pointer()
+		elif event.pressed:
+			_begin_pointer(event.position, event.index)
 		else:
-			_end_pointer(event.position)
+			_end_pointer(event.position, event.index)
 
 
 func _process(_delta: float) -> void:
 	_update_hovered_tile()
 
 
-func _begin_pointer(position: Vector2) -> void:
-	_press_position = position
-	_tracking_pointer = true
-
-
-func _end_pointer(position: Vector2) -> void:
-	if not _tracking_pointer:
+func _begin_pointer(position: Vector2, pointer_index := -1) -> void:
+	# A second finger must not replace the gesture already in progress.
+	if _tracking_pointer and _pointer_index != pointer_index:
 		return
-	_tracking_pointer = false
+	_press_position = position
+	_pointer_index = pointer_index
+	_tracking_pointer = true
+	var hit := _raycast_tile(position)
+	_pressed_tile = _find_tile(hit.collider as Node) if not hit.is_empty() else null
+	_pressed_normal = hit.get("normal", Vector3.ZERO)
+
+
+func _end_pointer(position: Vector2, pointer_index := -1) -> void:
+	if not _tracking_pointer or _pointer_index != pointer_index:
+		return
+	var tile := _pressed_tile
+	var normal := _pressed_normal
+	_cancel_pointer()
 	var delta := position - _press_position
 	var absolute_delta := delta.abs()
 	if (
@@ -90,8 +104,23 @@ func _end_pointer(position: Vector2) -> void:
 	):
 		_rotate_board(delta.x > 0.0)
 		get_viewport().set_input_as_handled()
-	elif delta.length() <= maximum_tap_distance:
-		_pick_tile(position)
+	elif delta.length() < minimum_swipe_distance and is_instance_valid(tile):
+		# Resolve a tap against its original target, even if the pointer drifts
+		# off an edge or the board moves before release. Long drags are ignored.
+		_on_tile_pressed(tile, normal)
+		get_viewport().set_input_as_handled()
+
+
+func _cancel_pointer() -> void:
+	_tracking_pointer = false
+	_pointer_index = -1
+	_pressed_tile = null
+	_pressed_normal = Vector3.ZERO
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
+		_cancel_pointer()
 
 
 func _rotate_board(right: bool) -> void:
@@ -100,16 +129,13 @@ func _rotate_board(right: bool) -> void:
 		rotation.rotate(right)
 
 
-func _pick_tile(screen_position: Vector2) -> void:
+func _raycast_tile(screen_position: Vector2) -> Dictionary:
+	if camera == null:
+		return {}
 	var origin := camera.project_ray_origin(screen_position)
 	var direction := camera.project_ray_normal(screen_position)
 	var query := PhysicsRayQueryParameters3D.create(origin, origin + direction * ray_length)
-	var hit := camera.get_world_3d().direct_space_state.intersect_ray(query)
-	if hit.is_empty():
-		return
-	var tile := _find_tile(hit.collider as Node)
-	if tile != null:
-		_on_tile_pressed(tile, hit.get("normal", Vector3.ZERO))
+	return camera.get_world_3d().direct_space_state.intersect_ray(query)
 
 
 func _find_tile(node: Node) -> Node3D:
@@ -225,6 +251,7 @@ func _set_selected_tile(tile: Node3D) -> void:
 
 
 func _clear_state() -> void:
+	_cancel_pointer()
 	_set_hovered_tile(null)
 	var previous := _selected_tile
 	_selected_tile = null
@@ -238,7 +265,7 @@ func _clear_state() -> void:
 
 func begin_shuffle() -> void:
 	_input_locked = true
-	_tracking_pointer = false
+	_cancel_pointer()
 	_set_hovered_tile(null)
 	_set_selected_tile(null)
 

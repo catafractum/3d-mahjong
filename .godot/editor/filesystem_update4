@@ -1,2 +1,3 @@
-res://game/scenes/level_editor/level_editor.tscn
 res://game/gamedb/gamedb.tscn
+res://game/scenes/game/board_interaction_component.gd
+res://tests/board_input_test.gd
