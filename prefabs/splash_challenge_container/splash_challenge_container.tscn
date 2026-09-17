@@ -7,6 +7,8 @@
 [ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="5_font"]
 [ext_resource type="Script" uid="uid://0g13lmkx4usr" path="res://core/components/button_helper_component.gd" id="8_button_helper"]
 
+[ext_resource type="Texture2D" uid="uid://cikkwftd686n3" path="res://assets/images/tick_icon.png" id="9_tick"]
+
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font = ExtResource("5_font")
 font_color = Color(1, 0.8352941, 0.40392157, 1)
@@ -125,6 +127,25 @@ layout_mode = 2
 text = "Complete in 0:00"
 label_settings = SubResource("LabelSettings_body")
 
+[node name="CompletionSlot" type="Control" parent="Background/Content/Easy"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="Completed" type="TextureRect" parent="Background/Content/Easy/CompletionSlot"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("9_tick")
+expand_mode = 1
+stretch_mode = 5
+
 [node name="PlayButton" type="TextureButton" parent="Background/Content/Easy" unique_id=1333324968]
 custom_minimum_size = Vector2(112, 40)
 layout_mode = 2
@@ -162,6 +183,25 @@ layout_mode = 2
 text = "Complete in 0:00"
 label_settings = SubResource("LabelSettings_body")
 
+[node name="CompletionSlot" type="Control" parent="Background/Content/Medium"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="Completed" type="TextureRect" parent="Background/Content/Medium/CompletionSlot"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("9_tick")
+expand_mode = 1
+stretch_mode = 5
+
 [node name="PlayButton" type="TextureButton" parent="Background/Content/Medium" unique_id=1503424743]
 custom_minimum_size = Vector2(112, 40)
 layout_mode = 2
@@ -198,6 +238,25 @@ label_settings = SubResource("LabelSettings_hard")
 layout_mode = 2
 text = "Complete in 0:00"
 label_settings = SubResource("LabelSettings_body")
+
+[node name="CompletionSlot" type="Control" parent="Background/Content/Hard"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="Completed" type="TextureRect" parent="Background/Content/Hard/CompletionSlot"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("9_tick")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="PlayButton" type="TextureButton" parent="Background/Content/Hard" unique_id=905272123]
 custom_minimum_size = Vector2(112, 40)

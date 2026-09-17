@@ -33,15 +33,14 @@ func _initialize() -> void:
 
 
 func _on_level_completed() -> void:
-	if _session == null or _session.has_next_level():
+	if _session == null:
+		return
+	if _session.mode == GameSession.Mode.CHALLENGE and not _session.challenge_date_key.is_empty():
+		DailyChallengeService.complete_difficulty(_session.challenge_date_key, str(_session.get_current_level().difficulty), not _session.is_catch_up)
+	if _session.has_next_level():
 		return
 	_timer.pause()
 	_session.status = GameSession.Status.COMPLETED
-	if _session.mode == GameSession.Mode.CHALLENGE and not _session.challenge_date_key.is_empty():
-		if _session.levels.size() == 1:
-			DailyChallengeService.complete_difficulty(_session.challenge_date_key, str(_session.get_current_level().difficulty), not _session.is_catch_up)
-		else:
-			DailyChallengeService.complete_challenge(_session.challenge_date_key, not _session.is_catch_up)
 	show_menu()
 
 

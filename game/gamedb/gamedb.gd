@@ -25,9 +25,15 @@ func create_challenge_session(date_key := "", difficulty := "") -> GameSession:
 		return null
 
 	if not difficulty.is_empty():
-		levels = levels.filter(func(level: Dictionary): return str(level.get("difficulty", "")) == difficulty)
-		if levels.is_empty():
+		var selected := levels.filter(func(level: Dictionary): return str(level.get("difficulty", "")) == difficulty)
+		if selected.is_empty():
 			return null
+		var completed: Array = SaveLoadManager.data.completed_challenge_difficulties.get(date_key, [])
+		var remaining := levels.filter(func(level: Dictionary):
+			return str(level.get("difficulty", "")) != difficulty and str(level.get("difficulty", "")) not in completed
+		)
+		levels = selected
+		levels.append_array(remaining)
 
 	for level in levels:
 		level["time_limit_seconds"] = get_level_time_limit_seconds(level)

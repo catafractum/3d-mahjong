@@ -95,16 +95,50 @@ func _run() -> void:
 	_check(launcher.selected_date_key == DailyChallengeService.get_today_key(), "Right arrow must return to today")
 	for difficulty in GameDB.challenge_difficulties:
 		var session := GameDB.create_challenge_session(past[0], difficulty)
-		_check(session.levels.size() == 1 and session.get_current_level().difficulty == difficulty, "Wrong difficulty selected")
+		_check(session.levels.size() == 3 and session.get_current_level().difficulty == difficulty, "Selected difficulty must lead into remaining challenges")
 		_check(session.challenge_date_key == past[0] and session.is_catch_up, "Wrong session date")
 		_check(session.time_limit_seconds == GameDB.get_level_time_limit_seconds(session.get_current_level()), "Wrong time limit")
 	SaveLoadManager.data.set_from_dict({"version": 2})
 	DailyChallengeService.complete_difficulty(past[0], "easy", false)
 	_check(not DailyChallengeService.is_completed(past[0]), "One difficulty completed the whole day")
+	var remaining_session := GameDB.create_challenge_session(past[0], "hard")
+	_check(remaining_session.levels.size() == 2 and remaining_session.levels[1].difficulty == "medium", "Starting hard must still offer unfinished medium and skip completed easy")
 	DailyChallengeService.complete_difficulty(past[0], "medium", false)
 	SaveLoadManager.data.set_from_json(memory.saved_json)
 	DailyChallengeService.complete_difficulty(past[0], "hard", false)
 	_check(DailyChallengeService.is_completed(past[0]), "All difficulties did not complete the day")
+	_check(GameDB.create_challenge_session(past[0], "hard").levels.size() == 1, "Replay should skip other completed challenges")
+	SaveLoadManager.data.set_from_dict({"version": 2})
+	var flow_session := GameDB.create_challenge_session(past[0], "easy")
+	var timer := GameTimerComponent.new()
+	var complete_menu := ChallengeCompleteMenuComponent.new()
+	complete_menu.popup_sfx_path = "res://assets/sounds/popup.mp3"
+	complete_menu._session = flow_session
+	complete_menu._timer = timer
+	complete_menu.menu = Control.new()
+	complete_menu.menu.hide()
+	var next_menu := NextLevelMenuComponent.new()
+	next_menu.popup_sfx_path = "res://assets/sounds/popup.mp3"
+	next_menu._session = flow_session
+	next_menu._timer = timer
+	next_menu.show_delay = 0.0
+	next_menu.menu = Control.new()
+	next_menu.button_label = Label.new()
+	for index in range(3):
+		next_menu.menu.hide()
+		complete_menu._on_level_completed()
+		next_menu._on_level_completed()
+		_check(complete_menu.menu.visible == (index == 2), "Final popup appeared before all challenges were finished")
+		_check(next_menu.menu.visible == (index < 2), "Next challenge popup visibility incorrect")
+		_check(DailyChallengeService.is_completed(past[0]) == (index == 2), "Daily completion recorded at wrong stage")
+		_check(flow_session.get_current_level().difficulty in SaveLoadManager.data.completed_challenge_difficulties.get(past[0], []), "Board completion was not saved")
+		flow_session.advance_to_next_level()
+	complete_menu.menu.free()
+	complete_menu.free()
+	next_menu.menu.free()
+	next_menu.button_label.free()
+	next_menu.free()
+	timer.free()
 	launcher.select_date(past[0])
 	var play := splash.get_node("UI/PortraitUI/SplashChallengeContainer/Background/Content/Hard/PlayButton") as BaseButton
 	play.pressed.emit()
