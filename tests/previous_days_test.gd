@@ -79,70 +79,39 @@ func _run() -> void:
 	add_child(splash)
 	await get_tree().process_frame
 	await get_tree().process_frame
-	var popup := splash.get_node("UI/PreviousDaysPopup") as Control
-	var component := PreviousDaysPopupComponent.of_as(popup)
-	_check(not popup.visible, "Popup should start closed")
-	var opener := splash.get_node("UI/PortraitUI/SplashDaysCarousel/PreviousDaysButton/Button") as Button
-	opener.pressed.emit()
-	_check(popup.visible, "Previous days entry point did not open popup")
-	_check(component._rows.size() == 6, "Popup must have six rows")
-	for index in 6:
-		_check(component._rows[index].date_key == past[index], "Rows are not newest first")
-	_check(component._rows[1].completion_tick.visible and component._rows[1].play_label.text == "PLAY AGAIN", "Completed row not replayable")
-	_check(not component._rows[0].completion_tick.visible and component._rows[0].play_label.text == "PLAY", "Unplayed row incorrect")
-	component.close_button.pressed.emit()
-	_check(not popup.visible, "Close did not hide popup")
-	component.show_menu()
-	var escape := InputEventKey.new()
-	escape.keycode = KEY_ESCAPE
-	escape.pressed = true
-	component._unhandled_input(escape)
-	_check(not popup.visible, "Escape did not close popup")
-	component.show_menu()
-	var tab := InputEventKey.new()
-	tab.keycode = KEY_TAB
-	tab.pressed = true
-	get_viewport().push_input(tab, true)
-	_check(get_viewport().gui_get_focus_owner() == component._rows[0].play_button, "Keyboard focus escaped the popup")
-	component._today_key = "stale"
-	component._process(0.0)
-	_check(component._today_key == DailyChallengeService.get_today_key(), "Popup did not refresh on date change")
-
 	var launcher := SplashChallengeLauncherComponent.of_as(splash)
-	launcher.start_challenge("1900-01-01")
-	_check(GameDB.current_session == null, "Out-of-window date was playable")
-
-	if "--capture" in OS.get_cmdline_user_args():
-		for window_size in [Vector2i(540, 1080), Vector2i(1280, 720)]:
-			get_window().size = window_size
-			for frame in 4:
-				await get_tree().process_frame
-			_click(component.close_button)
-			_check(not popup.visible, "Pointer click did not close popup")
-			var layout := "PortraitUI" if window_size.x < window_size.y else "LandscapeUI/Section"
-			var visible_opener := splash.get_node("UI/%s/SplashDaysCarousel/PreviousDaysButton/Button" % layout) as Control
-			await RenderingServer.frame_post_draw
-			get_viewport().get_texture().get_image().save_png("/tmp/previous-days-menu-%s.png" % window_size.x)
-			_click(visible_opener)
-			_check(popup.visible, "Pointer click did not open popup")
-			await RenderingServer.frame_post_draw
-			get_viewport().get_texture().get_image().save_png("/tmp/previous-days-%s.png" % window_size.x)
-
-	if "--capture" in OS.get_cmdline_user_args():
-		_click(component._rows[0].play_button)
-	else:
-		component._rows[0].play_button.pressed.emit()
-	_check(GameDB.current_session != null and GameDB.current_session.challenge_date_key == past[0], "Row launched wrong date")
-	_check(GameDB.current_session.is_catch_up, "Past session missing catch-up flag")
-	_check(GameDB.current_session.time_limit_seconds == GameDB.get_level_time_limit_seconds(GameDB.current_session.get_current_level()), "Past challenge has wrong timer")
+	var carousel := splash.get_node("UI/PortraitUI/SplashDaysCarousel/Components/SplashDaysCarouselComponent") as SplashDaysCarouselComponent
+	_check(launcher.selected_date_key == DailyChallengeService.get_today_key(), "Default date is not today")
+	_check(carousel._right.disabled, "Future navigation should be disabled")
+	carousel._left.pressed.emit()
+	await get_tree().create_timer(0.4).timeout
+	_check(launcher.selected_date_key == past[0], "Left arrow must move one day")
+	var calendar := splash.get_node("UI/PortraitUI/SplashCalendarDay/Components/SplashCalendarDayComponent") as SplashCalendarDayComponent
+	var selected := Time.get_date_dict_from_unix_time(DailyChallengeService._date_key_to_unix(past[0]))
+	_check(calendar.day_number_label.text == str(selected.day), "Calendar did not follow carousel")
+	_check(carousel._row.get_child(6).get_node("Date").text == str(selected.day), "Rightmost day differs from selection")
+	carousel._right.pressed.emit()
+	await get_tree().create_timer(0.4).timeout
+	_check(launcher.selected_date_key == DailyChallengeService.get_today_key(), "Right arrow must return to today")
+	for difficulty in GameDB.challenge_difficulties:
+		var session := GameDB.create_challenge_session(past[0], difficulty)
+		_check(session.levels.size() == 1 and session.get_current_level().difficulty == difficulty, "Wrong difficulty selected")
+		_check(session.challenge_date_key == past[0] and session.is_catch_up, "Wrong session date")
+		_check(session.time_limit_seconds == GameDB.get_level_time_limit_seconds(session.get_current_level()), "Wrong time limit")
+	SaveLoadManager.data.set_from_dict({"version": 2})
+	DailyChallengeService.complete_difficulty(past[0], "easy", false)
+	_check(not DailyChallengeService.is_completed(past[0]), "One difficulty completed the whole day")
+	DailyChallengeService.complete_difficulty(past[0], "medium", false)
+	SaveLoadManager.data.set_from_json(memory.saved_json)
+	DailyChallengeService.complete_difficulty(past[0], "hard", false)
+	_check(DailyChallengeService.is_completed(past[0]), "All difficulties did not complete the day")
+	launcher.select_date(past[0])
+	var play := splash.get_node("UI/PortraitUI/SplashChallengeContainer/Background/Content/Hard/PlayButton") as BaseButton
+	play.pressed.emit()
+	_check(GameDB.current_session != null and GameDB.current_session.challenge_date_key == past[0] and GameDB.current_session.get_current_level().difficulty == "hard", "Play launched wrong game")
 	var original_session := GameDB.current_session
-	component._rows[2].play_button.pressed.emit()
+	play.pressed.emit()
 	_check(GameDB.current_session == original_session, "Double click started a second session")
-	if "--capture" in OS.get_cmdline_user_args():
-		for frame in 4:
-			await get_tree().process_frame
-		_check(switcher.requested_path == "res://game/scenes/game/game.tscn", "Catch-up did not request game scene")
-	_check(not GameDB.create_challenge_session().is_catch_up, "Today marked as catch-up")
 	SaveLoadManager.data.set_from_dict(original_data)
 	SaveLoadManager.storage_provider = original_storage
 	GameDB.current_session = null

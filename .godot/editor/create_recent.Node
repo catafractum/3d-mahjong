@@ -1,11 +1,11 @@
-Label
 NinePatchRect
+TextureButton
+Label
 TextureRect
 HBoxContainer
 ColorRect
 VBoxContainer
 Control
-TextureButton
 SplashCalendarDayComponent
 Node
 CanvasLayer

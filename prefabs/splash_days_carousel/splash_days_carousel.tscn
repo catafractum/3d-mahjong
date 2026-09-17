@@ -2,38 +2,35 @@
 
 [ext_resource type="Script" uid="uid://bgi5hjcbfsqtj" path="res://prefabs/splash_days_carousel/splash_days_carousel_component.gd" id="1_component"]
 [ext_resource type="Texture2D" uid="uid://c3i0xy0pm7dge" path="res://assets/images/splash/bg_days_carousel.png" id="2_background"]
+[ext_resource type="Texture2D" uid="uid://d1gwfduejp5i5" path="res://assets/images/rounded_rect_bg.png" id="3_1tujp"]
 [ext_resource type="Texture2D" uid="uid://bp0u883p8xife" path="res://assets/images/splash/badge_empty.png" id="3_badge"]
 [ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="4_font"]
 [ext_resource type="Texture2D" uid="uid://cikkwftd686n3" path="res://assets/images/tick_icon.png" id="5_tick"]
-[ext_resource type="Texture2D" uid="uid://cyyix8x2dsplv" path="res://assets/images/buttons/btn_play_next_level.png" id="6_1tujp"]
-[ext_resource type="Script" uid="uid://0g13lmkx4usr" path="res://core/components/button_helper_component.gd" id="6_helper"]
+[ext_resource type="Texture2D" uid="uid://c416j1cv6240u" path="res://assets/images/splash/arrow.png" id="6_rv6j5"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_rv6j5"]
+font = ExtResource("4_font")
+font_size = 18
 
 [sub_resource type="LabelSettings" id="LabelSettings_weekday"]
 font = ExtResource("4_font")
 font_size = 18
 font_color = Color(0.768627, 0.623529, 0.933333, 1)
 
-[sub_resource type="LabelSettings" id="LabelSettings_1tujp"]
-font = ExtResource("4_font")
-font_size = 22
-
 [node name="SplashDaysCarousel" type="Control" unique_id=1939107156]
-custom_minimum_size = Vector2(596, 143)
+custom_minimum_size = Vector2(596, 179)
 layout_mode = 3
 anchors_preset = 0
 offset_right = 596.0
-offset_bottom = 143.0
+offset_bottom = 179.0
 
 [node name="Components" type="Node" parent="." unique_id=335650532]
 
-[node name="SplashDaysCarouselComponent" type="Node" parent="Components" unique_id=1524741809 node_paths=PackedStringArray("previous_days_button", "weekday_labels", "completion_ticks")]
+[node name="SplashDaysCarouselComponent" type="Node" parent="Components" unique_id=1812735550]
 script = ExtResource("1_component")
-previous_days_button = NodePath("../../PreviousDaysButton/Button")
-weekday_labels = [NodePath("../../DaysRow/Day1/Weekday"), NodePath("../../DaysRow/Day2/Weekday"), NodePath("../../DaysRow/Day3/Weekday"), NodePath("../../DaysRow/Day4/Weekday"), NodePath("../../DaysRow/Day5/Weekday"), NodePath("../../DaysRow/Day6/Weekday"), NodePath("../../DaysRow/Day7/Weekday")]
-completion_ticks = [NodePath("../../DaysRow/Day1/Badge/Tick"), NodePath("../../DaysRow/Day2/Badge/Tick"), NodePath("../../DaysRow/Day3/Badge/Tick"), NodePath("../../DaysRow/Day4/Badge/Tick"), NodePath("../../DaysRow/Day5/Badge/Tick"), NodePath("../../DaysRow/Day6/Badge/Tick"), NodePath("../../DaysRow/Day7/Badge/Tick")]
 owner_node_path = NodePath("../..")
 
-[node name="Background" type="TextureRect" parent="." unique_id=504708966]
+[node name="Background" type="NinePatchRect" parent="." unique_id=1812590356]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -41,28 +38,52 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_background")
-stretch_mode = 5
+patch_margin_left = 20
+patch_margin_top = 60
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=1866093397]
+self_modulate = Color(0.18240997, 0.0306, 0.51, 1)
+custom_minimum_size = Vector2(58, 129)
+layout_mode = 0
+offset_left = 454.0
+offset_top = 44.0
+offset_right = 512.0
+offset_bottom = 173.0
+texture = ExtResource("3_1tujp")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
 
 [node name="DaysRow" type="HBoxContainer" parent="." unique_id=194482785]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 34.0
+offset_left = 77.0
 offset_top = 43.0
-offset_right = -34.0
+offset_right = -84.0
 offset_bottom = -7.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 8
 alignment = 1
 
 [node name="Day1" type="VBoxContainer" parent="DaysRow" unique_id=607414539]
-custom_minimum_size = Vector2(50, 82)
+custom_minimum_size = Vector2(30, 82)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 4
 alignment = 1
+
+[node name="Date" type="Label" parent="DaysRow/Day1" unique_id=442671697]
+custom_minimum_size = Vector2(50, 24)
+layout_mode = 2
+text = "31"
+label_settings = SubResource("LabelSettings_rv6j5")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Weekday" type="Label" parent="DaysRow/Day1" unique_id=2015556458]
 custom_minimum_size = Vector2(50, 24)
@@ -97,6 +118,14 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 4
 alignment = 1
 
+[node name="Date" type="Label" parent="DaysRow/Day2" unique_id=1237940737]
+custom_minimum_size = Vector2(50, 24)
+layout_mode = 2
+text = "31"
+label_settings = SubResource("LabelSettings_rv6j5")
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="Weekday" type="Label" parent="DaysRow/Day2" unique_id=663121160]
 custom_minimum_size = Vector2(50, 24)
 layout_mode = 2
@@ -129,6 +158,14 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 4
 alignment = 1
+
+[node name="Date" type="Label" parent="DaysRow/Day3" unique_id=613577387]
+custom_minimum_size = Vector2(50, 24)
+layout_mode = 2
+text = "31"
+label_settings = SubResource("LabelSettings_rv6j5")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Weekday" type="Label" parent="DaysRow/Day3" unique_id=1998249945]
 custom_minimum_size = Vector2(50, 24)
@@ -163,6 +200,14 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 4
 alignment = 1
 
+[node name="Date" type="Label" parent="DaysRow/Day4" unique_id=55898957]
+custom_minimum_size = Vector2(50, 24)
+layout_mode = 2
+text = "31"
+label_settings = SubResource("LabelSettings_rv6j5")
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="Weekday" type="Label" parent="DaysRow/Day4" unique_id=1393545466]
 custom_minimum_size = Vector2(50, 24)
 layout_mode = 2
@@ -195,6 +240,14 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 4
 alignment = 1
+
+[node name="Date" type="Label" parent="DaysRow/Day5" unique_id=1754060587]
+custom_minimum_size = Vector2(50, 24)
+layout_mode = 2
+text = "31"
+label_settings = SubResource("LabelSettings_rv6j5")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Weekday" type="Label" parent="DaysRow/Day5" unique_id=19174040]
 custom_minimum_size = Vector2(50, 24)
@@ -229,6 +282,14 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 4
 alignment = 1
 
+[node name="Date" type="Label" parent="DaysRow/Day6" unique_id=1180633396]
+custom_minimum_size = Vector2(50, 24)
+layout_mode = 2
+text = "31"
+label_settings = SubResource("LabelSettings_rv6j5")
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="Weekday" type="Label" parent="DaysRow/Day6" unique_id=1119580998]
 custom_minimum_size = Vector2(50, 24)
 layout_mode = 2
@@ -262,6 +323,14 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 4
 alignment = 1
 
+[node name="Date" type="Label" parent="DaysRow/Day7" unique_id=76523234]
+custom_minimum_size = Vector2(50, 24)
+layout_mode = 2
+text = "31"
+label_settings = SubResource("LabelSettings_rv6j5")
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="Weekday" type="Label" parent="DaysRow/Day7" unique_id=299079248]
 custom_minimum_size = Vector2(50, 24)
 layout_mode = 2
@@ -288,49 +357,23 @@ texture = ExtResource("5_tick")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="PreviousDaysButton" type="NinePatchRect" parent="." unique_id=1127036979]
-custom_minimum_size = Vector2(0, 54)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -175.0
-offset_top = 79.5
-offset_right = 175.0
-offset_bottom = 133.5
-grow_horizontal = 2
-grow_vertical = 2
-mouse_default_cursor_shape = 2
-texture = ExtResource("6_1tujp")
-patch_margin_left = 30
-patch_margin_right = 30
+[node name="LeftArrow" type="TextureButton" parent="." unique_id=208824119]
+layout_mode = 0
+offset_left = 22.0
+offset_top = 83.0
+offset_right = 62.0
+offset_bottom = 123.0
+texture_normal = ExtResource("6_rv6j5")
+ignore_texture_size = true
+stretch_mode = 5
+flip_h = true
 
-[node name="Button" type="Button" parent="PreviousDaysButton"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_default_cursor_shape = 2
-flat = true
-
-[node name="ButtonHelperComponent" type="Node" parent="PreviousDaysButton/Button" unique_id=1884066819]
-script = ExtResource("6_helper")
-click_sfx_path = "res://assets/sounds/click.mp3"
-owner_node_path = NodePath("..")
-
-[node name="Label" type="Label" parent="PreviousDaysButton" unique_id=1776084988]
-mouse_filter = 2
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "PLAY PAST CHALLENGES"
-label_settings = SubResource("LabelSettings_1tujp")
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="RightArrow" type="TextureButton" parent="." unique_id=300244009]
+layout_mode = 0
+offset_left = 532.0
+offset_top = 83.0
+offset_right = 572.0
+offset_bottom = 123.0
+texture_normal = ExtResource("6_rv6j5")
+ignore_texture_size = true
+stretch_mode = 5

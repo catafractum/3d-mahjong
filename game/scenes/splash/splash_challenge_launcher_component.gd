@@ -7,7 +7,17 @@ extends BaseComponent
 @export var previous_days_popup: Control
 @export var spinner_speed_degrees := 240.0
 
+signal selected_date_changed(date_key: String)
+
+var selected_date_key := DailyChallengeService.get_today_key()
 var _is_loading := false
+
+
+func select_date(date_key: String) -> void:
+	if date_key > DailyChallengeService.get_today_key():
+		return
+	selected_date_key = date_key
+	selected_date_changed.emit(date_key)
 
 
 func _process(delta: float) -> void:
@@ -20,12 +30,12 @@ func show_previous_days() -> void:
 		PreviousDaysPopupComponent.of_as(previous_days_popup).show_menu()
 
 
-func start_challenge(date_key: String) -> void:
+func start_challenge(date_key: String, difficulty := "") -> void:
 	if _is_loading:
 		return
-	if date_key != DailyChallengeService.get_today_key() and date_key not in DailyChallengeService.get_previous_date_keys():
+	if not DailyChallengeService._is_valid_date_key(date_key) or date_key > DailyChallengeService.get_today_key():
 		return
-	GameDB.current_session = GameDB.create_challenge_session(date_key)
+	GameDB.current_session = GameDB.create_challenge_session(date_key, difficulty)
 	if GameDB.current_session == null:
 		return
 	_is_loading = true

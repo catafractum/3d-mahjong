@@ -1,6 +1,7 @@
 class_name SavedataDTO
 extends BaseDTO
 
+var completed_challenge_difficulties: Dictionary = {}
 var first_time: bool = true
 var completed_daily_challenges: Array[String] = []
 var streak_daily_challenges: Array[String] = []
@@ -24,6 +25,7 @@ func _get_migrations() -> Dictionary:
 
 
 func _apply_dict(dict: Dictionary) -> void:
+	completed_challenge_difficulties = dict.get("completed_challenge_difficulties", {}).duplicate(true)
 	first_time = dict.get("first_time", true)
 	completed_daily_challenges.clear()
 	for value in dict.get("completed_daily_challenges", []):
@@ -40,6 +42,7 @@ func _apply_dict(dict: Dictionary) -> void:
 func _to_dict() -> Dictionary:
 	return {
 		"first_time": first_time,
+		"completed_challenge_difficulties": completed_challenge_difficulties,
 		"completed_daily_challenges": completed_daily_challenges,
 		"streak_daily_challenges": streak_daily_challenges,
 	}

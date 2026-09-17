@@ -114,3 +114,15 @@ func get_previous_date_keys() -> Array[String]:
 	for days_ago in range(1, 7):
 		dates.append(_unix_to_date_key(today - days_ago * SECONDS_PER_DAY))
 	return dates
+
+
+func complete_difficulty(date_key: String, difficulty: String, streak_eligible := true) -> void:
+	if not _is_valid_date_key(date_key) or difficulty not in GameDB.challenge_difficulties:
+		return
+	var completed: Array = SaveLoadManager.data.completed_challenge_difficulties.get(date_key, [])
+	if difficulty not in completed:
+		completed.append(difficulty)
+	SaveLoadManager.data.completed_challenge_difficulties[date_key] = completed
+	if GameDB.challenge_difficulties.all(func(value: String): return value in completed):
+		complete_challenge(date_key, streak_eligible)
+	SaveLoadManager.save_game()

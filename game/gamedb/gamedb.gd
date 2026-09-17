@@ -16,13 +16,18 @@ var levels_path: String:
 		return development_levels_path if use_development_levels else original_levels_path
 
 
-func create_challenge_session(date_key := "") -> GameSession:
+func create_challenge_session(date_key := "", difficulty := "") -> GameSession:
 	if date_key.is_empty():
 		date_key = DailyChallengeService.get_today_key()
 	var levels := _select_daily_levels(date_key)
 	if levels.size() != challenge_difficulties.size():
 		push_error("GameDB: Could not select every daily challenge level from %s." % levels_path)
 		return null
+
+	if not difficulty.is_empty():
+		levels = levels.filter(func(level: Dictionary): return str(level.get("difficulty", "")) == difficulty)
+		if levels.is_empty():
+			return null
 
 	for level in levels:
 		level["time_limit_seconds"] = get_level_time_limit_seconds(level)
