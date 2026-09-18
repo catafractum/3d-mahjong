@@ -124,7 +124,7 @@ label_settings = SubResource("LabelSettings_easy")
 
 [node name="Time" type="Label" parent="Background/Content/Easy/Details" unique_id=997780629]
 layout_mode = 2
-text = "Complete in 0:00"
+text = "Complete in 0 min."
 label_settings = SubResource("LabelSettings_body")
 
 [node name="CompletionSlot" type="Control" parent="Background/Content/Easy"]
@@ -150,6 +150,7 @@ stretch_mode = 5
 custom_minimum_size = Vector2(112, 40)
 layout_mode = 2
 size_flags_vertical = 4
+pivot_offset_ratio = Vector2(0.5, 0.5)
 texture_normal = ExtResource("2_play")
 ignore_texture_size = true
 stretch_mode = 5
@@ -157,7 +158,7 @@ stretch_mode = 5
 [node name="ButtonHelperComponent" type="Node" parent="Background/Content/Easy/PlayButton" unique_id=1094553588]
 script = ExtResource("8_button_helper")
 click_sfx_path = "res://assets/sounds/click.mp3"
-hover_scale_multiplier = 1.0
+hover_scale_multiplier = 1.05
 owner_node_path = NodePath("..")
 
 [node name="Medium" type="HBoxContainer" parent="Background/Content" unique_id=785373110]
@@ -180,7 +181,7 @@ label_settings = SubResource("LabelSettings_medium")
 
 [node name="Time" type="Label" parent="Background/Content/Medium/Details" unique_id=1808123325]
 layout_mode = 2
-text = "Complete in 0:00"
+text = "Complete in 0 min."
 label_settings = SubResource("LabelSettings_body")
 
 [node name="CompletionSlot" type="Control" parent="Background/Content/Medium"]
@@ -206,6 +207,7 @@ stretch_mode = 5
 custom_minimum_size = Vector2(112, 40)
 layout_mode = 2
 size_flags_vertical = 4
+pivot_offset_ratio = Vector2(0.5, 0.5)
 texture_normal = ExtResource("2_play")
 ignore_texture_size = true
 stretch_mode = 5
@@ -213,7 +215,7 @@ stretch_mode = 5
 [node name="ButtonHelperComponent" type="Node" parent="Background/Content/Medium/PlayButton" unique_id=795047895]
 script = ExtResource("8_button_helper")
 click_sfx_path = "res://assets/sounds/click.mp3"
-hover_scale_multiplier = 1.0
+hover_scale_multiplier = 1.05
 owner_node_path = NodePath("..")
 
 [node name="Hard" type="HBoxContainer" parent="Background/Content" unique_id=1740040385]
@@ -236,7 +238,7 @@ label_settings = SubResource("LabelSettings_hard")
 
 [node name="Time" type="Label" parent="Background/Content/Hard/Details" unique_id=188512934]
 layout_mode = 2
-text = "Complete in 0:00"
+text = "Complete in 0 min."
 label_settings = SubResource("LabelSettings_body")
 
 [node name="CompletionSlot" type="Control" parent="Background/Content/Hard"]
@@ -262,6 +264,7 @@ stretch_mode = 5
 custom_minimum_size = Vector2(112, 40)
 layout_mode = 2
 size_flags_vertical = 4
+pivot_offset_ratio = Vector2(0.5, 0.5)
 texture_normal = ExtResource("2_play")
 ignore_texture_size = true
 stretch_mode = 5
@@ -269,5 +272,5 @@ stretch_mode = 5
 [node name="ButtonHelperComponent" type="Node" parent="Background/Content/Hard/PlayButton" unique_id=1841046141]
 script = ExtResource("8_button_helper")
 click_sfx_path = "res://assets/sounds/click.mp3"
-hover_scale_multiplier = 1.0
+hover_scale_multiplier = 1.05
 owner_node_path = NodePath("..")

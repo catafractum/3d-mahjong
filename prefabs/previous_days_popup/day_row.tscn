@@ -104,12 +104,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
 mouse_default_cursor_shape = 2
 flat = true
 
 [node name="ButtonHelperComponent" type="Node" parent="HBoxContainer/TextureButton/Button" unique_id=2104240113]
 script = ExtResource("7_helper")
 click_sfx_path = "res://assets/sounds/click.mp3"
+hover_scale_multiplier = 1.05
 owner_node_path = NodePath("..")
 
 [node name="Components" type="Node" parent="." unique_id=1446399343]

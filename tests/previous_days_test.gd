@@ -82,10 +82,11 @@ func _run() -> void:
 	var launcher := SplashChallengeLauncherComponent.of_as(splash)
 	var carousel := splash.get_node("UI/PortraitUI/SplashDaysCarousel/Components/SplashDaysCarouselComponent") as SplashDaysCarouselComponent
 	_check(launcher.selected_date_key == DailyChallengeService.get_today_key(), "Default date is not today")
-	_check(carousel._right.disabled, "Future navigation should be disabled")
+	_check(not carousel._right.visible, "Future navigation should be hidden")
 	carousel._left.pressed.emit()
 	await get_tree().create_timer(0.4).timeout
 	_check(launcher.selected_date_key == past[0], "Left arrow must move one day")
+	_check(carousel._right.visible, "Return navigation should be visible after moving back")
 	var calendar := splash.get_node("UI/PortraitUI/SplashCalendarDay/Components/SplashCalendarDayComponent") as SplashCalendarDayComponent
 	var selected := Time.get_date_dict_from_unix_time(DailyChallengeService._date_key_to_unix(past[0]))
 	_check(calendar.day_number_label.text == str(selected.day), "Calendar did not follow carousel")

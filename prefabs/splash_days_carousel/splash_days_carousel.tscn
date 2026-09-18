@@ -7,6 +7,7 @@
 [ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="4_font"]
 [ext_resource type="Texture2D" uid="uid://cikkwftd686n3" path="res://assets/images/tick_icon.png" id="5_tick"]
 [ext_resource type="Texture2D" uid="uid://c416j1cv6240u" path="res://assets/images/splash/arrow.png" id="6_rv6j5"]
+[ext_resource type="Script" uid="uid://0g13lmkx4usr" path="res://core/components/button_helper_component.gd" id="7_helper"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_rv6j5"]
 font = ExtResource("4_font")
@@ -363,10 +364,16 @@ offset_left = 22.0
 offset_top = 83.0
 offset_right = 62.0
 offset_bottom = 123.0
+pivot_offset_ratio = Vector2(0.5, 0.5)
 texture_normal = ExtResource("6_rv6j5")
 ignore_texture_size = true
 stretch_mode = 5
 flip_h = true
+
+[node name="ButtonHelperComponent" type="Node" parent="LeftArrow" unique_id=1305319461]
+script = ExtResource("7_helper")
+hover_scale_multiplier = 1.05
+owner_node_path = NodePath("..")
 
 [node name="RightArrow" type="TextureButton" parent="." unique_id=300244009]
 layout_mode = 0
@@ -374,6 +381,12 @@ offset_left = 532.0
 offset_top = 83.0
 offset_right = 572.0
 offset_bottom = 123.0
+pivot_offset_ratio = Vector2(0.5, 0.5)
 texture_normal = ExtResource("6_rv6j5")
 ignore_texture_size = true
 stretch_mode = 5
+
+[node name="ButtonHelperComponent" type="Node" parent="RightArrow" unique_id=1305319462]
+script = ExtResource("7_helper")
+hover_scale_multiplier = 1.05
+owner_node_path = NodePath("..")
