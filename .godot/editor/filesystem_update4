@@ -20,3 +20,7 @@ res://prefabs/splash_calendar_day/splash_calendar_day.tscn
 res://prefabs/splash_streak/splash_streak.tscn
 res://prefabs/game_ui/game_ui.tscn
 res://prefabs/game_over_menu/game_over_menu.tscn
+res://game/scenes/game/board_builder_component.gd
+res://game/scenes/level_editor/level_editor_component.gd
+res://tests/icon_quality_test.gd
+res://game/scenes/level_editor/level_editor.tscn

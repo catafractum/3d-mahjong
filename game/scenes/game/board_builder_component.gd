@@ -153,22 +153,96 @@ func assign_solvable_icons(
 	if positions.is_empty():
 		return {}
 
-	var removal_pairs := _make_removal_sequence(positions, assignment_grid_size)
-	if removal_pairs.is_empty():
-		push_error("BoardBuilderComponent: Layout has no complete removal sequence; refusing an unsafe random assignment.")
+	if positions.size() % 2 != 0 or maximum_icon_count < 1:
 		return {}
+	var pool_size := clampi(requested_icon_count, 1, maximum_icon_count) if requested_icon_count > 0 else _icon_pool_size(positions.size(), maximum_icon_count, difficulty)
+	for _attempt in 80:
+		var removal_pairs := _make_removal_sequence(positions, assignment_grid_size)
+		if removal_pairs.is_empty():
+			return {}
+		var result: Dictionary = {}
+		var counts: Array[int] = []
+		counts.resize(pool_size)
+		counts.fill(0)
+		var order: Array = range(removal_pairs.size())
+		order.shuffle()
+		for pair_index in order:
+			var pair: Array = removal_pairs[pair_index]
+			var candidates: Array = range(pool_size)
+			candidates.shuffle()
+			candidates.sort_custom(func(a, b): return counts[a] < counts[b])
+			var placed := false
+			for icon in candidates:
+				result[pair[0]] = icon
+				result[pair[1]] = icon
+				if icon_quality_issues(result).is_empty():
+					counts[icon] += 1
+					placed = true
+					break
+			if not placed:
+				result.clear()
+				break
+		if result.size() == positions.size():
+			# Verify the same coordinate order used by Save and subsequent loads.
+			var saved_positions := positions.duplicate()
+			saved_positions.sort_custom(func(a: Vector3i, b: Vector3i):
+				if a.y != b.y:
+					return a.y < b.y
+				if a.z != b.z:
+					return a.z < b.z
+				return a.x < b.x
+			)
+			var ordered: Dictionary = {}
+			for position in saved_positions:
+				ordered[position] = result[position]
+			var solver := MahjongSolverComponent.of_as(self)
+			if solver == null or solver.is_solvable(ordered, assignment_grid_size):
+				return ordered
+	return {}
 
-	var result: Dictionary = {}
-	var icons := _make_icon_sequence(removal_pairs.size(), positions.size(), maximum_icon_count, difficulty, requested_icon_count)
-	for index in removal_pairs.size():
-		var pair: Array = removal_pairs[index]
-		result[pair[0]] = icons[index]
-		result[pair[1]] = icons[index]
 
-	var solver := MahjongSolverComponent.of_as(self)
-	if solver != null and not solver.is_solvable(result, assignment_grid_size):
-		push_error("BoardBuilderComponent: Generated assignment is not solvable.")
-	return result
+# Shared by generation and editor validation. Coordinates are included for feedback.
+static func icon_quality_issues(assignment: Dictionary, offending: Dictionary = {}) -> Array[String]:
+	var issues: Array[String] = []
+	var axes := [Vector3i.RIGHT, Vector3i.UP, Vector3i.BACK]
+	for position: Vector3i in assignment:
+		for direction: Vector3i in axes:
+			var neighbor := position + direction
+			if assignment.has(neighbor) and assignment[position] == assignment[neighbor]:
+				offending[position] = true
+				offending[neighbor] = true
+				issues.append("Identical neighbors at %s and %s" % [position, neighbor])
+			var end := position + direction * 3
+			if assignment.has(neighbor) and assignment.has(position + direction * 2) and assignment.has(end):
+				if assignment[position] == assignment[position + direction * 2] and assignment[neighbor] == assignment[end]:
+					for step in 4:
+						offending[position + direction * step] = true
+					issues.append("Repeated ABAB line from %s to %s" % [position, end])
+	# Ignore fixed points on mirror planes; require at least eight compared pairs.
+	if assignment.size() >= 16:
+		for axis in 3:
+			var low := 100000
+			var high := -100000
+			for position: Vector3i in assignment:
+				low = mini(low, position[axis])
+				high = maxi(high, position[axis])
+			var compared := 0
+			var matched := 0
+			for position: Vector3i in assignment:
+				var reflected := position
+				reflected[axis] = low + high - position[axis]
+				if position[axis] < reflected[axis] and assignment.has(reflected):
+					compared += 1
+					if assignment[position] == assignment[reflected]:
+						matched += 1
+			if compared >= 8 and matched * 4 >= compared * 3:
+				for position: Vector3i in assignment:
+					var reflected := position
+					reflected[axis] = low + high - position[axis]
+					if reflected != position and assignment.has(reflected) and assignment[position] == assignment[reflected]:
+						offending[position] = true
+				issues.append("Mirrored symbols on axis %s (%d/%d pairs)" % [["X", "Y", "Z"][axis], matched, compared])
+	return issues
 
 
 func _make_removal_sequence(positions: Array[Vector3i], assignment_grid_size: int) -> Array[Array]:
@@ -183,18 +257,18 @@ func _make_removal_sequence(positions: Array[Vector3i], assignment_grid_size: in
 				break
 			free_positions.shuffle()
 			var first := free_positions[0]
-			var second := free_positions[1]
-			# Prefer a separated partner from the randomized order. Pairing two
-			# immediately adjacent cells made generated boards look striped even
-			# though their icon sequence was technically shuffled.
+			var second := first
+			# Only pair nonadjacent cells. Retry the sequence if no partner remains.
 			for index in range(1, free_positions.size()):
 				var candidate := free_positions[index]
 				var distance := absi(candidate.x - first.x) \
 					+ absi(candidate.y - first.y) \
 					+ absi(candidate.z - first.z)
-				if distance >= 3:
+				if distance >= 2:
 					second = candidate
 					break
+			if second == first:
+				break
 			var pair := [first, second]
 			occupancy.erase(pair[0])
 			occupancy.erase(pair[1])

@@ -90,12 +90,13 @@ func _validate_editor_path(quit_when_done := true) -> bool:
 		_fail("Level editor rejected its loaded level geometry")
 		return false
 	print("PASS: level editor Save and Play geometry check")
+	editor_component.call("_create_icons")
 	editor_component.call("_simulate_selected_level")
 	var status_label = editor_component.get("_status_label")
-	if status_label == null or not str(status_label.text).begins_with("Simulation: 100/100"):
+	if status_label == null or not str(status_label.text).begins_with("Validation passed:"):
 		_fail("Level editor simulation failed: %s" % (status_label.text if status_label != null else "no status"))
 		return false
-	print("PASS: level editor Simulate 100× check")
+	print("PASS: level editor quality and solvability check")
 	if quit_when_done:
 		get_tree().quit(0)
 	return true

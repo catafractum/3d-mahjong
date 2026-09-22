@@ -31,6 +31,7 @@ var _occupied: Dictionary = {}
 var _tile_nodes: Dictionary = {}
 var _icon_by_position: Dictionary = {}
 var _icon_materials: Dictionary = {}
+var _quality_conflicts: Dictionary = {}
 var _layer_clipboard: Array[Vector2i] = []
 var _editing_icons := false
 var _preview_shape := false
@@ -158,7 +159,7 @@ func _build_controls() -> void:
 	var row_two := HBoxContainer.new()
 	panel.add_child(row_two)
 	_add_button(row_two, "Play", _play_selected_level)
-	_simulate_button = _add_button(row_two, "Simulate 100×", _simulate_selected_level)
+	_simulate_button = _add_button(row_two, "Validate Level", _simulate_selected_level)
 	var layer_row := HBoxContainer.new()
 	panel.add_child(layer_row)
 	_add_button(layer_row, "Copy Layer", _copy_layer)
@@ -424,7 +425,7 @@ func _create_icons() -> void:
 		_occupied.keys(), GRID_SIZE, 16, _selected_difficulty(), requested_icons
 	)
 	if assignment.size() != _occupied.size() or not solver.is_solvable(assignment, GRID_SIZE):
-		_set_status("Could not create a verified solvable icon assignment")
+		_set_status("No compliant assignment found within the attempt limit. Reduce Pairs per Icon or adjust the shape and retry.")
 		return
 	_icon_by_position = assignment
 	_refresh_all_tile_materials()
@@ -432,7 +433,7 @@ func _create_icons() -> void:
 	for icon in _icon_by_position.values():
 		used_icons[int(icon)] = true
 	var capacity_note := " (16-icon limit; target cannot be exact)" if pair_count > target_pairs * 16 else ""
-	_set_status("Created a global solvable assignment using %d symbols across %d blocks%s" % [used_icons.size(), _icon_by_position.size(), capacity_note])
+	_set_status("Created a solvable, pattern-checked assignment using %d symbols across %d blocks%s" % [used_icons.size(), _icon_by_position.size(), capacity_note])
 
 
 func _add_random_blocks() -> void:
@@ -540,6 +541,10 @@ func _save_selected_level() -> bool:
 	if _icon_by_position.size() != _occupied.size():
 		_set_status("Click Create Icons after editing the shape, then Save")
 		return false
+	var quality_issues := BoardBuilderComponent.icon_quality_issues(_icon_by_position)
+	if not quality_issues.is_empty():
+		_set_status("Cannot save: %s. Click Create Icons or correct the tiles." % quality_issues[0])
+		return false
 	var solver := MahjongSolverComponent.of_as(self)
 	if solver == null or not solver.is_solvable(_icon_by_position, GRID_SIZE):
 		_set_status("Cannot save: the current icon assignment is not solvable")
@@ -597,6 +602,7 @@ func _clear_level() -> void:
 	_occupied.clear()
 	_tile_nodes.clear()
 	_icon_by_position.clear()
+	_quality_conflicts.clear()
 	_hovered_coordinate = Vector3i(-1, -1, -1)
 	if hover_root != null:
 		hover_root.visible = false
@@ -612,29 +618,19 @@ func _play_selected_level() -> void:
 
 
 func _simulate_selected_level() -> void:
-	if _occupied.is_empty() or _occupied.size() % 2 != 0:
-		_set_status("Simulation needs a non-zero, even number of blocks")
+	_refresh_all_tile_materials()
+	if _occupied.is_empty() or _occupied.size() % 2 != 0 or _icon_by_position.size() != _occupied.size():
+		_set_status("Validation: needs an even block count and complete icons. Click Create Icons.")
+		return
+	var issues := BoardBuilderComponent.icon_quality_issues(_icon_by_position)
+	if not issues.is_empty():
+		_set_status("Validation: %d quality issues. %s" % [issues.size(), issues[0]])
 		return
 	var solver := MahjongSolverComponent.of_as(self)
-	if solver == null or _icon_by_position.size() != _occupied.size():
-		_set_status("Click Create Icons before simulating")
+	if solver == null or not solver.is_solvable(_icon_by_position, GRID_SIZE):
+		_set_status("Validation: current icons could not be verified solvable")
 		return
-	if not solver.is_solvable(_icon_by_position, GRID_SIZE):
-		_set_status("Simulation: current icons are not solvable — FAILED")
-		return
-	if solver == null:
-		_set_status("Simulation components unavailable")
-		return
-	_simulate_button.disabled = true
-	var positions: Array = _occupied.keys()
-	var passed := 0
-	for _run in 100:
-		if _icon_by_position.size() == positions.size() and solver.is_solvable(_icon_by_position, GRID_SIZE):
-			passed += 1
-		else:
-			break
-	_simulate_button.disabled = false
-	_set_status("Simulation: %d/100 solvable assignments%s" % [passed, " ✓" if passed == 100 else " — FAILED"])
+	_set_status("Validation passed: solvable, no identical neighbors, no ABAB lines or excessive mirrored symbols")
 
 
 func _layout_has_removal_sequence() -> bool:
@@ -721,7 +717,8 @@ func _toggle_hovered_tile() -> void:
 		var icon := _selected_icon
 		_icon_by_position[_hovered_coordinate] = icon
 		_update_tile_material(_hovered_coordinate)
-		_set_status("Applied Icon %s; run Simulate 100× before Save" % _icon_label(icon))
+		_refresh_all_tile_materials()
+		_set_status("Applied Icon %s; click Validate Level to check placement" % _icon_label(icon))
 		return
 	if _occupied.has(_hovered_coordinate):
 		_remove_tile(_hovered_coordinate)
@@ -784,6 +781,13 @@ func _update_tile_material(coordinate: Vector3i) -> void:
 	var tile: MeshInstance3D = _tile_nodes.get(coordinate)
 	if tile != null:
 		var label := tile.get_node_or_null("IconLabel") as Label3D
+		if _quality_conflicts.has(coordinate):
+			tile.material_override = _remove_material
+			if label != null:
+				label.text = "! " + _icon_label(int(_icon_by_position.get(coordinate, 0)))
+				label.modulate = Color.WHITE
+				label.visible = true
+			return
 		if _preview_shape:
 			tile.material_override = _icon_material(int(_icon_by_position[coordinate])) if _icon_by_position.has(coordinate) else _blank_material
 			if label != null:
@@ -822,6 +826,8 @@ func _icon_label(icon: int) -> String:
 
 
 func _refresh_all_tile_materials() -> void:
+	_quality_conflicts.clear()
+	BoardBuilderComponent.icon_quality_issues(_icon_by_position, _quality_conflicts)
 	for coordinate: Vector3i in _tile_nodes:
 		_update_tile_material(coordinate)
 
