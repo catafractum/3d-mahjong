@@ -84,7 +84,7 @@ func _run() -> void:
 	_check(launcher.selected_date_key == DailyChallengeService.get_today_key(), "Default date is not today")
 	_check(not carousel._right.visible, "Future navigation should be hidden")
 	carousel._left.pressed.emit()
-	await get_tree().create_timer(0.4).timeout
+	await get_tree().create_timer(carousel.SCROLL_DURATION + 0.05).timeout
 	_check(launcher.selected_date_key == past[0], "Left arrow must move one day")
 	_check(carousel._right.visible, "Return navigation should be visible after moving back")
 	var calendar := splash.get_node("UI/PortraitUI/SplashCalendarDay/Components/SplashCalendarDayComponent") as SplashCalendarDayComponent
@@ -92,8 +92,54 @@ func _run() -> void:
 	_check(calendar.day_number_label.text == str(selected.day), "Calendar did not follow carousel")
 	_check(carousel._row.get_child(6).get_node("Date").text == str(selected.day), "Rightmost day differs from selection")
 	carousel._right.pressed.emit()
-	await get_tree().create_timer(0.4).timeout
+	await get_tree().create_timer(carousel.SCROLL_DURATION + 0.05).timeout
 	_check(launcher.selected_date_key == DailyChallengeService.get_today_key(), "Right arrow must return to today")
+	# Use actual GUI input to cover labels, badges, and the already-selected day.
+	for index in range(7):
+		launcher.select_date("2024-03-02")
+		await get_tree().process_frame
+		var selection_home_x := carousel._selection_rect.position.x
+		var day := carousel._row.get_child(index) as Control
+		var target := day.get_node("Badge" if index % 2 == 0 else "Date") as Control
+		var expected := DailyChallengeService._unix_to_date_key(DailyChallengeService._date_key_to_unix("2024-03-02") - (6 - index) * 86400)
+		var expected_day := str(Time.get_date_dict_from_unix_time(DailyChallengeService._date_key_to_unix(expected)).day)
+		var outgoing_day := day.get_node("Date").text as String
+		_click(target)
+		_check(launcher.selected_date_key == expected, "Clicked date must be selected immediately")
+		_check(calendar.day_number_label.text == expected_day, "Calendar must update before animation")
+		_check(day.get_node("Date").text == outgoing_day, "Selection changed the outgoing dates before animation")
+		_check(carousel._animating == (index < 6), "Click should animate only an unselected date")
+		if index < 6:
+			carousel._left.pressed.emit()
+			await get_tree().create_timer(carousel.SELECTION_MOVE_DURATION + carousel.SELECTION_PAUSE_DURATION * 0.5).timeout
+			_check(carousel._row.visible, "Dates moved before selection pause finished")
+			var selected_day := carousel._row.get_child(6) as Control
+			var expected_x := selection_home_x + day.position.x - selected_day.position.x
+			_check(is_equal_approx(carousel._selection_rect.position.x, expected_x), "Highlight did not reach clicked date first")
+			await get_tree().create_timer(carousel.SELECTION_PAUSE_DURATION * 0.5 + carousel.SCROLL_DURATION + 0.05).timeout
+			_check(is_equal_approx(carousel._selection_rect.position.x, selection_home_x), "Highlight did not return with selected date")
+		_check(launcher.selected_date_key == expected, "Clicked date was not selected")
+		_check(carousel._row.get_child(6).get_node("Date").text == expected_day, "Clicked date did not reach rightmost slot")
+		_check(calendar.day_number_label.text == expected_day, "Calendar did not follow clicked date")
+		_check(carousel._row.visible and not carousel._animating, "Click transition did not finish")
+	# Click the icon itself to verify child controls pass input to Today.
+	var today_button := carousel._today
+	_check(today_button.pivot_offset_ratio == Vector2(0.5, 0.5), "Today pivot must be centered")
+	today_button.mouse_entered.emit()
+	_check(today_button.scale.is_equal_approx(Vector2.ONE * 1.05), "Today hover did not scale")
+	today_button.mouse_exited.emit()
+	_check(today_button.scale.is_equal_approx(Vector2.ONE), "Today hover did not reset")
+	_click(today_button.get_node("HBoxContainer/TextureRect"))
+	_check(launcher.selected_date_key == DailyChallengeService.get_today_key(), "Today icon did not select today")
+	_check(carousel._animating, "Today jump must animate")
+	await get_tree().create_timer(carousel.SCROLL_DURATION + 0.05).timeout
+	_check(carousel._row.visible and not carousel._animating, "Today jump did not finish")
+	_check(not carousel._right.visible, "Today jump enabled future navigation")
+	var today_day := str(Time.get_date_dict_from_unix_time(DailyChallengeService._date_key_to_unix(DailyChallengeService.get_today_key())).day)
+	_check(carousel._row.get_child(6).get_node("Date").text == today_day, "Today jump displayed the wrong date")
+	_click(today_button.get_node("HBoxContainer/Label"))
+	_check(not carousel._animating, "Clicking Today while selected should not animate")
+	launcher.select_date(DailyChallengeService.get_today_key())
 	for difficulty in GameDB.challenge_difficulties:
 		var session := GameDB.create_challenge_session(past[0], difficulty)
 		_check(session.levels.size() == 3 and session.get_current_level().difficulty == difficulty, "Selected difficulty must lead into remaining challenges")

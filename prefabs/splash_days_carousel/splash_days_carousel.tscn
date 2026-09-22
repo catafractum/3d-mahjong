@@ -1,13 +1,21 @@
 [gd_scene format=3 uid="uid://bxsh7ctu63ghw"]
 
 [ext_resource type="Script" uid="uid://bgi5hjcbfsqtj" path="res://prefabs/splash_days_carousel/splash_days_carousel_component.gd" id="1_component"]
-[ext_resource type="Texture2D" uid="uid://c3i0xy0pm7dge" path="res://assets/images/splash/bg_days_carousel.png" id="2_background"]
+[ext_resource type="Texture2D" uid="uid://dvg3fb4pya5s" path="res://assets/images/splash/challenge_bg.png" id="2_n7kg7"]
 [ext_resource type="Texture2D" uid="uid://d1gwfduejp5i5" path="res://assets/images/rounded_rect_bg.png" id="3_1tujp"]
 [ext_resource type="Texture2D" uid="uid://bp0u883p8xife" path="res://assets/images/splash/badge_empty.png" id="3_badge"]
 [ext_resource type="FontFile" uid="uid://63ajipkse5q8" path="res://assets/fonts/Montserrat-SemiBold.otf" id="4_1btta"]
 [ext_resource type="Texture2D" uid="uid://cikkwftd686n3" path="res://assets/images/tick_icon.png" id="5_tick"]
 [ext_resource type="Texture2D" uid="uid://c416j1cv6240u" path="res://assets/images/splash/arrow.png" id="6_rv6j5"]
 [ext_resource type="Script" uid="uid://0g13lmkx4usr" path="res://core/components/button_helper_component.gd" id="7_helper"]
+[ext_resource type="Texture2D" uid="uid://bme411pvplbfk" path="res://assets/images/splash/title-edge.png" id="9_1btta"]
+[ext_resource type="Texture2D" uid="uid://cyyix8x2dsplv" path="res://assets/images/buttons/btn_play_next_level.png" id="10_c0y7v"]
+[ext_resource type="Texture2D" uid="uid://dty5366bq6qs8" path="res://assets/images/splash/today_arrow.svg" id="11_today_arrow"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_c0y7v"]
+font = ExtResource("4_1btta")
+font_color = Color(1, 0.8352941, 0.40392157, 1)
+shadow_color = Color(0, 0, 0, 0.4392157)
 
 [sub_resource type="LabelSettings" id="LabelSettings_rv6j5"]
 font = ExtResource("4_1btta")
@@ -38,13 +46,46 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_background")
+texture = ExtResource("2_n7kg7")
 patch_margin_left = 20
 patch_margin_top = 60
 patch_margin_right = 20
 patch_margin_bottom = 20
 
-[node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=1866093397]
+[node name="TitleContainer" type="HBoxContainer" parent="." unique_id=1964718056]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -168.0
+offset_top = 7.0
+offset_right = 170.0
+offset_bottom = 47.0
+grow_horizontal = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="LeftEdge" type="TextureRect" parent="TitleContainer" unique_id=1810939195]
+custom_minimum_size = Vector2(60, 20)
+layout_mode = 2
+texture = ExtResource("9_1btta")
+expand_mode = 1
+stretch_mode = 5
+flip_h = true
+
+[node name="Title" type="Label" parent="TitleContainer" unique_id=150231434]
+layout_mode = 2
+text = "PREVIOUS DAYS"
+label_settings = SubResource("LabelSettings_c0y7v")
+
+[node name="RightEdge" type="TextureRect" parent="TitleContainer" unique_id=409413615]
+custom_minimum_size = Vector2(60, 20)
+layout_mode = 2
+texture = ExtResource("9_1btta")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SelectionRect" type="NinePatchRect" parent="." unique_id=1866093397]
 self_modulate = Color(0.18240997, 0.0306, 0.51, 1)
 custom_minimum_size = Vector2(58, 129)
 layout_mode = 0
@@ -390,3 +431,42 @@ stretch_mode = 5
 script = ExtResource("7_helper")
 hover_scale_multiplier = 1.05
 owner_node_path = NodePath("..")
+
+[node name="Today" type="TextureButton" parent="." unique_id=2075046605]
+layout_mode = 0
+offset_left = 475.0
+offset_top = 11.0
+offset_right = 584.0
+offset_bottom = 41.0
+pivot_offset_ratio = Vector2(0.5, 0.5)
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("10_c0y7v")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="ButtonHelperComponent" type="Node" parent="Today" unique_id=1544116569]
+script = ExtResource("7_helper")
+hover_scale_multiplier = 1.05
+owner_node_path = NodePath("..")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Today" unique_id=7298848]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="Today/HBoxContainer" unique_id=504815190]
+layout_mode = 2
+text = "TODAY"
+
+[node name="TextureRect" type="TextureRect" parent="Today/HBoxContainer" unique_id=524474223]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("11_today_arrow")
+expand_mode = 1
+stretch_mode = 5

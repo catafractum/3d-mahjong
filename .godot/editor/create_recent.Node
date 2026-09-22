@@ -1,9 +1,9 @@
-Label
+HBoxContainer
 TextureRect
+Label
 Control
 NinePatchRect
 TextureButton
-HBoxContainer
 ColorRect
 VBoxContainer
 SplashCalendarDayComponent
