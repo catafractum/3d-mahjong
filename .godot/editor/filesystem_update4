@@ -1,7 +1,15 @@
-res://prefabs/splash_challenge_container/splash_challenge_container.tscn
-res://prefabs/splash_challenge_container/splash_challenge_container_component.gd
+res://game/scenes/splash/splash.tscn
+res://prefabs/next_level_menu/next_level_menu.tscn
+res://game/scenes/game/game.tscn
+res://prefabs/challenge_complete_menu/challenge_complete_menu.tscn
+res://prefabs/challenge_complete_menu/challenge_complete_menu_component.gd
+res://prefabs/next_level_menu/next_level_menu_component.gd
+res://prefabs/next_level_menu/completion_presentation.gd
 res://prefabs/previous_days_popup/day_row.tscn
 res://prefabs/previous_days_popup/previous_days_popup.tscn
+res://prefabs/splash_challenge_container/splash_challenge_container.tscn
+res://prefabs/splash_challenge_container/splash_challenge_container_component.gd
 res://prefabs/splash_days_carousel/splash_days_carousel.tscn
 res://prefabs/splash_days_carousel/splash_days_carousel_component.gd
 res://tests/previous_days_test.gd
+res://game/gamedb/gamedb.tscn

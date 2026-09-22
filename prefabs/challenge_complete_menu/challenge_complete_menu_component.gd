@@ -61,11 +61,12 @@ func _request_replay() -> void:
 
 func show_menu() -> void:
 	SoundManager.play_sfx(popup_sfx_path)
-	menu.show()
+	var difficulty := str(_session.get_current_level().get("difficulty", "hard")) if _session != null else "hard"
+	menu.present(difficulty)
 
 
 func hide_menu() -> void:
-	menu.hide()
+	menu.dismiss()
 
 
 static func of_as(node: Node) -> ChallengeCompleteMenuComponent:

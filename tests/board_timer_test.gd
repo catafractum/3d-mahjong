@@ -37,7 +37,7 @@ func _ready() -> void:
 	timer.reset()
 	var builder := BuilderProbe.new()
 	var next_menu := NextLevelMenuComponent.new()
-	next_menu.menu = Control.new()
+	next_menu.menu = preload("res://prefabs/next_level_menu/completion_presentation.gd").new()
 	next_menu._session = session
 	next_menu._timer = timer
 	next_menu._builder = builder

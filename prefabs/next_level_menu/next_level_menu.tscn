@@ -1,28 +1,43 @@
 [gd_scene format=3 uid="uid://dwqu0wqid64jx"]
 
 [ext_resource type="Script" uid="uid://bmu8cmhr2w262" path="res://prefabs/next_level_menu/next_level_menu_component.gd" id="1_component"]
-[ext_resource type="Texture2D" uid="uid://c1vt6ybw21ec8" path="res://assets/images/bg_next_level_easy.png" id="2_background"]
+[ext_resource type="Texture2D" uid="uid://dvg3fb4pya5s" path="res://assets/images/splash/challenge_bg.png" id="2_background"]
 [ext_resource type="Texture2D" uid="uid://cyyix8x2dsplv" path="res://assets/images/buttons/btn_play_next_level.png" id="3_play"]
-[ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="4_font"]
+[ext_resource type="FontFile" uid="uid://cp1posuglql2i" path="res://assets/fonts/Montserrat-ExtraBold.ttf" id="4_3nb0e"]
+[ext_resource type="Texture2D" uid="uid://cnrp0horjlimb" path="res://assets/images/hard_complete_dice.png" id="4_10flq"]
 [ext_resource type="Script" uid="uid://0g13lmkx4usr" path="res://core/components/button_helper_component.gd" id="5_button_helper"]
+[ext_resource type="Texture2D" uid="uid://bme411pvplbfk" path="res://assets/images/splash/title-edge.png" id="5_r03dk"]
+[ext_resource type="Texture2D" uid="uid://vpnwpnabyrug" path="res://assets/images/buttons/btn_home_next_level.png" id="6_home"]
+[ext_resource type="Script" uid="uid://bfbv2aau71ny4" path="res://prefabs/next_level_menu/completion_presentation.gd" id="7_presentation"]
+[ext_resource type="Texture2D" uid="uid://bt45n7arbils6" path="res://assets/images/easy_complete_dice.png" id="9_gcpx1"]
+[ext_resource type="Texture2D" uid="uid://d2k5dr347ejbf" path="res://assets/images/medium_complete_dice.png" id="10_medium_dice"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_button"]
-font = ExtResource("4_font")
+font = ExtResource("4_3nb0e")
 font_size = 56
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_home"]
+atlas = ExtResource("6_home")
+region = Rect2(0, 110, 2172, 474)
 
 [node name="NextLevelMenu" type="CanvasLayer" unique_id=1267724779]
 
 [node name="Components" type="Node" parent="." unique_id=1275429086]
 
-[node name="NextLevelMenuComponent" type="Node" parent="Components" unique_id=305667616 node_paths=PackedStringArray("menu", "play_button", "button_label")]
+[node name="NextLevelMenuComponent" type="Node" parent="Components" unique_id=305667616 node_paths=PackedStringArray("menu", "home_button", "play_button", "button_label", "completion_image")]
 script = ExtResource("1_component")
 menu = NodePath("../../Menu")
+home_button = NodePath("../../Menu/Panel/HomeButton")
 play_button = NodePath("../../Menu/Panel/PlayButton")
 button_label = NodePath("../../Menu/Panel/PlayButton/Label")
+completion_image = NodePath("../../Menu/Panel/TextureRect")
+easy_completion_texture = ExtResource("9_gcpx1")
+medium_completion_texture = ExtResource("10_medium_dice")
+hard_completion_texture = ExtResource("4_10flq")
 popup_sfx_path = "res://assets/sounds/popup.mp3"
 owner_node_path = NodePath("../..")
 
-[node name="Menu" type="Control" parent="." unique_id=1963629387]
+[node name="Menu" type="Control" parent="." unique_id=1963629387 node_paths=PackedStringArray("panel", "title1", "buttons")]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -30,6 +45,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("7_presentation")
+panel = NodePath("Panel")
+title1 = NodePath("Panel/Title1")
+buttons = [NodePath("Panel/PlayButton"), NodePath("Panel/HomeButton")]
 
 [node name="Overlay" type="ColorRect" parent="Menu" unique_id=757201314]
 layout_mode = 1
@@ -40,21 +59,89 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.03, 0.02, 0.05, 0.34)
 
-[node name="Panel" type="TextureRect" parent="Menu" unique_id=824151029]
+[node name="Panel" type="NinePatchRect" parent="Menu" unique_id=824151029]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -418.75
-offset_top = -502.25
-offset_right = 418.75
-offset_bottom = 502.25
+offset_left = -390.0
+offset_top = -514.0
+offset_right = 390.0
+offset_bottom = 514.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_background")
+patch_margin_left = 40
+patch_margin_top = 40
+patch_margin_right = 40
+patch_margin_bottom = 40
+
+[node name="Title1" type="Label" parent="Menu/Panel" unique_id=971939085]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 20.0
+offset_top = 14.0
+offset_right = -20.0
+offset_bottom = 124.0
+grow_horizontal = 2
+text = "EASY"
+label_settings = SubResource("LabelSettings_button")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Title2" type="Label" parent="Menu/Panel" unique_id=732849691]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 20.0
+offset_top = 80.0
+offset_right = -20.0
+offset_bottom = 190.0
+grow_horizontal = 2
+text = "COMPLETE"
+label_settings = SubResource("LabelSettings_button")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Line" type="TextureRect" parent="Menu/Panel" unique_id=298031945]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -17.0
+offset_top = -356.0
+offset_right = 199.0
+offset_bottom = -284.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0, 0.5)
+texture = ExtResource("5_r03dk")
+expand_mode = 1
 stretch_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="Menu/Panel/Line" unique_id=1958019621]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -283.0
+offset_top = -36.0
+offset_right = -67.0
+offset_bottom = 36.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(1, 0.5)
+texture = ExtResource("5_r03dk")
+expand_mode = 1
+stretch_mode = 5
+flip_h = true
 
 [node name="PlayButton" type="TextureButton" parent="Menu/Panel" unique_id=43572092]
 layout_mode = 1
@@ -63,14 +150,15 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -282.5
-offset_top = -229.0
-offset_right = 282.5
-offset_bottom = -59.0
+offset_left = -282.0
+offset_top = -340.0
+offset_right = 283.0
+offset_bottom = -195.0
 grow_horizontal = 2
 grow_vertical = 0
 pivot_offset_ratio = Vector2(0.5, 0.5)
 texture_normal = ExtResource("3_play")
+ignore_texture_size = true
 stretch_mode = 5
 
 [node name="Label" type="Label" parent="Menu/Panel/PlayButton" unique_id=123470269]
@@ -89,3 +177,55 @@ vertical_alignment = 1
 script = ExtResource("5_button_helper")
 click_sfx_path = "res://assets/sounds/click.mp3"
 owner_node_path = NodePath("..")
+
+[node name="HomeButton" type="TextureButton" parent="Menu/Panel" unique_id=1744505551]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -282.0
+offset_top = -180.0
+offset_right = 283.0
+offset_bottom = -35.0
+grow_horizontal = 2
+grow_vertical = 0
+pivot_offset_ratio = Vector2(0.5, 0.5)
+texture_normal = SubResource("AtlasTexture_home")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Menu/Panel/HomeButton" unique_id=1580962002]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "HOME"
+label_settings = SubResource("LabelSettings_button")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ButtonHelperComponent" type="Node" parent="Menu/Panel/HomeButton" unique_id=1133048853]
+script = ExtResource("5_button_helper")
+click_sfx_path = "res://assets/sounds/click.mp3"
+owner_node_path = NodePath("..")
+
+[node name="TextureRect" type="TextureRect" parent="Menu/Panel" unique_id=1737265658]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -269.0
+offset_top = -320.0
+offset_right = 270.0
+offset_bottom = 185.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("9_gcpx1")
+expand_mode = 1
+stretch_mode = 5
