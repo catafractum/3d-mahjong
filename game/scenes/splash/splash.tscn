@@ -26,12 +26,11 @@ script = ExtResource("8_sound")
 music_path = "res://assets/sounds/music.mp3"
 owner_node_path = NodePath("../..")
 
-[node name="SplashChallengeLauncherComponent" type="Node" parent="Components" unique_id=622054559 node_paths=PackedStringArray("loading_control", "spinner", "previous_days_popup")]
+[node name="SplashChallengeLauncherComponent" type="Node" parent="Components" unique_id=622054559 node_paths=PackedStringArray("loading_control", "spinner")]
 script = ExtResource("10_launcher")
 game_scene_path = "res://game/scenes/game/game.tscn"
 loading_control = NodePath("../../UI/Loading")
 spinner = NodePath("../../UI/Loading/ColorRect/TextureRect")
-previous_days_popup = NodePath("")
 owner_node_path = NodePath("../..")
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1927576681]

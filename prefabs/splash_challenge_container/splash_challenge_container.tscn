@@ -93,7 +93,7 @@ flip_h = true
 
 [node name="Title" type="Label" parent="Background/Content/TitleContainer" unique_id=1232827530]
 layout_mode = 2
-text = "THIS DAY'S CHALLENGE"
+text = "TODAY'S CHALLENGE"
 label_settings = SubResource("LabelSettings_title")
 
 [node name="RightEdge" type="TextureRect" parent="Background/Content/TitleContainer" unique_id=1998289247]
