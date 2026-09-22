@@ -4,33 +4,32 @@
 [ext_resource type="Texture2D" uid="uid://da3aejwjvv2b0" path="res://assets/images/buttons/btn_play_compact.png" id="2_play"]
 [ext_resource type="Texture2D" uid="uid://dvg3fb4pya5s" path="res://assets/images/splash/challenge_bg.png" id="3_background"]
 [ext_resource type="Texture2D" uid="uid://bme411pvplbfk" path="res://assets/images/splash/title-edge.png" id="4_title_edge"]
-[ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="5_font"]
+[ext_resource type="FontFile" uid="uid://63ajipkse5q8" path="res://assets/fonts/Montserrat-SemiBold.otf" id="4_ve208"]
 [ext_resource type="Script" uid="uid://0g13lmkx4usr" path="res://core/components/button_helper_component.gd" id="8_button_helper"]
-
 [ext_resource type="Texture2D" uid="uid://cikkwftd686n3" path="res://assets/images/tick_icon.png" id="9_tick"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
-font = ExtResource("5_font")
+font = ExtResource("4_ve208")
 font_color = Color(1, 0.8352941, 0.40392157, 1)
 shadow_color = Color(0, 0, 0, 0.4392157)
 
 [sub_resource type="LabelSettings" id="LabelSettings_easy"]
-font = ExtResource("5_font")
+font = ExtResource("4_ve208")
 font_size = 20
 font_color = Color(1, 0.8352941, 0.40392157, 1)
 shadow_color = Color(0, 0, 0, 0.4392157)
 
 [sub_resource type="LabelSettings" id="LabelSettings_body"]
-font = ExtResource("5_font")
+font = ExtResource("4_ve208")
 
 [sub_resource type="LabelSettings" id="LabelSettings_medium"]
-font = ExtResource("5_font")
+font = ExtResource("4_ve208")
 font_size = 20
 font_color = Color(1, 0.64705884, 0.003921569, 1)
 shadow_color = Color(0, 0, 0, 0.4392157)
 
 [sub_resource type="LabelSettings" id="LabelSettings_hard"]
-font = ExtResource("5_font")
+font = ExtResource("4_ve208")
 font_size = 20
 font_color = Color(1, 0.2901961, 0.3764706, 1)
 shadow_color = Color(0, 0, 0, 0.4392157)
@@ -127,13 +126,13 @@ layout_mode = 2
 text = "Complete in 0 min."
 label_settings = SubResource("LabelSettings_body")
 
-[node name="CompletionSlot" type="Control" parent="Background/Content/Easy"]
+[node name="CompletionSlot" type="Control" parent="Background/Content/Easy" unique_id=1953747526]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
 
-[node name="Completed" type="TextureRect" parent="Background/Content/Easy/CompletionSlot"]
+[node name="Completed" type="TextureRect" parent="Background/Content/Easy/CompletionSlot" unique_id=461234942]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -150,7 +149,6 @@ stretch_mode = 5
 custom_minimum_size = Vector2(112, 40)
 layout_mode = 2
 size_flags_vertical = 4
-pivot_offset_ratio = Vector2(0.5, 0.5)
 texture_normal = ExtResource("2_play")
 ignore_texture_size = true
 stretch_mode = 5
@@ -184,13 +182,13 @@ layout_mode = 2
 text = "Complete in 0 min."
 label_settings = SubResource("LabelSettings_body")
 
-[node name="CompletionSlot" type="Control" parent="Background/Content/Medium"]
+[node name="CompletionSlot" type="Control" parent="Background/Content/Medium" unique_id=888901390]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
 
-[node name="Completed" type="TextureRect" parent="Background/Content/Medium/CompletionSlot"]
+[node name="Completed" type="TextureRect" parent="Background/Content/Medium/CompletionSlot" unique_id=1749538591]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -207,7 +205,6 @@ stretch_mode = 5
 custom_minimum_size = Vector2(112, 40)
 layout_mode = 2
 size_flags_vertical = 4
-pivot_offset_ratio = Vector2(0.5, 0.5)
 texture_normal = ExtResource("2_play")
 ignore_texture_size = true
 stretch_mode = 5
@@ -241,13 +238,13 @@ layout_mode = 2
 text = "Complete in 0 min."
 label_settings = SubResource("LabelSettings_body")
 
-[node name="CompletionSlot" type="Control" parent="Background/Content/Hard"]
+[node name="CompletionSlot" type="Control" parent="Background/Content/Hard" unique_id=997343988]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
 
-[node name="Completed" type="TextureRect" parent="Background/Content/Hard/CompletionSlot"]
+[node name="Completed" type="TextureRect" parent="Background/Content/Hard/CompletionSlot" unique_id=2075793112]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -264,7 +261,6 @@ stretch_mode = 5
 custom_minimum_size = Vector2(112, 40)
 layout_mode = 2
 size_flags_vertical = 4
-pivot_offset_ratio = Vector2(0.5, 0.5)
 texture_normal = ExtResource("2_play")
 ignore_texture_size = true
 stretch_mode = 5

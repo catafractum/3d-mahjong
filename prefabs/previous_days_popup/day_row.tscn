@@ -3,22 +3,22 @@
 [ext_resource type="Texture2D" uid="uid://d1gwfduejp5i5" path="res://assets/images/rounded_rect_bg.png" id="1_tt4hx"]
 [ext_resource type="Texture2D" uid="uid://bp0u883p8xife" path="res://assets/images/splash/badge_empty.png" id="2_u7i5o"]
 [ext_resource type="Texture2D" uid="uid://cikkwftd686n3" path="res://assets/images/tick_icon.png" id="3_05kn8"]
-[ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="4_us08o"]
+[ext_resource type="FontFile" uid="uid://63ajipkse5q8" path="res://assets/fonts/Montserrat-SemiBold.otf" id="4_05kn8"]
 [ext_resource type="Texture2D" uid="uid://cyyix8x2dsplv" path="res://assets/images/buttons/btn_play_next_level.png" id="5_udrek"]
 [ext_resource type="Script" uid="uid://dux5qmtswaaii" path="res://prefabs/previous_days_popup/day_row_component.gd" id="6_component"]
 [ext_resource type="Script" uid="uid://0g13lmkx4usr" path="res://core/components/button_helper_component.gd" id="7_helper"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_iiom5"]
-font = ExtResource("4_us08o")
+font = ExtResource("4_05kn8")
 font_size = 32
 
 [sub_resource type="LabelSettings" id="LabelSettings_dlcce"]
-font = ExtResource("4_us08o")
+font = ExtResource("4_05kn8")
 font_size = 40
 font_color = Color(0.54643, 0.6796216, 0.55410594, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_fe1nj"]
-font = ExtResource("4_us08o")
+font = ExtResource("4_05kn8")
 font_size = 26
 
 [node name="DayRow" type="NinePatchRect" unique_id=520908403]

@@ -105,6 +105,7 @@ stretch_mode = 6
 [node name="Board" type="Node3D" parent="." unique_id=541336519]
 
 [node name="GameUI" parent="." unique_id=578073262 instance=ExtResource("3_game_ui")]
+visible = true
 
 [node name="GameSettingsMenu" parent="." unique_id=299455565 instance=ExtResource("21_settings_menu")]
 

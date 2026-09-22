@@ -13,3 +13,10 @@ res://prefabs/splash_days_carousel/splash_days_carousel.tscn
 res://prefabs/splash_days_carousel/splash_days_carousel_component.gd
 res://tests/previous_days_test.gd
 res://game/gamedb/gamedb.tscn
+res://tests/challenge_completion_test.gd
+res://game/scenes/splash/splash_challenge_launcher_component.gd
+res://prefabs/mahjong_tile/mahjong_tile_visual_component.gd
+res://prefabs/splash_calendar_day/splash_calendar_day.tscn
+res://prefabs/splash_streak/splash_streak.tscn
+res://prefabs/game_ui/game_ui.tscn
+res://prefabs/game_over_menu/game_over_menu.tscn

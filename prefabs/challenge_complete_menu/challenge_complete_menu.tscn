@@ -1,15 +1,15 @@
 [gd_scene format=3 uid="uid://dw33pljsvxs0b"]
 
 [ext_resource type="Script" uid="uid://xclhkh7vs2ad" path="res://prefabs/challenge_complete_menu/challenge_complete_menu_component.gd" id="1_component"]
-[ext_resource type="Texture2D" uid="uid://dvg3fb4pya5s" path="res://assets/images/splash/challenge_bg.png" id="2_background"]
+[ext_resource type="Texture2D" uid="uid://bdehsdd8ywr3e" path="res://assets/images/bg_challenge_completed_level.png" id="2_background"]
 [ext_resource type="Texture2D" uid="uid://cyyix8x2dsplv" path="res://assets/images/buttons/btn_play_next_level.png" id="3_play"]
-[ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="4_font"]
+[ext_resource type="FontFile" uid="uid://63ajipkse5q8" path="res://assets/fonts/Montserrat-SemiBold.otf" id="5_12j4l"]
 [ext_resource type="Script" uid="uid://0g13lmkx4usr" path="res://core/components/button_helper_component.gd" id="5_button_helper"]
 [ext_resource type="Texture2D" uid="uid://vpnwpnabyrug" path="res://assets/images/buttons/btn_home_next_level.png" id="6_home"]
 [ext_resource type="Script" uid="uid://bfbv2aau71ny4" path="res://prefabs/next_level_menu/completion_presentation.gd" id="7_presentation"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_button"]
-font = ExtResource("4_font")
+font = ExtResource("5_12j4l")
 font_size = 56
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_home"]
@@ -39,7 +39,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("7_presentation")
 panel = NodePath("Panel")
-title1 = NodePath("Panel/Title")
+title1 = NodePath("Label")
 title_format = "%s COMPLETE"
 buttons = [NodePath("Panel/ReplayButton"), NodePath("Panel/HomeButton")]
 
@@ -52,24 +52,22 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.03, 0.02, 0.05, 0.34)
 
-[node name="Panel" type="NinePatchRect" parent="Menu" unique_id=824151029]
+[node name="Panel" type="TextureRect" parent="Menu" unique_id=824151029]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -390.0
-offset_top = -310.0
-offset_right = 390.0
-offset_bottom = 310.0
+offset_left = -395.25
+offset_top = -455.44
+offset_right = 395.25
+offset_bottom = 455.44
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_background")
-patch_margin_left = 40
-patch_margin_top = 40
-patch_margin_right = 40
-patch_margin_bottom = 40
+expand_mode = 1
+stretch_mode = 5
 
 [node name="ReplayButton" type="TextureButton" parent="Menu/Panel" unique_id=43572092]
 layout_mode = 1
@@ -79,9 +77,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -282.0
-offset_top = -340.0
+offset_top = -328.43994
 offset_right = 283.0
-offset_bottom = -195.0
+offset_bottom = -183.43994
 grow_horizontal = 2
 grow_vertical = 0
 pivot_offset_ratio = Vector2(0.5, 0.5)
@@ -141,15 +139,8 @@ script = ExtResource("5_button_helper")
 click_sfx_path = "res://assets/sounds/click.mp3"
 owner_node_path = NodePath("..")
 
-[node name="Title" type="Label" parent="Menu/Panel" unique_id=1643762483]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_left = 20.0
-offset_top = 70.0
-offset_right = -20.0
-offset_bottom = 180.0
-text = "HARD COMPLETE"
-label_settings = SubResource("LabelSettings_button")
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="Label" type="Label" parent="Menu" unique_id=1168209212]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0

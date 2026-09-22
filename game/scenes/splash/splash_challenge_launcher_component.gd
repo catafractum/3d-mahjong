@@ -33,7 +33,10 @@ func show_previous_days() -> void:
 func start_challenge(date_key: String, difficulty := "") -> void:
 	if _is_loading:
 		return
-	if not DailyChallengeService._is_valid_date_key(date_key) or date_key > DailyChallengeService.get_today_key():
+	if (
+		not DailyChallengeService._is_valid_date_key(date_key)
+		or date_key > DailyChallengeService.get_today_key()
+	):
 		return
 	GameDB.current_session = GameDB.create_challenge_session(date_key, difficulty)
 	if GameDB.current_session == null:
@@ -44,7 +47,7 @@ func start_challenge(date_key: String, difficulty := "") -> void:
 	await get_tree().process_frame
 	await RenderingServer.frame_post_draw
 	var switcher := SceneSwitcherComponent.of_as(self)
-	if switcher == null or not await switcher.switch_scene_async(game_scene_path):
+	if switcher == null or not switcher.switch_scene_async(game_scene_path):
 		push_error("SplashChallengeLauncherComponent: Could not open the challenge.")
 		GameDB.current_session = null
 		_is_loading = false
@@ -52,4 +55,6 @@ func start_challenge(date_key: String, difficulty := "") -> void:
 
 
 static func of_as(node: Node) -> SplashChallengeLauncherComponent:
-	return BaseComponent.of(node, SplashChallengeLauncherComponent) as SplashChallengeLauncherComponent
+	return (
+		BaseComponent.of(node, SplashChallengeLauncherComponent) as SplashChallengeLauncherComponent
+	)

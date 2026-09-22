@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://dvg3fb4pya5s" path="res://assets/images/splash/challenge_bg.png" id="1_vuosq"]
 [ext_resource type="Texture2D" uid="uid://bme411pvplbfk" path="res://assets/images/splash/title-edge.png" id="2_3bsh6"]
-[ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="3_yedd6"]
+[ext_resource type="FontFile" uid="uid://63ajipkse5q8" path="res://assets/fonts/Montserrat-SemiBold.otf" id="3_yedd6"]
 [ext_resource type="PackedScene" uid="uid://b45chr42r5m3t" path="res://prefabs/previous_days_popup/day_row.tscn" id="4_7dpwm"]
 [ext_resource type="Texture2D" uid="uid://c3cuffjg326ra" path="res://assets/images/buttons/btn_play_hard.png" id="5_as7no"]
 [ext_resource type="Script" uid="uid://buj1hpv7u7oe0" path="res://prefabs/previous_days_popup/previous_days_popup_component.gd" id="6_component"]

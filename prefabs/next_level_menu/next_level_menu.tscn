@@ -3,17 +3,17 @@
 [ext_resource type="Script" uid="uid://bmu8cmhr2w262" path="res://prefabs/next_level_menu/next_level_menu_component.gd" id="1_component"]
 [ext_resource type="Texture2D" uid="uid://dvg3fb4pya5s" path="res://assets/images/splash/challenge_bg.png" id="2_background"]
 [ext_resource type="Texture2D" uid="uid://cyyix8x2dsplv" path="res://assets/images/buttons/btn_play_next_level.png" id="3_play"]
-[ext_resource type="FontFile" uid="uid://cp1posuglql2i" path="res://assets/fonts/Montserrat-ExtraBold.ttf" id="4_3nb0e"]
 [ext_resource type="Texture2D" uid="uid://cnrp0horjlimb" path="res://assets/images/hard_complete_dice.png" id="4_10flq"]
 [ext_resource type="Script" uid="uid://0g13lmkx4usr" path="res://core/components/button_helper_component.gd" id="5_button_helper"]
 [ext_resource type="Texture2D" uid="uid://bme411pvplbfk" path="res://assets/images/splash/title-edge.png" id="5_r03dk"]
 [ext_resource type="Texture2D" uid="uid://vpnwpnabyrug" path="res://assets/images/buttons/btn_home_next_level.png" id="6_home"]
+[ext_resource type="FontFile" uid="uid://63ajipkse5q8" path="res://assets/fonts/Montserrat-SemiBold.otf" id="7_10flq"]
 [ext_resource type="Script" uid="uid://bfbv2aau71ny4" path="res://prefabs/next_level_menu/completion_presentation.gd" id="7_presentation"]
 [ext_resource type="Texture2D" uid="uid://bt45n7arbils6" path="res://assets/images/easy_complete_dice.png" id="9_gcpx1"]
 [ext_resource type="Texture2D" uid="uid://d2k5dr347ejbf" path="res://assets/images/medium_complete_dice.png" id="10_medium_dice"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_button"]
-font = ExtResource("4_3nb0e")
+font = ExtResource("7_10flq")
 font_size = 56
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_home"]

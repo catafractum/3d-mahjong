@@ -4,17 +4,17 @@
 [ext_resource type="Texture2D" uid="uid://c3i0xy0pm7dge" path="res://assets/images/splash/bg_days_carousel.png" id="2_background"]
 [ext_resource type="Texture2D" uid="uid://d1gwfduejp5i5" path="res://assets/images/rounded_rect_bg.png" id="3_1tujp"]
 [ext_resource type="Texture2D" uid="uid://bp0u883p8xife" path="res://assets/images/splash/badge_empty.png" id="3_badge"]
-[ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="4_font"]
+[ext_resource type="FontFile" uid="uid://63ajipkse5q8" path="res://assets/fonts/Montserrat-SemiBold.otf" id="4_1btta"]
 [ext_resource type="Texture2D" uid="uid://cikkwftd686n3" path="res://assets/images/tick_icon.png" id="5_tick"]
 [ext_resource type="Texture2D" uid="uid://c416j1cv6240u" path="res://assets/images/splash/arrow.png" id="6_rv6j5"]
 [ext_resource type="Script" uid="uid://0g13lmkx4usr" path="res://core/components/button_helper_component.gd" id="7_helper"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_rv6j5"]
-font = ExtResource("4_font")
+font = ExtResource("4_1btta")
 font_size = 18
 
 [sub_resource type="LabelSettings" id="LabelSettings_weekday"]
-font = ExtResource("4_font")
+font = ExtResource("4_1btta")
 font_size = 18
 font_color = Color(0.768627, 0.623529, 0.933333, 1)
 

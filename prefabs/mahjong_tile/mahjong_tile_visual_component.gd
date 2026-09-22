@@ -1,6 +1,9 @@
 class_name MahjongTileVisualComponent
 extends BaseComponent
 
+# Keep the physics body basis invertible until the tile is freed.
+const REMOVAL_MIN_SCALE := 0.05
+
 const TILE_OUTLINE_SHADER := preload("res://game/shaders/tile_outline.gdshader")
 
 @export var tile: Node3D
@@ -79,7 +82,8 @@ func remove() -> void:
 	var base_scale := tile.scale
 	_tween.tween_property(tile, "scale", base_scale * 1.1, removal_grow_duration)
 	_tween.tween_callback(_spawn_disappear_particles)
-	_tween.tween_property(tile, "scale", Vector3.ZERO, removal_shrink_duration)
+	_tween.tween_property(tile, "scale", base_scale * REMOVAL_MIN_SCALE, removal_shrink_duration)
+	_tween.tween_callback(tile.hide)
 	_tween.tween_interval(removal_finish_delay)
 	_tween.tween_callback(tile.queue_free)
 

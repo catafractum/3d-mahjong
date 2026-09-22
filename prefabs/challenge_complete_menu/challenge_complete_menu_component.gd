@@ -37,6 +37,8 @@ func _on_level_completed() -> void:
 		return
 	if _session.mode == GameSession.Mode.CHALLENGE and not _session.challenge_date_key.is_empty():
 		DailyChallengeService.complete_difficulty(_session.challenge_date_key, str(_session.get_current_level().difficulty), not _session.is_catch_up)
+	# Sessions start with the chosen difficulty and queue the unfinished ones.
+	# Only the last remaining difficulty completes the whole challenge.
 	if _session.has_next_level():
 		return
 	_timer.pause()
@@ -61,8 +63,8 @@ func _request_replay() -> void:
 
 func show_menu() -> void:
 	SoundManager.play_sfx(popup_sfx_path)
-	var difficulty := str(_session.get_current_level().get("difficulty", "hard")) if _session != null else "hard"
-	menu.present(difficulty)
+	# The frame contains the challenge title, independent of the last difficulty.
+	menu.present("challenge")
 
 
 func hide_menu() -> void:
