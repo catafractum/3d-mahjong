@@ -41,12 +41,7 @@ func settle_on_board() -> void:
 	if tiles.is_empty():
 		return
 	var target := _calculate_target(tiles, _level_start_camera_size)
-	_kill_tween()
-	_tween = create_tween().set_parallel(true)
-	_tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
-	_tween.tween_property(camera, "global_position", target.position, settle_duration)
-	_tween.tween_property(camera, "size", target.size, settle_duration)
-	_tween.chain().tween_callback(framing_settled.emit)
+	_tween_to_target(target)
 
 
 func _on_board_built(tiles: Array[Node3D]) -> void:
@@ -58,9 +53,17 @@ func _on_board_built(tiles: Array[Node3D]) -> void:
 		_level_start_camera_size = 0.0
 		return
 	var target := _calculate_target(tiles, _default_camera_size)
-	camera.global_position = target.position
-	camera.size = target.size
 	_level_start_camera_size = target.size
+	_tween_to_target(target)
+
+
+func _tween_to_target(target: Dictionary) -> void:
+	_kill_tween()
+	_tween = create_tween().set_parallel(true)
+	_tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	_tween.tween_property(camera, "global_position", target.position, settle_duration)
+	_tween.tween_property(camera, "size", target.size, settle_duration)
+	_tween.chain().tween_callback(framing_settled.emit)
 
 
 func _on_viewport_size_changed() -> void:
@@ -85,20 +88,36 @@ func _refit_after_viewport_change() -> void:
 
 func _calculate_target(tiles: Array[Node3D], closest_camera_size := 0.0) -> Dictionary:
 	var camera_inverse := camera.global_transform.affine_inverse()
-	var first_view_position: Vector3 = camera_inverse * tiles[0].global_position
-	var minimum := Vector2(first_view_position.x, first_view_position.y)
-	var maximum := minimum
+	var board_inverse := board.global_transform.affine_inverse()
+	var board_to_view := camera_inverse * board.global_transform
+	var minimum := Vector2(INF, INF)
+	var maximum := Vector2(-INF, -INF)
 	for tile in tiles:
-		var view_position: Vector3 = camera_inverse * tile.global_position
-		var point := Vector2(view_position.x, view_position.y)
-		minimum = minimum.min(point)
-		maximum = maximum.max(point)
+		var corners: Array[Vector3] = []
+		_collect_mesh_corners(tile, board_inverse, corners)
+		if corners.is_empty():
+			corners.append(board_inverse * tile.global_position)
+		for corner in corners:
+			# The board rotates around Y with uniform scale. Each corner sweeps
+			# a circle; its projection on either camera axis is a sinusoid.
+			# Its exact extrema cover intermediate animation angles as well.
+			var radius := Vector2(corner.x, corner.z).length()
+			var orbit_center := board_to_view * Vector3(0.0, corner.y, 0.0)
+			var extent := radius * Vector2(
+				Vector2(board_to_view.basis.x.x, board_to_view.basis.z.x).length(),
+				Vector2(board_to_view.basis.x.y, board_to_view.basis.z.y).length()
+			)
+			var point := Vector2(orbit_center.x, orbit_center.y)
+			minimum = minimum.min(point - extent)
+			maximum = maximum.max(point + extent)
 
 	var center := (minimum + maximum) * 0.5
 	var span := maximum - minimum + Vector2.ONE * frame_padding * 2.0
 	var viewport_size := get_viewport().get_visible_rect().size
 	var aspect := viewport_size.x / maxf(viewport_size.y, 1.0)
 	var target_size := maxf(span.y, span.x / maxf(aspect, 0.01))
+	if camera.keep_aspect == Camera3D.KEEP_WIDTH:
+		target_size = maxf(span.x, span.y * aspect)
 	target_size = maxf(target_size, closest_camera_size)
 
 	var camera_plane_offset := camera.global_transform.basis * Vector3(center.x, center.y, 0.0)
@@ -108,9 +127,23 @@ func _calculate_target(tiles: Array[Node3D], closest_camera_size := 0.0) -> Dict
 	}
 
 
+func _collect_mesh_corners(node: Node, board_inverse: Transform3D, corners: Array[Vector3]) -> void:
+	if node is MeshInstance3D:
+		var mesh_instance := node as MeshInstance3D
+		if mesh_instance.mesh != null and mesh_instance.is_visible_in_tree():
+			var bounds := mesh_instance.get_aabb()
+			var mesh_to_board := board_inverse * mesh_instance.global_transform
+			for index in 8:
+				corners.append(mesh_to_board * bounds.get_endpoint(index))
+	for child in node.get_children():
+		_collect_mesh_corners(child, board_inverse, corners)
+
+
 func _get_tiles() -> Array[Node3D]:
 	var builder := BoardBuilderComponent.of_as(self)
-	return builder.get_tiles() if builder != null else []
+	if builder != null:
+		return builder.get_tiles()
+	return []
 
 
 func _kill_tween() -> void:

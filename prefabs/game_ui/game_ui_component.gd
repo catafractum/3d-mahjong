@@ -29,6 +29,8 @@ var _shuffle_alignment_initialized := false
 
 
 func _ready() -> void:
+	for button in [rotate_left_button, rotate_right_button, shuffle_button, remove_pair_button]:
+		button.focus_mode = Control.FOCUS_NONE
 	rotate_left_button.pressed.connect(_rotate_board.bind(false))
 	rotate_right_button.pressed.connect(_rotate_board.bind(true))
 	shuffle_button.pressed.connect(_shuffle_board)

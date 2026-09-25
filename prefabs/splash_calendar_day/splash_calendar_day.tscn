@@ -2,22 +2,22 @@
 
 [ext_resource type="Script" uid="uid://dfcef5e7gm848" path="res://prefabs/splash_calendar_day/splash_calendar_day_component.gd" id="1_71y7m"]
 [ext_resource type="Texture2D" uid="uid://b3bju8bn8fm1y" path="res://assets/images/splash/bg_calendar_day.png" id="1_bcw1g"]
-[ext_resource type="FontFile" uid="uid://lus8dvysyfip" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="2_71y7m"]
+[ext_resource type="FontFile" uid="uid://63ajipkse5q8" path="res://assets/fonts/Montserrat-SemiBold.otf" id="3_8vxn3"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_8vxn3"]
-font = ExtResource("2_71y7m")
+font = ExtResource("3_8vxn3")
 font_size = 34
 font_color = Color(1, 0.772549, 0.427451, 1)
 shadow_color = Color(0, 0, 0, 1)
 shadow_offset = Vector2(0, 2)
 
 [sub_resource type="LabelSettings" id="LabelSettings_826eu"]
-font = ExtResource("2_71y7m")
+font = ExtResource("3_8vxn3")
 font_size = 38
 font_color = Color(0.184314, 0.0745098, 0.309804, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_bpgdn"]
-font = ExtResource("2_71y7m")
+font = ExtResource("3_8vxn3")
 font_size = 160
 font_color = Color(0.184314, 0.0745098, 0.309804, 1)
 shadow_size = 4
@@ -33,10 +33,10 @@ offset_bottom = 522.0
 
 [node name="SplashCalendarDayComponent" type="Node" parent="Components" unique_id=1007876638 node_paths=PackedStringArray("month_label", "weekday_label", "day_number_label")]
 script = ExtResource("1_71y7m")
-owner_node_path = NodePath("../..")
 month_label = NodePath("../../MonthLabel")
 weekday_label = NodePath("../../WeekDayLabel")
 day_number_label = NodePath("../../DayNumberLabel")
+owner_node_path = NodePath("../..")
 metadata/_custom_type_script = "uid://dfcef5e7gm848"
 
 [node name="Background" type="TextureRect" parent="." unique_id=42110077]

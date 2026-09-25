@@ -5,7 +5,10 @@ extends Node
 @export_file("*.json") var original_levels_path: String
 @export_file("*.json") var development_levels_path: String
 @export var challenge_difficulties: Array[String] = ["easy", "medium", "hard"]
-@export_range(0.0, 3600.0, 1.0, "or_greater") var challenge_time_limit_seconds := 180.0
+@export_group("Challenge timing (seconds per pair)")
+@export_range(0.1, 60.0, 0.1, "or_greater") var easy_seconds_per_pair := 7.0
+@export_range(0.1, 60.0, 0.1, "or_greater") var medium_seconds_per_pair := 5.0
+@export_range(0.1, 60.0, 0.1, "or_greater") var hard_seconds_per_pair := 3.0
 
 var current_session: GameSession = null
 var levels_path: String:
@@ -13,7 +16,7 @@ var levels_path: String:
 		return development_levels_path if use_development_levels else original_levels_path
 
 
-func create_challenge_session(date_key := "") -> GameSession:
+func create_challenge_session(date_key := "", difficulty := "") -> GameSession:
 	if date_key.is_empty():
 		date_key = DailyChallengeService.get_today_key()
 	var levels := _select_daily_levels(date_key)
@@ -21,9 +24,41 @@ func create_challenge_session(date_key := "") -> GameSession:
 		push_error("GameDB: Could not select every daily challenge level from %s." % levels_path)
 		return null
 
-	return GameSession.new(
-		levels, GameSession.Mode.CHALLENGE, challenge_time_limit_seconds, date_key
+	if not difficulty.is_empty():
+		var selected := levels.filter(func(level: Dictionary): return str(level.get("difficulty", "")) == difficulty)
+		if selected.is_empty():
+			return null
+		var completed: Array = SaveLoadManager.data.completed_challenge_difficulties.get(date_key, [])
+		var remaining := levels.filter(func(level: Dictionary):
+			return str(level.get("difficulty", "")) != difficulty and str(level.get("difficulty", "")) not in completed
+		)
+		levels = selected
+		levels.append_array(remaining)
+
+	for level in levels:
+		level["time_limit_seconds"] = get_level_time_limit_seconds(level)
+	var session := GameSession.new(
+		levels, GameSession.Mode.CHALLENGE, float(levels[0].time_limit_seconds), date_key
 	)
+	session.is_catch_up = date_key != DailyChallengeService.get_today_key()
+	return session
+
+
+func get_seconds_per_pair(difficulty: String) -> float:
+	match difficulty:
+		"easy": return easy_seconds_per_pair
+		"medium": return medium_seconds_per_pair
+		"hard": return hard_seconds_per_pair
+	push_error("GameDB: Unknown challenge difficulty: %s" % difficulty)
+	return easy_seconds_per_pair
+
+
+func get_level_time_limit_seconds(level: Dictionary) -> float:
+	# Use the original board size once; removing pairs does not change the budget.
+	var tiles: Array = level.get("tiles", [])
+	var pair_count := tiles.size() / 2.0
+	var seconds := pair_count * get_seconds_per_pair(str(level.get("difficulty", "easy")))
+	return ceilf(seconds / 60.0) * 60.0
 
 
 func _select_daily_levels(date_key: String) -> Array[Dictionary]:
@@ -61,6 +96,16 @@ func _load_all_levels() -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	for level in parsed.get("levels", []):
 		if level is Dictionary:
+			var tiles = level.get("tiles", [])
+			var icons = level.get("tile_icons", [])
+			if not tiles is Array or not icons is Array or icons.size() != tiles.size():
+				push_error(
+					(
+						"GameDB: Level %s has invalid or missing tile_icons in %s."
+						% [level.get("name", "unnamed"), levels_path]
+					)
+				)
+				return []
 			result.append(level.duplicate(true))
 	return result
 

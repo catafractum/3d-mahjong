@@ -6,9 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://ife5h8wg7pi8" path="res://prefabs/splash_calendar_day/splash_calendar_day.tscn" id="4_tmpah"]
 [ext_resource type="PackedScene" uid="uid://d2j1ruu616fo3" path="res://prefabs/splash_challenge_container/splash_challenge_container.tscn" id="5_challenge"]
 [ext_resource type="PackedScene" uid="uid://bxsh7ctu63ghw" path="res://prefabs/splash_days_carousel/splash_days_carousel.tscn" id="6_carousel"]
-[ext_resource type="PackedScene" path="res://prefabs/splash_streak/splash_streak.tscn" id="7_streak"]
+[ext_resource type="PackedScene" uid="uid://dbtoap2i7j7xl" path="res://prefabs/splash_streak/splash_streak.tscn" id="7_streak"]
 [ext_resource type="Script" uid="uid://dnaqbk04qydfb" path="res://game/scenes/splash/splash_sound_component.gd" id="8_sound"]
 [ext_resource type="Texture2D" uid="uid://cfwemswtovpqp" path="res://assets/images/spinner.png" id="9_t66fi"]
+[ext_resource type="Script" uid="uid://drfvdek1imify" path="res://game/scenes/splash/splash_challenge_launcher_component.gd" id="10_launcher"]
 
 [node name="Splash" type="Node2D" unique_id=100442976]
 
@@ -23,6 +24,13 @@ owner_node_path = NodePath("../..")
 [node name="SplashSoundComponent" type="Node" parent="Components" unique_id=348874464]
 script = ExtResource("8_sound")
 music_path = "res://assets/sounds/music.mp3"
+owner_node_path = NodePath("../..")
+
+[node name="SplashChallengeLauncherComponent" type="Node" parent="Components" unique_id=622054559 node_paths=PackedStringArray("loading_control", "spinner")]
+script = ExtResource("10_launcher")
+game_scene_path = "res://game/scenes/game/game.tscn"
+loading_control = NodePath("../../UI/Loading")
+spinner = NodePath("../../UI/Loading/ColorRect/TextureRect")
 owner_node_path = NodePath("../..")
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1927576681]
@@ -59,6 +67,7 @@ grow_vertical = 2
 color = Color(0.03, 0.02, 0.05, 0.34)
 
 [node name="LandscapeUI" type="Control" parent="UI" unique_id=1319850694]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -99,33 +108,36 @@ pivot_offset_ratio = Vector2(0.5, 0)
 
 [node name="SplashCalendarDay" parent="UI/LandscapeUI/Section" unique_id=847538879 instance=ExtResource("4_tmpah")]
 layout_mode = 0
+offset_left = 480.0
+offset_top = -38.0
+offset_right = 843.0
+offset_bottom = 484.0
 
 [node name="SplashChallengeContainer" parent="UI/LandscapeUI/Section" unique_id=731102767 instance=ExtResource("5_challenge")]
 layout_mode = 0
-offset_left = 441.0
-offset_top = 21.0
-offset_right = 832.0
-offset_bottom = 271.0
+offset_left = 921.0
+offset_top = -17.0
+offset_right = 1312.0
+offset_bottom = 233.0
 scale = Vector2(2, 2)
 
 [node name="SplashDaysCarousel" parent="UI/LandscapeUI/Section" unique_id=987524499 instance=ExtResource("6_carousel")]
 layout_mode = 0
-offset_left = 1300.0
-offset_top = 73.000015
-offset_right = 1896.0
-offset_bottom = 216.00002
+offset_left = 681.0
+offset_top = 522.0
+offset_right = 1277.0
+offset_bottom = 665.0
 scale = Vector2(1.4, 1.4)
 
 [node name="SplashStreak" parent="UI/LandscapeUI/Section" unique_id=792587543 instance=ExtResource("7_streak")]
 layout_mode = 0
-offset_left = 1300.0
-offset_top = 316.0
-offset_right = 1901.0
-offset_bottom = 423.0
+offset_left = 681.0
+offset_top = 845.0
+offset_right = 1282.0
+offset_bottom = 952.0
 scale = Vector2(1.4, 1.4)
 
 [node name="PortraitUI" type="Control" parent="UI" unique_id=1897949588]
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -157,13 +169,32 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -250.0
-offset_top = 119.0
+offset_top = 38.5
 offset_right = 250.0
-offset_bottom = 369.0
+offset_bottom = 288.5
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(1.7, 1.7)
 pivot_offset_ratio = Vector2(0.5, 0.5)
+
+[node name="Content" parent="UI/PortraitUI/SplashChallengeContainer/Background" parent_id_path=PackedInt32Array(1097770764, 1415559383) index="0" unique_id=370922621]
+custom_minimum_size = Vector2(320, 250)
+offset_left = -365.88235
+
+[node name="TitleContainer" parent="UI/PortraitUI/SplashChallengeContainer/Background/Content" index="0" unique_id=283921637]
+offset_left = -234.11765
+offset_top = 7.647072
+offset_right = 103.88237
+offset_bottom = 47.64707
+
+[node name="Easy" parent="UI/PortraitUI/SplashChallengeContainer/Background/Content" index="1" unique_id=1185529345]
+offset_right = 353.0
+
+[node name="Medium" parent="UI/PortraitUI/SplashChallengeContainer/Background/Content" index="2" unique_id=785373110]
+offset_right = 353.0
+
+[node name="Hard" parent="UI/PortraitUI/SplashChallengeContainer/Background/Content" index="3" unique_id=1740040385]
+offset_right = 353.0
 
 [node name="SplashCalendarDay" parent="UI/PortraitUI" unique_id=65817169 instance=ExtResource("4_tmpah")]
 layout_mode = 1
@@ -173,9 +204,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -394.0
-offset_top = 83.0
+offset_top = 23.0
 offset_right = -31.0
-offset_bottom = 605.0
+offset_bottom = 545.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.6, 0.6)
@@ -188,9 +219,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -298.0
-offset_top = -383.0
+offset_top = -402.0
 offset_right = 298.0
-offset_bottom = -240.0
+offset_bottom = -223.0
 grow_horizontal = 2
 grow_vertical = 0
 scale = Vector2(1.4, 1.4)
@@ -214,6 +245,7 @@ pivot_offset_ratio = Vector2(0.5, 1)
 
 [node name="Loading" type="Control" parent="UI" unique_id=1501389120]
 visible = false
+z_index = 20
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

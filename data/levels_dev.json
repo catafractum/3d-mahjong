@@ -6,6 +6,12 @@
 			"id": 0.0,
 			"name": "dev_easy_01",
 			"slot": 0.0,
+			"tile_icons": [
+				1,
+				0,
+				0,
+				1
+			],
 			"tiles": [
 				[
 					2.0,
@@ -35,6 +41,12 @@
 			"id": 10.0,
 			"name": "dev_medium_01",
 			"slot": 0.0,
+			"tile_icons": [
+				1,
+				0,
+				0,
+				1
+			],
 			"tiles": [
 				[
 					2.0,
@@ -64,6 +76,12 @@
 			"id": 20.0,
 			"name": "dev_hard_01",
 			"slot": 0.0,
+			"tile_icons": [
+				1,
+				1,
+				0,
+				0
+			],
 			"tiles": [
 				[
 					2.0,

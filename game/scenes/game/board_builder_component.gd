@@ -16,7 +16,8 @@ signal board_cleared
 @export var icon_type_count := 16
 @export var default_grid_size := 7
 @export var tile_spacing := 1.03
-@export var maximum_sequence_attempts := 80
+@export var maximum_sequence_attempts := 500
+@export var build_on_ready := true
 
 var grid_size := 7
 var visual_offset := Vector3.ZERO
@@ -25,7 +26,8 @@ var rotation_bounds: Dictionary = {}
 
 
 func _ready() -> void:
-	_build_current_level.call_deferred()
+	if build_on_ready:
+		_build_current_level.call_deferred()
 
 
 func _build_current_level() -> void:
@@ -61,12 +63,10 @@ func build_level(level: Dictionary) -> void:
 	board.rotation_degrees = BOARD_INITIAL_ROTATION
 	board.scale = Vector3.ONE * _get_level_scale(_get_height(coordinates))
 
-	var icon_assignment := assign_solvable_icons(
-		coordinates,
-		grid_size,
-		icon_type_count,
-		str(level.get("difficulty", "easy"))
-	)
+	var icon_assignment := _saved_icon_assignment(level, coordinates)
+	if icon_assignment.size() != coordinates.size():
+		push_error("BoardBuilderComponent: Refusing to build a level without a verified solvable assignment.")
+		return
 	var center := float(grid_size - 1) * 0.5
 	var tiles: Array[Node3D] = []
 
@@ -92,6 +92,21 @@ func build_level(level: Dictionary) -> void:
 		tiles.append(tile)
 
 	board_built.emit(tiles)
+
+
+func _saved_icon_assignment(level: Dictionary, coordinates: Array) -> Dictionary:
+	var saved_icons = level.get("tile_icons", [])
+	if not saved_icons is Array or saved_icons.size() != coordinates.size():
+		push_error("BoardBuilderComponent: Level is missing its required tile_icons assignment.")
+		return {}
+	var result: Dictionary = {}
+	for index in coordinates.size():
+		result[Vector3i(coordinates[index])] = int(saved_icons[index])
+	var solver := MahjongSolverComponent.of_as(self)
+	if solver == null or not solver.is_solvable(result, grid_size):
+		push_error("BoardBuilderComponent: Saved tile_icons assignment is not solvable.")
+		return {}
+	return result
 
 
 func clear_board() -> void:
@@ -129,7 +144,8 @@ func assign_solvable_icons(
 	coordinates: Array,
 	assignment_grid_size: int,
 	maximum_icon_count: int,
-	difficulty := "easy"
+	difficulty := "easy",
+	requested_icon_count := 0
 ) -> Dictionary:
 	var positions: Array[Vector3i] = []
 	for coordinate in coordinates:
@@ -137,42 +153,150 @@ func assign_solvable_icons(
 	if positions.is_empty():
 		return {}
 
-	var removal_pairs := _make_removal_sequence(positions, assignment_grid_size)
-	if removal_pairs.is_empty():
-		return _assign_pair_icons(positions, maximum_icon_count, difficulty)
+	if positions.size() % 2 != 0 or maximum_icon_count < 1:
+		return {}
+	var pool_size := clampi(requested_icon_count, 1, maximum_icon_count) if requested_icon_count > 0 else _icon_pool_size(positions.size(), maximum_icon_count, difficulty)
+	for _attempt in 80:
+		var removal_pairs := _make_removal_sequence(positions, assignment_grid_size)
+		if removal_pairs.is_empty():
+			return {}
+		var result: Dictionary = {}
+		var counts: Array[int] = []
+		counts.resize(pool_size)
+		counts.fill(0)
+		var order: Array = range(removal_pairs.size())
+		order.shuffle()
+		for pair_index in order:
+			var pair: Array = removal_pairs[pair_index]
+			var candidates: Array = range(pool_size)
+			candidates.shuffle()
+			candidates.sort_custom(func(a, b): return counts[a] < counts[b])
+			var placed := false
+			for icon in candidates:
+				result[pair[0]] = icon
+				result[pair[1]] = icon
+				if icon_quality_issues(result).is_empty():
+					counts[icon] += 1
+					placed = true
+					break
+			if not placed:
+				result.clear()
+				break
+		if result.size() == positions.size():
+			# Verify the same coordinate order used by Save and subsequent loads.
+			var saved_positions := positions.duplicate()
+			saved_positions.sort_custom(func(a: Vector3i, b: Vector3i):
+				if a.y != b.y:
+					return a.y < b.y
+				if a.z != b.z:
+					return a.z < b.z
+				return a.x < b.x
+			)
+			var ordered: Dictionary = {}
+			for position in saved_positions:
+				ordered[position] = result[position]
+			var solver := MahjongSolverComponent.of_as(self)
+			if solver == null or solver.is_solvable(ordered, assignment_grid_size):
+				return ordered
+	return {}
 
-	var result: Dictionary = {}
-	var icons := _make_icon_sequence(removal_pairs.size(), positions.size(), maximum_icon_count, difficulty)
-	for index in removal_pairs.size():
-		var pair: Array = removal_pairs[index]
-		result[pair[0]] = icons[index]
-		result[pair[1]] = icons[index]
 
-	var solver := MahjongSolverComponent.of_as(self)
-	if solver != null and not solver.is_solvable(result, assignment_grid_size):
-		push_error("BoardBuilderComponent: Generated assignment is not solvable.")
-	return result
+# Shared by generation and editor validation. Coordinates are included for feedback.
+static func icon_quality_issues(assignment: Dictionary, offending: Dictionary = {}) -> Array[String]:
+	var issues: Array[String] = []
+	var axes := [Vector3i.RIGHT, Vector3i.UP, Vector3i.BACK]
+	for position: Vector3i in assignment:
+		for direction: Vector3i in axes:
+			var neighbor := position + direction
+			if assignment.has(neighbor) and assignment[position] == assignment[neighbor]:
+				offending[position] = true
+				offending[neighbor] = true
+				issues.append("Identical neighbors at %s and %s" % [position, neighbor])
+			var end := position + direction * 3
+			if assignment.has(neighbor) and assignment.has(position + direction * 2) and assignment.has(end):
+				if assignment[position] == assignment[position + direction * 2] and assignment[neighbor] == assignment[end]:
+					for step in 4:
+						offending[position + direction * step] = true
+					issues.append("Repeated ABAB line from %s to %s" % [position, end])
+	# Ignore fixed points on mirror planes; require at least eight compared pairs.
+	if assignment.size() >= 16:
+		for axis in 3:
+			var low := 100000
+			var high := -100000
+			for position: Vector3i in assignment:
+				low = mini(low, position[axis])
+				high = maxi(high, position[axis])
+			var compared := 0
+			var matched := 0
+			for position: Vector3i in assignment:
+				var reflected := position
+				reflected[axis] = low + high - position[axis]
+				if position[axis] < reflected[axis] and assignment.has(reflected):
+					compared += 1
+					if assignment[position] == assignment[reflected]:
+						matched += 1
+			if compared >= 8 and matched * 4 >= compared * 3:
+				for position: Vector3i in assignment:
+					var reflected := position
+					reflected[axis] = low + high - position[axis]
+					if reflected != position and assignment.has(reflected) and assignment[position] == assignment[reflected]:
+						offending[position] = true
+				issues.append("Mirrored symbols on axis %s (%d/%d pairs)" % [["X", "Y", "Z"][axis], matched, compared])
+	return issues
 
 
 func _make_removal_sequence(positions: Array[Vector3i], assignment_grid_size: int) -> Array[Array]:
-	var rules := TileRulesComponent.of_as(self)
-	if rules == null:
-		return []
 	for _attempt in maximum_sequence_attempts:
-		var occupancy := rules.make_occupancy(positions)
+		var occupancy: Dictionary = {}
+		for position in positions:
+			occupancy[position] = true
 		var sequence: Array[Array] = []
 		while not occupancy.is_empty():
-			var free_positions := rules.get_free_positions(occupancy, assignment_grid_size)
+			var free_positions := _get_free_positions(occupancy, assignment_grid_size)
 			if free_positions.size() < 2:
 				break
 			free_positions.shuffle()
-			var pair := [free_positions[0], free_positions[1]]
+			var first := free_positions[0]
+			var second := first
+			# Only pair nonadjacent cells. Retry the sequence if no partner remains.
+			for index in range(1, free_positions.size()):
+				var candidate := free_positions[index]
+				var distance := absi(candidate.x - first.x) \
+					+ absi(candidate.y - first.y) \
+					+ absi(candidate.z - first.z)
+				if distance >= 2:
+					second = candidate
+					break
+			if second == first:
+				break
+			var pair := [first, second]
 			occupancy.erase(pair[0])
 			occupancy.erase(pair[1])
 			sequence.append(pair)
 		if occupancy.is_empty():
 			return sequence
 	return []
+
+
+func _get_free_positions(occupancy: Dictionary, assignment_grid_size: int) -> Array[Vector3i]:
+	var result: Array[Vector3i] = []
+	for position: Vector3i in occupancy:
+		var free_sides: Array[Vector3i] = []
+		for direction: Vector3i in TileRulesComponent.SIDE_DIRECTIONS:
+			var neighbor := position + direction
+			if not _is_inside_grid(neighbor, assignment_grid_size) or not occupancy.has(neighbor):
+				free_sides.append(direction)
+		var is_free := false
+		for first in range(free_sides.size()):
+			for second in range(first + 1, free_sides.size()):
+				if free_sides[first] + free_sides[second] != Vector3i.ZERO:
+					is_free = true
+					break
+			if is_free:
+				break
+		if is_free:
+			result.append(position)
+	return result
 
 
 func _assign_pair_icons(positions: Array[Vector3i], maximum_icon_count: int, difficulty: String) -> Dictionary:
@@ -189,8 +313,8 @@ func _assign_pair_icons(positions: Array[Vector3i], maximum_icon_count: int, dif
 	return result
 
 
-func _make_icon_sequence(pair_count: int, tile_count: int, maximum_icon_count: int, difficulty: String) -> Array[int]:
-	var pool_size := _icon_pool_size(tile_count, maximum_icon_count, difficulty)
+func _make_icon_sequence(pair_count: int, tile_count: int, maximum_icon_count: int, difficulty: String, requested_icon_count := 0) -> Array[int]:
+	var pool_size := clampi(requested_icon_count, 1, maximum_icon_count) if requested_icon_count > 0 else _icon_pool_size(tile_count, maximum_icon_count, difficulty)
 	var result: Array[int] = []
 	for index in pair_count:
 		result.append(index % pool_size)
